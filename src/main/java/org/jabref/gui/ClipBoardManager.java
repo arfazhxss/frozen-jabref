@@ -60,18 +60,19 @@ public class ClipBoardManager {
      */
     public static void addX11Support(TextInputControl input) {
         input.selectedTextProperty().addListener(
-                // using InvalidationListener because of https://bugs.openjdk.java.net/browse/JDK-8176270
-                observable -> Platform.runLater(() -> {
-                    String newValue = input.getSelectedText();
-                    if (!newValue.isEmpty() && (primary != null)) {
-                        primary.setContents(new StringSelection(newValue), null);
-                    }
-                }));
+                                                 // using InvalidationListener because of https://bugs.openjdk.java.net/browse/JDK-8176270
+                                                 observable -> Platform.runLater(() -> {
+                                                     String newValue = input.getSelectedText();
+                                                     if (!newValue.isEmpty() && (primary != null)) {
+                                                         primary.setContents(new StringSelection(newValue), null);
+                                                     }
+                                                 }));
         input.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.MIDDLE) {
                 input.insertText(input.getCaretPosition(), getContentsPrimary());
             }
         });
+
     }
 
     /**
@@ -112,6 +113,7 @@ public class ClipBoardManager {
      * @param content the ClipboardContent to set as current value of the system clipboard.
      */
     public void setContent(ClipboardContent content) {
+
         clipboard.setContent(content);
         setPrimaryClipboardContent(content);
     }
@@ -137,6 +139,7 @@ public class ClipBoardManager {
 
     public void setContent(String string) {
         final ClipboardContent content = new ClipboardContent();
+
         content.putString(string);
         clipboard.setContent(content);
         setPrimaryClipboardContent(content);

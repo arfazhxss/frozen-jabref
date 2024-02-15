@@ -214,7 +214,9 @@ dependencies {
         exclude group: "org.apache.xmlgraphics"
     }
 
-    implementation 'com.vladsch.flexmark:flexmark:0.64.8'
+    
+    implementation group: 'com.vladsch.flexmark', name: 'flexmark-html2md-converter', version: '0.64.0'
+    
 
     implementation group: 'net.harawata', name: 'appdirs', version: '1.2.2'
 

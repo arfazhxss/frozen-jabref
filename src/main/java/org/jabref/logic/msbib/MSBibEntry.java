@@ -288,6 +288,8 @@ class MSBibEntry {
         addField(document, rootNode, "ThesisType", thesisType);
         addField(document, rootNode, "InternetSiteTitle", internetSiteTitle);
 
+        // Can be removed
+
         addField(document, rootNode, "PublicationTitle", publicationTitle);
 
         addField(document, rootNode, "AlbumTitle", albumTitle);

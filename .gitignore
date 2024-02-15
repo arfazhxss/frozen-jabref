@@ -561,3 +561,4 @@ lib/ojdbc.jar
 
 # generated during release process
 CHANGELOG.html
+/target/

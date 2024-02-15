@@ -36,7 +36,7 @@ public class HtmlToLatexFormatter extends Formatter implements LayoutFormatter {
         // Deal with the form <sup>k</sup>and <sub>k</sub>
         result = result.replaceAll("<[ ]?sup>([^<]+)</sup>", "\\\\textsuperscript\\{$1\\}");
         result = result.replaceAll("<[ ]?sub>([^<]+)</sub>", "\\\\textsubscript\\{$1\\}");
-
+        result = result.replaceAll("<li>", "* ");
         // TODO: maybe rewrite this based on regular expressions instead
         // Note that (at least) the IEEE Xplore fetcher must be fixed as it relies on the current way to
         // remove tags for its image alt-tag to equation converter

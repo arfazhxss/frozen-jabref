@@ -430,7 +430,7 @@ public class LibraryTab extends Tab {
         if (entries.isEmpty()) {
             return;
         }
-        if (mode == StandardActions.DELETE_ENTRY && !showDeleteConfirmationDialog(entries.size())) {
+        if ((mode == StandardActions.DELETE_ENTRY) && !showDeleteConfirmationDialog(entries.size())) {
             return;
         }
 

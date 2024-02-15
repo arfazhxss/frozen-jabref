@@ -357,6 +357,9 @@ public class ImportHandler {
 
     private List<BibEntry> fetchByDOI(DOI doi) throws FetcherException {
         LOGGER.info("Found DOI identifer in clipboard");
+
+        //source of error
+
         Optional<BibEntry> entry = new DoiFetcher(preferencesService.getImportFormatPreferences()).performSearchById(doi.getDOI());
         return OptionalUtil.toList(entry);
     }

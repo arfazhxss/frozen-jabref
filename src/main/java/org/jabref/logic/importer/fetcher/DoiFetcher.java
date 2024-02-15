@@ -163,6 +163,9 @@ public class DoiFetcher implements IdBasedFetcher, EntryBasedFetcher {
                 }
                 return fetchedEntry;
             } else {
+
+                //source of error message
+
                 throw new FetcherException(Localization.lang("Invalid DOI: '%0'.", identifier));
             }
         } catch (IOException e) {

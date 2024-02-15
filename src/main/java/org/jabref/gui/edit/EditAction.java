@@ -12,7 +12,6 @@ import org.jabref.gui.StateManager;
 import org.jabref.gui.actions.ActionHelper;
 import org.jabref.gui.actions.SimpleCommand;
 import org.jabref.gui.actions.StandardActions;
-
 import org.fxmisc.richtext.CodeArea;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,8 +49,13 @@ public class EditAction extends SimpleCommand {
 
     @Override
     public void execute() {
+
+        //edited
+
+
         stateManager.getFocusOwner().ifPresent(focusOwner -> {
             LOGGER.debug("focusOwner: {}; Action: {}", focusOwner, action.getText());
+
             if (focusOwner instanceof TextInputControl textInput) {
                 // Focus is on text field -> copy/paste/cut selected text
                 // DELETE_ENTRY in text field should do forward delete

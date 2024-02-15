@@ -40,7 +40,7 @@ public class MSBibConverter {
 
         // Duplicate: also added as BookTitle
 
-        entry.getFieldLatexFree(StandardField.BOOKTITLE).ifPresent(booktitle -> result.conferenceName = booktitle);
+        entry.getFieldLatexFree(StandardField.JOURNALTITLE).ifPresent(booktitle -> result.publicationTitle = booktitle);
 
         entry.getFieldLatexFree(StandardField.PAGES).ifPresent(pages -> result.pages = new PageNumbers(pages));
         entry.getFieldLatexFree(new UnknownField(MSBIB_PREFIX + "accessed")).ifPresent(accesed -> result.dateAccessed = accesed);
@@ -52,23 +52,8 @@ public class MSBibConverter {
 
         if ("SoundRecording".equals(msBibType)) {
 
-            if (entry.getFieldLatexFree(StandardField.BOOKTITLE).isPresent()) {
+            //Do Nothing
 
-                String tt = entry.getFieldLatexFree(StandardField.BOOKTITLE).orElse(null);
-
-                if (!entry.getFieldLatexFree(StandardField.TITLE).equals(tt)) {
-
-                    result.internetSiteTitle = entry.getFieldLatexFree(StandardField.TITLE).orElse(null);
-
-                }
-
-            } else
-
-            {
-
-                result.internetSiteTitle = entry.getFieldLatexFree(StandardField.TITLE).orElse(null);
-
-            }
         }
 
         // TODO: currently this can never happen
@@ -76,23 +61,9 @@ public class MSBibConverter {
 
         if ("Interview".equals(msBibType)) {
 
-            if (entry.getFieldLatexFree(StandardField.BOOKTITLE).isPresent()) {
+            //Do Nothing
 
-                String tt = entry.getFieldLatexFree(StandardField.BOOKTITLE).orElse(null);
 
-                if (!entry.getFieldLatexFree(StandardField.TITLE).equals(tt)) {
-
-                    result.internetSiteTitle = entry.getFieldLatexFree(StandardField.TITLE).orElse(null);
-
-                }
-
-            } else
-
-            {
-
-                result.internetSiteTitle = entry.getFieldLatexFree(StandardField.TITLE).orElse(null);
-
-            }
         }
 
         result.number = entry.getFieldLatexFree(StandardField.NUMBER).orElse(null);
@@ -146,24 +117,7 @@ public class MSBibConverter {
 
         if (("InternetSite".equals(msBibType) || "DocumentFromInternetSite".equals(msBibType))) {
 
-            if (entry.getFieldLatexFree(StandardField.BOOKTITLE).isPresent()) {
-
-                String tt = entry.getFieldLatexFree(StandardField.BOOKTITLE).orElse(null);
-
-                if (!entry.getFieldLatexFree(StandardField.TITLE).equals(tt)) {
-
-                    result.internetSiteTitle = entry.getFieldLatexFree(StandardField.TITLE).orElse(null);
-
-                }
-
-            } else
-
-            {
-
-                result.internetSiteTitle = entry.getFieldLatexFree(StandardField.TITLE).orElse(null);
-
-            }
-
+            //Do Nothing
         }
 
         // TODO: currently only Misc can happen
@@ -172,22 +126,8 @@ public class MSBibConverter {
 
         if (("ElectronicSource".equals(msBibType) || "Art".equals(msBibType) || "Misc".equals(msBibType))) {
 
-            if (entry.getFieldLatexFree(StandardField.BOOKTITLE).isPresent()) {
+            //Do Nothing
 
-                String tt = entry.getFieldLatexFree(StandardField.BOOKTITLE).orElse(null);
-
-                if (!entry.getFieldLatexFree(StandardField.TITLE).equals(tt)) {
-
-                    result.internetSiteTitle = entry.getFieldLatexFree(StandardField.TITLE).orElse(null);
-                }
-
-            } else
-
-            {
-
-                result.internetSiteTitle = entry.getFieldLatexFree(StandardField.TITLE).orElse(null);
-
-            }
         }
 
         if (entry.getType().equals(IEEETranEntryType.Patent)) {
