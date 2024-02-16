@@ -10,7 +10,7 @@ import org.jabref.gui.StateManager;
 import org.jabref.gui.actions.ActionHelper;
 import org.jabref.gui.actions.SimpleCommand;
 import org.jabref.gui.actions.StandardActions;
-import org.jabref.logic.layout.format.MarkdownFormatter;
+import org.jabref.logic.layout.format.HTMLtoMarkdown;
 import org.fxmisc.richtext.CodeArea;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +59,7 @@ public class EditAction extends SimpleCommand {
                         if (clipboard.hasString()) {
                             final String textInHTML = clipboard.getHtml();
                             if (textInHTML != null) {
-                                MarkdownFormatter formatter = new MarkdownFormatter();
+                                HTMLtoMarkdown formatter = new HTMLtoMarkdown();
                                 String markdownText = formatter.format(textInHTML);
                                 textInput.replaceSelection(markdownText);
                             }
