@@ -1,17 +1,16 @@
 package org.jabref.gui.edit;
-
 import java.util.function.Supplier;
-
 import javax.swing.undo.UndoManager;
 
 import javafx.scene.control.TextInputControl;
+import javafx.scene.input.Clipboard;
 import javafx.scene.web.WebView;
-
 import org.jabref.gui.LibraryTab;
 import org.jabref.gui.StateManager;
 import org.jabref.gui.actions.ActionHelper;
 import org.jabref.gui.actions.SimpleCommand;
 import org.jabref.gui.actions.StandardActions;
+import org.jabref.logic.layout.format.MarkdownFormatter;
 import org.fxmisc.richtext.CodeArea;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +22,6 @@ import org.slf4j.LoggerFactory;
 public class EditAction extends SimpleCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EditAction.class);
-
     private final Supplier<LibraryTab> tabSupplier;
     private final StandardActions action;
     private final StateManager stateManager;
@@ -35,11 +33,8 @@ public class EditAction extends SimpleCommand {
         this.stateManager = stateManager;
         this.undoManager = undoManager;
 
-        if (action == StandardActions.PASTE) {
-            this.executable.bind(ActionHelper.needsDatabase(stateManager));
-        } else {
-            this.executable.bind(ActionHelper.needsEntriesSelected(stateManager));
-        }
+        if (action == StandardActions.PASTE) { this.executable.bind(ActionHelper.needsDatabase(stateManager)); }
+        else { this.executable.bind(ActionHelper.needsEntriesSelected(stateManager)); }
     }
 
     @Override
@@ -49,10 +44,6 @@ public class EditAction extends SimpleCommand {
 
     @Override
     public void execute() {
-
-        //edited
-
-
         stateManager.getFocusOwner().ifPresent(focusOwner -> {
             LOGGER.debug("focusOwner: {}; Action: {}", focusOwner, action.getText());
 
@@ -63,7 +54,17 @@ public class EditAction extends SimpleCommand {
                     case SELECT_ALL -> textInput.selectAll();
                     case COPY -> textInput.copy();
                     case CUT -> textInput.cut();
-                    case PASTE -> textInput.paste();
+                    case PASTE -> {
+                        final Clipboard clipboard = Clipboard.getSystemClipboard();
+                        if (clipboard.hasString()) {
+                            final String textInHTML = clipboard.getHtml();
+                            if (textInHTML != null) {
+                                MarkdownFormatter formatter = new MarkdownFormatter();
+                                String markdownText = formatter.format(textInHTML);
+                                textInput.replaceSelection(markdownText);
+                            }
+                        }
+                    }
                     case DELETE -> textInput.clear();
                     case DELETE_ENTRY -> textInput.deleteNextChar();
                     case UNDO -> textInput.undo();

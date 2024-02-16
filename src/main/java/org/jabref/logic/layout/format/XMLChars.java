@@ -18,6 +18,7 @@ public class XMLChars implements LayoutFormatter {
     private boolean[] forceReplace;
 
     static {
+        //        ASCII_TO_XML_CHARS.put("&", "&amp;");
         ASCII_TO_XML_CHARS.put("<", "&lt;");
         ASCII_TO_XML_CHARS.put("\"", "&quot;");
         ASCII_TO_XML_CHARS.put(">", "&gt;");
@@ -58,7 +59,6 @@ public class XMLChars implements LayoutFormatter {
         // copied from PDF
         // AND: this is accepted in the abstract of bibtex files, so are forced
         // to catch those cases
-
         if (forceReplace == null) {
             forceReplace = new boolean[126];
             for (int i = 0; i < 40; i++) {

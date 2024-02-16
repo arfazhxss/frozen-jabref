@@ -24,13 +24,10 @@ public class MarkdownFormatter implements LayoutFormatter {
     public String format(final String fieldText) {
         Objects.requireNonNull(fieldText, "Field Text should not be null, when handed to formatter");
 
-        // edited
-
         Node document = parser.parse(fieldText);
         String html = renderer.convert(document.toString());
-
-
-        return html.replaceAll("\\r\\n|\\r|\\n", " ").trim();
+        // return html.replaceAll("\\r\\n|\\r|\\n", " ").trim();
+        return "testcheck";
 
     }
 }
