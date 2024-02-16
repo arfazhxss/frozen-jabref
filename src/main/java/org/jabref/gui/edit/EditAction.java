@@ -1,9 +1,11 @@
 package org.jabref.gui.edit;
+import java.util.Set;
 import java.util.function.Supplier;
 import javax.swing.undo.UndoManager;
 
 import javafx.scene.control.TextInputControl;
-import javafx.scene.input.Clipboard;
+import javafx.scene.input.Clipboard;   
+import javafx.scene.input.DataFormat; 
 import javafx.scene.web.WebView;
 import org.jabref.gui.LibraryTab;
 import org.jabref.gui.StateManager;
@@ -56,13 +58,18 @@ public class EditAction extends SimpleCommand {
                     case CUT -> textInput.cut();
                     case PASTE -> {
                         final Clipboard clipboard = Clipboard.getSystemClipboard();
-                        if (clipboard.hasString()) {
+                        Set<DataFormat> formats = clipboard.getContentTypes();
+                        // if (clipboard.hasString()) {
+                        if ((clipboard.hasString())&&(formats.contains(DataFormat.HTML))) {
                             final String textInHTML = clipboard.getHtml();
                             if (textInHTML != null) {
                                 HTMLtoMarkdown formatter = new HTMLtoMarkdown();
                                 String markdownText = formatter.format(textInHTML);
                                 textInput.replaceSelection(markdownText);
                             }
+                        } 
+                        else if ((clipboard.hasString())&&(formats.contains(DataFormat.PLAIN_TEXT))) {
+                                textInput.paste();
                         }
                     }
                     case DELETE -> textInput.clear();
