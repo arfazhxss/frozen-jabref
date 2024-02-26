@@ -39,6 +39,8 @@ import org.jabref.model.entry.types.StandardEntryType;
 import org.jabref.model.util.FileUpdateMonitor;
 import org.jabref.preferences.PreferencesService;
 
+import de.saxsys.mvvmfx.utils.commands.Command;
+
 import com.tobiasdiez.easybind.EasyBind;
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.TaskProgressView;
@@ -109,7 +111,14 @@ public class MainToolBar extends ToolBar {
                         factory.createIconButton(StandardActions.NEW_ARTICLE, new NewEntryAction(frame::getCurrentLibraryTab, StandardEntryType.Article, dialogService, preferencesService, stateManager)),
                         factory.createIconButton(StandardActions.NEW_ENTRY, new NewEntryAction(frame::getCurrentLibraryTab, dialogService, preferencesService, stateManager)),
                         createNewEntryFromIdButton(),
+                        
                         factory.createIconButton(StandardActions.NEW_ENTRY_FROM_PLAIN_TEXT, new ExtractBibtexAction(dialogService, preferencesService, stateManager)),
+                        
+                        
+                        //Added with error
+                        factory.createIconButton(StandardActions.Custom_Entry_Type, new AddEntryWindow(/*dialogService, preferencesService, stateManager*/)),
+                        
+                        
                         factory.createIconButton(StandardActions.DELETE_ENTRY, new EditAction(StandardActions.DELETE_ENTRY, frame::getCurrentLibraryTab, stateManager, undoManager))),
 
                 new Separator(Orientation.VERTICAL),

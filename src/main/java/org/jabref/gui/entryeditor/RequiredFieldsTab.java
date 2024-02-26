@@ -59,7 +59,10 @@ public class RequiredFieldsTab extends FieldsEditorTab {
                 fields.addAll(orFields.getFields());
             }
             // Add the edit field for Bibtex-key.
-            fields.add(InternalField.KEY_FIELD);
+            
+            //Edited
+            //fields.add(InternalField.KEY_FIELD);
+            
         } else {
             // Entry type unknown -> treat all fields as required
             fields.addAll(entry.getFields());

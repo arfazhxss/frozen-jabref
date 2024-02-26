@@ -294,6 +294,7 @@ public class JabRefFrame extends BorderPane implements LibraryTabContainer {
                     case NEW_PHDTHESIS:
                         new NewEntryAction(this::getCurrentLibraryTab, StandardEntryType.PhdThesis, dialogService, prefs, stateManager).execute();
                         break;
+                    
                     case NEW_PROCEEDINGS:
                         new NewEntryAction(this::getCurrentLibraryTab, StandardEntryType.Proceedings, dialogService, prefs, stateManager).execute();
                         break;

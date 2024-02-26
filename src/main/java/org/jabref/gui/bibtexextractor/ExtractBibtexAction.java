@@ -27,4 +27,6 @@ public class ExtractBibtexAction extends SimpleCommand {
         GrobidOptInDialogHelper.showAndWaitIfUserIsUndecided(dialogService, preferencesService.getGrobidPreferences());
         dialogService.showCustomDialogAndWait(new ExtractBibtexDialog());
     }
+    
+    
 }
