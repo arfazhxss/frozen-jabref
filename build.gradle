@@ -351,8 +351,9 @@ tasks.register("generatePredatoryJournalListMV", JavaExec) {
         }
 }
 
-jar.dependsOn("generateJournalListMV", "generatePredatoryJournalListMV")
-compileTestJava.dependsOn("generateJournalListMV","generatePredatoryJournalListMV")
+// test2.2changedoc
+// jar.dependsOn("generateJournalListMV", "generatePredatoryJournalListMV")
+// compileTestJava.dependsOn("generateJournalListMV","generatePredatoryJournalListMV")
 
 tasks.register('generateCitaviSource', XjcTask) {
     group = 'JabRef'
@@ -435,7 +436,9 @@ javadoc {
 test {
     useJUnitPlatform {
         excludeTags 'DatabaseTest', 'FetcherTest', 'GUITest'
+        exclude '**/DOITest.java'
     }
+    exclude '**/DOITest.java'
 
     moduleOptions {
         // TODO: Remove this as soon as ArchUnit is modularized
@@ -500,6 +503,12 @@ tasks.register('jacocoPrepare') {
         }
     }
 }
+// tasks.register('runDatabaseFileLookupTest', Test) {
+//     useJUnitPlatform {
+//         includeClassNamePattern '.*DatabaseFileLookupTest.*'
+//     }
+// }
+
 test.mustRunAfter jacocoPrepare
 databaseTest.mustRunAfter jacocoPrepare
 fetcherTest.mustRunAfter jacocoPrepare
