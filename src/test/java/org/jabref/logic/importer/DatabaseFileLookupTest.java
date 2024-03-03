@@ -25,6 +25,7 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 
 class DatabaseFileLookupTest {
@@ -56,61 +57,37 @@ class DatabaseFileLookupTest {
         assertNotNull(entry1);
         assertNotNull(entry2);
     }
-
+    /*
+    ---> test2.2 changedoc 
+    */
     @Test
-    void testFileLookupForPresentAndAbsentFiles(@TempDir Path tempDir) throws IOException {
+    void directoryPathTests(@TempDir Path tempDir) throws IOException {
         // Create a temporary file directory
-        Path xTxtFile = tempDir.resolve("x.txt");
-        Files.write(xTxtFile, Collections.singleton("Sample content"));
+        Path txtFileDir = tempDir.resolve("x.txt");
+        Files.write(txtFileDir, Collections.singleton("Sample content"));
 
         // Create a BibDatabaseContext with a BibDatabase containing two entries
         BibDatabase bibDatabase = new BibDatabase();
         BibEntry entry1 = new BibEntry();
-        entry1.setField(StandardField.FILE, xTxtFile.toAbsolutePath().toString());
+        entry1.setField(StandardField.FILE, txtFileDir.toAbsolutePath().toString());
         BibEntry entry2 = new BibEntry();
-        entry2.setField(StandardField.FILE, tempDir.resolve("y.txt").toAbsolutePath().toString());
+        entry2.setField(StandardField.FILE, "");
         bibDatabase.insertEntry(entry1);
         bibDatabase.insertEntry(entry2);
 
         BibDatabaseContext databaseContext = new BibDatabaseContext(bibDatabase);
 
-        // Set the temporary directory as the default file directory in the preferences
-        FilePreferences filePreferences = new FilePreferences("", tempDir.toString(), false, "", "", false, false, null, Collections.emptySet(), false, null);
-
-        // Create DatabaseFileLookup instance
+        // Set the temporary directory as the default file directory 
+        // in the preferences and creating DatabaseFileLookup instance
+        FilePreferences filePreferences = new FilePreferences("", txtFileDir.toAbsolutePath().toString(), false, "", "", false, false, null, Collections.emptySet(), false, null);
         DatabaseFileLookup fileLookup = new DatabaseFileLookup(databaseContext, filePreferences);
 
-        // Perform file lookup
-        assertTrue(fileLookup.lookupDatabase(xTxtFile)); // x.txt should be found
+        // Tests 
+        assertTrue(fileLookup.lookupDatabase(txtFileDir)); // x.txt should be found
         assertFalse(fileLookup.lookupDatabase(tempDir.resolve("y.txt"))); // y.txt should not be found
+        assertEquals(filePreferences.getMainFileDirectory().orElse(Path.of("")).toString(), txtFileDir.toAbsolutePath().toString());
+        assertNotNull(fileLookup.getPathOfDatabase());
+        assertEquals("", fileLookup.getPathOfDatabase().toString());
     }
 }
-/*
-    @Test
-    void testFileLookupForPresentAndAbsentFiles(@TempDir Path tempDir) throws IOException {
-        // Create a temporary file directory
-        Path xTxtFile = tempDir.resolve("x.txt");
-        Files.write(xTxtFile, Collections.singleton("Sample content"));
 
-        // Create a BibDatabaseContext with a BibDatabase containing two entries
-        BibDatabase bibDatabase = new BibDatabase();
-        BibEntry entry1 = new BibEntry();
-        entry1.setField(StandardField.FILE, xTxtFile.toAbsolutePath().toString());
-        BibEntry entry2 = new BibEntry();
-        entry2.setField(StandardField.FILE, tempDir.resolve("y.txt").toAbsolutePath().toString());
-        bibDatabase.insertEntry(entry1);
-        bibDatabase.insertEntry(entry2);
-
-        BibDatabaseContext databaseContext = new BibDatabaseContext(bibDatabase);
-
-        // Set the temporary directory as the default file directory in the preferences
-        FilePreferences filePreferences = new FilePreferences("", tempDir.toString(), false, "", "", false, false, null, Collections.emptySet(), false, null);
-
-        // Create DatabaseFileLookup instance
-        DatabaseFileLookup fileLookup = new DatabaseFileLookup(databaseContext, filePreferences);
-
-        // Perform file lookup
-        assertTrue(fileLookup.lookupDatabase(xTxtFile)); // x.txt should be found
-        assertFalse(fileLookup.lookupDatabase(tempDir.resolve("y.txt"))); // y.txt should not be found
-    }
- */
