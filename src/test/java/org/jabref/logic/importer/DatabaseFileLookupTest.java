@@ -17,6 +17,7 @@ import org.mockito.Answers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.mock;
 
@@ -64,8 +65,9 @@ class DatabaseFileLookupTest {
     void directoryPathTests(@TempDir Path tempDir) throws IOException {
         // Create a temporary file directory
         Path txtFileDir = tempDir.resolve("x.txt");
-        Files.write(txtFileDir, Collections.singleton("Sample content"));
-
+        try { Files.write(txtFileDir, Collections.singleton("x.txt file contents for test")); }
+        catch (IOException e) { fail("Failed to create temporary file directory: " + e.getMessage()); }
+        
         // Create a BibDatabaseContext with a BibDatabase containing two entries
         BibDatabase bibDatabase = new BibDatabase();
         BibEntry entry1 = new BibEntry();
