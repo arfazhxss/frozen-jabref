@@ -43,6 +43,8 @@ import com.tobiasdiez.easybind.EasyBind;
 import de.saxsys.mvvmfx.utils.validation.visualization.ControlsFxVisualizer;
 import jakarta.inject.Inject;
 
+//Added
+import org.jabref.model.entry.types.BiblatexEntryTypeDefinitions;
 /**
  * Dialog that prompts the user to choose a type for an entry.
  */
@@ -125,23 +127,24 @@ public class EntryTypeView extends BaseDialog<EntryType> {
 
 		for (BibEntryType entryType : entryTypes) {
 			Button entryButton;
-			
-			//Added
-			
-			if (!entryType.getType().getDisplayName().equals("Other")) {
+
+			// Added
+
+			if (!entryType.getType().getDisplayName().startsWith(".")){
 				entryButton = new Button(entryType.getType().getDisplayName());
 			} else {
 				entryButton = new Button(AddEntryWindow.getTextList().get(index));
-				index++;
+				++index;
 			}
-			
-			
+
 			entryButton.setUserData(entryType);
 			entryButton.setOnAction(event -> setEntryTypeForReturnAndClose(Optional.of(entryType)));
 			pane.getChildren().add(entryButton);
 
 			EntryType selectedType = entryType.getType();
+			
 			String description = getDescription(selectedType);
+			
 			if (StringUtil.isNotBlank(description)) {
 				Screen currentScreen = Screen.getPrimary();
 				double maxWidth = currentScreen.getBounds().getWidth();
@@ -151,6 +154,7 @@ public class EntryTypeView extends BaseDialog<EntryType> {
 				entryButton.setTooltip(tooltip);
 			}
 		}
+		
 	}
 
 	@FXML
@@ -202,9 +206,9 @@ public class EntryTypeView extends BaseDialog<EntryType> {
 			otherEntries.stream().filter(e -> !recommendedEntries.contains(e)).collect(Collectors.toList());
 			otherEntries.addAll(BiblatexSoftwareEntryTypeDefinitions.ALL);
 			otherEntries.addAll(BiblatexAPAEntryTypeDefinitions.ALL);
-			
+
 		} else {
-			
+
 			recommendedEntries = BibtexEntryTypeDefinitions.RECOMMENDED;
 
 			// Added
@@ -214,9 +218,9 @@ public class EntryTypeView extends BaseDialog<EntryType> {
 
 			otherEntries.stream().filter(e -> !recommendedEntries.contains(e)).collect(Collectors.toList());
 			otherEntries.addAll(IEEETranEntryTypeDefinitions.ALL);
-			
+
 		}
-		
+
 		addEntriesToPane(recommendedEntriesPane, recommendedEntries);
 		addEntriesToPane(otherEntriesPane, otherEntries);
 
