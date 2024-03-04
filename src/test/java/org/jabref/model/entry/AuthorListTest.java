@@ -625,7 +625,7 @@ public class AuthorListTest {
                             "Smith, Jr, John; true; Smith",
                             "John von Neumann and John Smith and Black Brown, Peter; true; von Neumann, Smith, and Black Brown",
         }, delimiter = ';')
-        @ParameterizedTest 
+        @ParameterizedTest
         public void testFixAuthorLastNameOnlyCommas(String input, boolean oxfordComma, String expectedOutput) {
                 assertEquals(expectedOutput, AuthorList.fixAuthorLastNameOnlyCommas(input, oxfordComma));
         }
@@ -757,27 +757,70 @@ public class AuthorListTest {
         //         assertEquals("von Neumann", author.getLastOnly());
         //         assertEquals("Neumann, Jr, J.", author.getNameForAlphabetization());
         //         assertEquals(Optional.of("von"), author.getVon());
-        // }
-        @CsvSource(value = {
-                            "John;von Neumann, Jr, John;John;J.;John Smith;J. Smith;;Smith;Smith, John;Smith, J.;Smith;Smith, J.;",
-        }, delimiter = ';')
-        @ParameterizedTest
-        public void testGetAuthor(String first, String last, String expectedFirst, String expectedFirstAbbr,
-                                  String expectedFirstLast, String expectedFirstLastAbbr, String expectedJr,
-                                  String expectedLast, String expectedLastFirst, String expectedLastFirstAbbr,
-                                  String expectedLastOnly, String expectedNameForAlphabetization) {
-                Author author = AuthorList.parse(first + " " + last).getAuthor(0);
+    // }
+        @Test
+        public void testGetAuthor() {
+            testAuthor(
+                    0,
+                    "John Smith and von Neumann, Jr, John",
+                    "John",
+                    "J.",
+                    "John Smith",
+                    "J. Smith",
+                    Optional.empty(),
+                    "Smith",
+                    "Smith, John",
+                    "Smith, J.",
+                    "Smith",
+                    "Smith, J.",
+                    Optional.empty());
+            testAuthor(
+                    0,
+                    "Peter Black Brown",
+                    "Peter Black",
+                    "P. B.",
+                    "Peter Black Brown",
+                    "P. B. Brown",
+                    Optional.empty(),
+                    "Brown",
+                    "Brown, Peter Black",
+                    "Brown, P. B.",
+                    "Brown",
+                    "Brown, P. B.",
+                    Optional.empty());
+            testAuthor(
+                    1,
+                    "John Smith and von Neumann, Jr, John",
+                    "John",
+                    "J.",
+                    "John von Neumann, Jr",
+                    "J. von Neumann, Jr",
+                    Optional.of("Jr"),
+                    "Neumann",
+                    "von Neumann, Jr, John",
+                    "von Neumann, Jr, J.",
+                    "von Neumann",
+                    "Neumann, Jr, J.",
+                    Optional.of("von"));
+        }
+
+        private void testAuthor(int authorIndex, String inputString,
+                                String expectedFirst, String expectedFirstAbbr, String expectedFirstLast,
+                                String expectedFirstLastAbbr, Optional<String> expectedJr, String expectedLast,
+                                String expectedLastFirst, String expectedLastFirstAbbr, String expectedLastOnly,
+                                String expectedNameForAlphabetization, Optional<String> expectedVon) {
+                Author author = AuthorList.parse(inputString).getAuthor(authorIndex);
                 assertEquals(Optional.of(expectedFirst), author.getFirst());
                 assertEquals(Optional.of(expectedFirstAbbr), author.getFirstAbbr());
                 assertEquals(expectedFirstLast, author.getFirstLast(false));
                 assertEquals(expectedFirstLastAbbr, author.getFirstLast(true));
-                assertEquals(Optional.ofNullable(expectedJr), author.getJr());
+                assertEquals(expectedJr, author.getJr());
                 assertEquals(Optional.of(expectedLast), author.getLast());
                 assertEquals(expectedLastFirst, author.getLastFirst(false));
                 assertEquals(expectedLastFirstAbbr, author.getLastFirst(true));
                 assertEquals(expectedLastOnly, author.getLastOnly());
                 assertEquals(expectedNameForAlphabetization, author.getNameForAlphabetization());
-                assertEquals(Optional.empty(), author.getVon());
+                assertEquals(expectedVon, author.getVon());
         }
 
         @Test
