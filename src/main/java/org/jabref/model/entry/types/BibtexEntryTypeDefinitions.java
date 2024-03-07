@@ -227,8 +227,6 @@ public class BibtexEntryTypeDefinitions {
 	 */
 	static String name = " ";
 
-	public static final List<BibEntryType> CUSTOM = add_new_entries();
-
 	public static List<BibEntryType> add_new_entries() {
 
 		List<BibEntryType> lis = new ArrayList<>();
@@ -237,9 +235,8 @@ public class BibtexEntryTypeDefinitions {
 		for (int i = 0; i < custom_entries.size(); ++i) {
 			name = "." + custom_entries.get(i);
 
-			enum CustomEntryType implements EntryType {
+			class CustomEntryType implements EntryType {
 
-				Other(name);
 
 				private String displayName;
 
@@ -258,7 +255,7 @@ public class BibtexEntryTypeDefinitions {
 				}
 			}
 
-			lis.add(new BibEntryTypeBuilder().withType(CustomEntryType.Other)
+			lis.add(new BibEntryTypeBuilder().withType(new CustomEntryType(name))
 					// .withRequiredFields(StandardField.AUTHOR, StandardField.TITLE,
 					// StandardField.NOTE)
 					// .withImportantFields(StandardField.MONTH, StandardField.YEAR)
