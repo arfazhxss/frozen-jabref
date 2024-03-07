@@ -233,7 +233,7 @@ public class BibtexEntryTypeDefinitions {
 		List<String> custom_entries = new ArrayList<>(AddEntryWindow.getTextList());
 
 		for (int i = 0; i < custom_entries.size(); ++i) {
-			name = "." + custom_entries.get(i);
+			name = custom_entries.get(i);
 
 			class CustomEntryType implements EntryType {
 

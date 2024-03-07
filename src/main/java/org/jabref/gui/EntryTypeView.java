@@ -128,15 +128,10 @@ public class EntryTypeView extends BaseDialog<EntryType> {
 		for (BibEntryType entryType : entryTypes) {
 			Button entryButton;
 
-			// Added
+			// Edited
 
-			if (!entryType.getType().getDisplayName().startsWith(".")){
-				entryButton = new Button(entryType.getType().getDisplayName());
-			} else {
-				entryButton = new Button(AddEntryWindow.getTextList().get(index));
-				++index;
-			}
-
+			entryButton = new Button(entryType.getType().getDisplayName());
+			
 			entryButton.setUserData(entryType);
 			entryButton.setOnAction(event -> setEntryTypeForReturnAndClose(Optional.of(entryType)));
 			pane.getChildren().add(entryButton);
@@ -193,7 +188,7 @@ public class EntryTypeView extends BaseDialog<EntryType> {
 
 		boolean isBiblatexMode = libraryTab.getBibDatabaseContext().isBiblatexMode();
 		List<BibEntryType> recommendedEntries;
-		List<BibEntryType> customEntries;
+		//List<BibEntryType> customEntries;
 		List<BibEntryType> otherEntries;
 		if (isBiblatexMode) {
 			recommendedEntries = BiblatexEntryTypeDefinitions.RECOMMENDED;
