@@ -2,6 +2,7 @@ package org.jabref.model.entry;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,8 @@ public class AuthorListTest {
         private static final AuthorList ONE_INSTITUTION_WITH_LATEX = AuthorList.of(BANU_MOSA);
         private static final AuthorList ONE_INSTITUTION_WITH_STARTING_PARANTHESIS = AuthorList.of(new Author(
                                                                                                              null, null, null, "{{\\L{}}ukasz Micha\\l{}}", null));
+        private static final List <Author> lis = Arrays.asList(new Author("Tom", "T.", null, "Bore", null));
+        
         private static final AuthorList TWO_INSTITUTIONS_WITH_LATEX = AuthorList.of(BANU_MOSA, BANU_MOSA);
         private static final AuthorList MIXED_AUTHOR_AND_INSTITUTION_WITH_LATEX = AuthorList.of(BANU_MOSA, CORRADO_BOHM);
 
@@ -1114,5 +1117,18 @@ public class AuthorListTest {
         @Test
         public void getAsLastFirstFirstLastNamesWithAndMultipleAuthors() {
                 assertEquals("al-Khw{\\={a}}rizm{\\={i}}, M. and C. B{\\\"o}hm and K. G{\\\"{o}}del", THREE_AUTHORS_WITH_LATEX.getAsLastFirstFirstLastNamesWithAnd(true));
+        }
+
+        @CsvSource(
+                value = {
+                        "Bore; Tim Bore;true",
+                }, delimiter = ';')
+        @ParameterizedTest
+        public void allGetAsLastFirstFirstLastNames() {
+
+        	assertEquals("", EMPTY_AUTHOR.getAsLastFirstFirstLastNamesWithAnd(true));
+        	assertEquals("al-Khw{\\\\={a}}rizm{\\\\={i}}, M.", ONE_AUTHOR_WITH_LATEX.getAsLastFirstFirstLastNamesWithAnd(true));
+        	assertEquals("al-Khw{\\\\={a}}rizm{\\\\={i}}, M. and C. B{\\\\\\\"o}hm", TWO_AUTHORS_WITH_LATEX.getAsLastFirstFirstLastNamesWithAnd(true));
+        	assertEquals("al-Khw{\\={a}}rizm{\\={i}}, M. and C. B{\\\"o}hm and K. G{\\\"{o}}del", THREE_AUTHORS_WITH_LATEX.getAsLastFirstFirstLastNamesWithAnd(true));
         }
 }
