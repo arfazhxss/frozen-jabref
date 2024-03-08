@@ -77,6 +77,7 @@ public class CommentsTab extends FieldsEditorTab {
         SequencedSet<Field> comments = new LinkedHashSet<>();
 
         // First comes the standard comment field
+        /**
         comments.add(StandardField.COMMENT);
 
         // Also show comment field of the current user (if enabled in the preferences)
@@ -90,6 +91,7 @@ public class CommentsTab extends FieldsEditorTab {
                         || field.getName().toLowerCase().contains("comment"))
                 .sorted(Comparator.comparing(Field::getName))
                 .collect(Collectors.toCollection(LinkedHashSet::new)));
+        **/
         return comments;
     }
 

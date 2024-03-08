@@ -57,7 +57,7 @@ public class AddEntryWindow extends SimpleCommand {
 		JTextField textField = new JTextField(15);
 		panel.add(textField);
 
-		JButton addButton = new JButton("Add Entry");
+		JButton addButton = new JButton("Add Entry/Subfield");
 		addButton.addActionListener(e -> {
 			String text = textField.getText();
 
@@ -84,7 +84,6 @@ public class AddEntryWindow extends SimpleCommand {
 	@Override
 	public void execute() {
 		
-		//throw new IllegalArgumentException(entries.get(0));
 		
 		ShowWindow();
 
