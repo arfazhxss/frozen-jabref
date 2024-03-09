@@ -1,10 +1,14 @@
 package org.jabref.gui.entryeditor;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.SequencedSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.swing.undo.UndoManager;
@@ -15,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 
+import org.jabref.gui.AddEntryWindow;
 import org.jabref.gui.DialogService;
 import org.jabref.gui.StateManager;
 import org.jabref.gui.autocompleter.SuggestionProviders;
@@ -29,129 +34,165 @@ import org.jabref.logic.pdf.search.IndexingTaskManager;
 import org.jabref.model.database.BibDatabaseContext;
 import org.jabref.model.entry.BibEntry;
 import org.jabref.model.entry.field.Field;
+import org.jabref.model.entry.field.FieldProperty;
 import org.jabref.model.entry.field.StandardField;
 import org.jabref.model.entry.field.UserSpecificCommentField;
 import org.jabref.preferences.PreferencesService;
 
+class CustomFields implements Field {
+	;
+
+	// Constructor
+	private String name = "";
+
+	public CustomFields(String n) {
+		this.name = n;
+	}
+
+	@Override
+	public Set<FieldProperty> getProperties() {
+
+		return EnumSet.noneOf(FieldProperty.class);
+	}
+
+	@Override
+	public String getName() {
+		
+		if (this.name == null) {
+			return Field.super.getDisplayName();
+		} else {
+			return this.name;
+		}
+		
+	}
+
+	@Override
+	public boolean isStandardField() {
+		
+		return false;
+	}
+
+}
+
 public class CommentsTab extends FieldsEditorTab {
-    public static final String NAME = "Comments";
+	public static final String NAME = "BibTex/Comment Fields";
 
-    private final String defaultOwner;
-    private final UserSpecificCommentField userSpecificCommentField;
+	private final String defaultOwner;
+	private final UserSpecificCommentField userSpecificCommentField;
 
-    private final EntryEditorPreferences entryEditorPreferences;
+	private final EntryEditorPreferences entryEditorPreferences;
 
-    public CommentsTab(PreferencesService preferences,
-                       BibDatabaseContext databaseContext,
-                       SuggestionProviders suggestionProviders,
-                       UndoManager undoManager,
-                       DialogService dialogService,
-                       StateManager stateManager,
-                       ThemeManager themeManager,
-                       IndexingTaskManager indexingTaskManager,
-                       TaskExecutor taskExecutor,
-                       JournalAbbreviationRepository journalAbbreviationRepository) {
-        super(
-                false,
-                databaseContext,
-                suggestionProviders,
-                undoManager,
-                dialogService,
-                preferences,
-                stateManager,
-                themeManager,
-                taskExecutor,
-                journalAbbreviationRepository,
-                indexingTaskManager
-        );
-        this.defaultOwner = preferences.getOwnerPreferences().getDefaultOwner();
-        setText(Localization.lang("Comments"));
-        setGraphic(IconTheme.JabRefIcons.COMMENT.getGraphicNode());
+	public CommentsTab(PreferencesService preferences, BibDatabaseContext databaseContext,
+			SuggestionProviders suggestionProviders, UndoManager undoManager, DialogService dialogService,
+			StateManager stateManager, ThemeManager themeManager, IndexingTaskManager indexingTaskManager,
+			TaskExecutor taskExecutor, JournalAbbreviationRepository journalAbbreviationRepository) {
+		super(false, databaseContext, suggestionProviders, undoManager, dialogService, preferences, stateManager,
+				themeManager, taskExecutor, journalAbbreviationRepository, indexingTaskManager);
+		this.defaultOwner = preferences.getOwnerPreferences().getDefaultOwner();
+		setText(Localization.lang(NAME));
+		setGraphic(IconTheme.JabRefIcons.COMMENT.getGraphicNode());
 
-        userSpecificCommentField = new UserSpecificCommentField(defaultOwner);
-        entryEditorPreferences = preferences.getEntryEditorPreferences();
-    }
+		userSpecificCommentField = new UserSpecificCommentField(defaultOwner);
+		entryEditorPreferences = preferences.getEntryEditorPreferences();
+	}
 
-    @Override
-    protected SequencedSet<Field> determineFieldsToShow(BibEntry entry) {
-        SequencedSet<Field> comments = new LinkedHashSet<>();
+	@Override
+	protected SequencedSet<Field> determineFieldsToShow(BibEntry entry) {
+		SequencedSet<Field> comments = new LinkedHashSet<>();
+		
+		
+		// Edited
+		
+		// First comes the standard and custom added field
 
-        // First comes the standard comment field
-        /**
-        comments.add(StandardField.COMMENT);
+		List<String> fields = AddEntryWindow.getFieldsList();
 
-        // Also show comment field of the current user (if enabled in the preferences)
-        if (entry.hasField(userSpecificCommentField) || entryEditorPreferences.shouldShowUserCommentsFields()) {
-            comments.add(userSpecificCommentField);
-        }
+		comments.add(StandardField.COMMENT);
 
-        // Show all non-empty comment fields (otherwise, they are completely hidden)
-        comments.addAll(entry.getFields().stream()
-                .filter(field -> (field instanceof UserSpecificCommentField && !field.equals(userSpecificCommentField))
-                        || field.getName().toLowerCase().contains("comment"))
-                .sorted(Comparator.comparing(Field::getName))
-                .collect(Collectors.toCollection(LinkedHashSet::new)));
-        **/
-        return comments;
-    }
+		for (int i = 0; i < fields.size(); ++i) {
 
-    /**
-     * Comment editors: three times size of button
-     */
-    private void setCompressedRowLayout() {
-        int numberOfComments = gridPane.getRowCount() - 1;
-        double totalWeight = numberOfComments * 3 + 1;
+			CustomFields cf = new CustomFields(fields.get(i));
 
-        RowConstraints commentConstraint = new RowConstraints();
-        commentConstraint.setVgrow(Priority.ALWAYS);
-        commentConstraint.setValignment(VPos.TOP);
-        double commentHeightPercent = 3.0 / totalWeight * 100.0;
-        commentConstraint.setPercentHeight(commentHeightPercent);
+			comments.add(cf);
+		
+		}
+		
+		// Also show comment field of the current user (if enabled in the preferences)
+		if (entry.hasField(userSpecificCommentField) || entryEditorPreferences.shouldShowUserCommentsFields()) {
+			comments.add(userSpecificCommentField);
+		}
 
-        RowConstraints buttonConstraint = new RowConstraints();
-        buttonConstraint.setVgrow(Priority.ALWAYS);
-        buttonConstraint.setValignment(VPos.TOP);
-        double addButtonHeightPercent = 1.0 / totalWeight * 100.0;
-        buttonConstraint.setPercentHeight(addButtonHeightPercent);
+		// Show all non-empty comment fields (otherwise, they are completely hidden)
+		comments.addAll(entry.getFields().stream()
+				.filter(field -> (field instanceof UserSpecificCommentField && !field.equals(userSpecificCommentField))
+						|| field.getName().toLowerCase().contains("comment"))
+				.sorted(Comparator.comparing(Field::getName)).collect(Collectors.toCollection(LinkedHashSet::new)));
 
-        ObservableList<RowConstraints> rowConstraints = gridPane.getRowConstraints();
-        rowConstraints.clear();
-        for (int i = 1; i <= numberOfComments; i++) {
-            rowConstraints.add(commentConstraint);
-        }
-        rowConstraints.add(buttonConstraint);
-    }
+		return comments;
+	}
 
-    @Override
-    protected void setupPanel(BibEntry entry, boolean compressed) {
-        super.setupPanel(entry, compressed);
+	/**
+	 * Comment editors: three times size of button
+	 */
+	private void setCompressedRowLayout() {
+		int numberOfComments = gridPane.getRowCount() - 1;
+		double totalWeight = numberOfComments * 3 + 1;
 
-        Optional<FieldEditorFX> fieldEditorForUserDefinedComment = editors.entrySet().stream().filter(f -> f.getKey().getName().contains(defaultOwner)).map(Map.Entry::getValue).findFirst();
-        for (Map.Entry<Field, FieldEditorFX> fieldEditorEntry : editors.entrySet()) {
-            Field field = fieldEditorEntry.getKey();
-            FieldEditorFX editor = fieldEditorEntry.getValue();
+		RowConstraints commentConstraint = new RowConstraints();
+		commentConstraint.setVgrow(Priority.ALWAYS);
+		commentConstraint.setValignment(VPos.TOP);
+		double commentHeightPercent = 3.0 / totalWeight * 100.0;
+		commentConstraint.setPercentHeight(commentHeightPercent);
 
-            boolean isStandardBibtexComment = field == StandardField.COMMENT;
-            boolean isDefaultOwnerComment = field.equals(userSpecificCommentField);
-            boolean shouldBeEnabled = isStandardBibtexComment || isDefaultOwnerComment;
-            editor.getNode().setDisable(!shouldBeEnabled);
-        }
+		RowConstraints buttonConstraint = new RowConstraints();
+		buttonConstraint.setVgrow(Priority.ALWAYS);
+		buttonConstraint.setValignment(VPos.TOP);
+		double addButtonHeightPercent = 1.0 / totalWeight * 100.0;
+		buttonConstraint.setPercentHeight(addButtonHeightPercent);
 
-        // Show "Hide" button only if user-specific comment field is empty. Otherwise, it is a strange UI, because the
-        // button would just disappear and no change **in the current** editor would be made
-        if (entryEditorPreferences.shouldShowUserCommentsFields() && !entry.hasField(userSpecificCommentField)) {
-            Button hideDefaultOwnerCommentButton = new Button(Localization.lang("Hide user comments"));
-            hideDefaultOwnerCommentButton.setOnAction(e -> {
-                var labelForField = gridPane.getChildren().stream().filter(s -> s instanceof FieldNameLabel).filter(x -> ((FieldNameLabel) x).getText().equals(userSpecificCommentField.getDisplayName())).findFirst();
-                labelForField.ifPresent(label -> gridPane.getChildren().remove(label));
-                fieldEditorForUserDefinedComment.ifPresent(f -> gridPane.getChildren().remove(f.getNode()));
-                editors.remove(userSpecificCommentField);
+		ObservableList<RowConstraints> rowConstraints = gridPane.getRowConstraints();
+		rowConstraints.clear();
+		for (int i = 1; i <= numberOfComments; i++) {
+			rowConstraints.add(commentConstraint);
+		}
+		rowConstraints.add(buttonConstraint);
+	}
 
-                entryEditorPreferences.setShowUserCommentsFields(false);
-                setupPanel(entry, false);
-            });
-            gridPane.add(hideDefaultOwnerCommentButton, 1, gridPane.getRowCount(), 2, 1);
-            setCompressedRowLayout();
-        }
-    }
+	@Override
+	protected void setupPanel(BibEntry entry, boolean compressed) {
+		super.setupPanel(entry, compressed);
+
+		Optional<FieldEditorFX> fieldEditorForUserDefinedComment = editors.entrySet().stream()
+				.filter(f -> f.getKey().getName().contains(defaultOwner)).map(Map.Entry::getValue).findFirst();
+		for (Map.Entry<Field, FieldEditorFX> fieldEditorEntry : editors.entrySet()) {
+			Field field = fieldEditorEntry.getKey();
+			FieldEditorFX editor = fieldEditorEntry.getValue();
+
+			boolean isStandardBibtexComment = field == StandardField.COMMENT;
+			boolean isDefaultOwnerComment = field.equals(userSpecificCommentField);
+			boolean shouldBeEnabled = isStandardBibtexComment || isDefaultOwnerComment;
+			editor.getNode().setDisable(false);
+		}
+
+		// Show "Hide" button only if user-specific comment field is empty. Otherwise,
+		// it is a strange UI, because the
+		// button would just disappear and no change **in the current** editor would be
+		// made
+		if (entryEditorPreferences.shouldShowUserCommentsFields() && !entry.hasField(userSpecificCommentField)) {
+			Button hideDefaultOwnerCommentButton = new Button(Localization.lang("Hide user comments"));
+			hideDefaultOwnerCommentButton.setOnAction(e -> {
+				var labelForField = gridPane.getChildren().stream().filter(s -> s instanceof FieldNameLabel)
+						.filter(x -> ((FieldNameLabel) x).getText().equals(userSpecificCommentField.getDisplayName()))
+						.findFirst();
+				labelForField.ifPresent(label -> gridPane.getChildren().remove(label));
+				fieldEditorForUserDefinedComment.ifPresent(f -> gridPane.getChildren().remove(f.getNode()));
+				editors.remove(userSpecificCommentField);
+
+				entryEditorPreferences.setShowUserCommentsFields(false);
+				setupPanel(entry, false);
+			});
+			gridPane.add(hideDefaultOwnerCommentButton, 1, gridPane.getRowCount(), 2, 1);
+			setCompressedRowLayout();
+		}
+	}
 }
