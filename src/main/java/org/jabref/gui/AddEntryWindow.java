@@ -31,8 +31,9 @@ public class AddEntryWindow extends SimpleCommand {
 	 * preferencesService; private StateManager stateManager;
 	 */
 
-	private static String text;
+
 	private static ArrayList<String> entries = new ArrayList<>();
+	private static ArrayList<String> fields = new ArrayList<>();
 
 	public AddEntryWindow()// DialogService dialogueService,PreferencesService preferencesService,
 							// StateManager stateManager
@@ -47,38 +48,59 @@ public class AddEntryWindow extends SimpleCommand {
 
 		// Creating a customized window for adding new entries.
 
-		JFrame frame = new JFrame("Add Entry");
+		JFrame frame = new JFrame("Add Entry an Fields");
 		frame.setSize(300, 150);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		JPanel panel = new JPanel();
 		frame.add(panel);
 
-		JTextField textField = new JTextField(15);
-		panel.add(textField);
+		JTextField textField_1 = new JTextField(15);
+		panel.add(textField_1);
 
-		JButton addButton = new JButton("Add Entry/Subfield");
-		addButton.addActionListener(e -> {
-			String text = textField.getText();
+		JButton addButton_1 = new JButton("Add Entry");
+		addButton_1.addActionListener(e -> {
+			String text = textField_1.getText();
 
 			// Storing inputed text
 			
-			this.text = text;
 			entries.add(text);
+			ClearFieldsList();
 
-			textField.setText("");
+			textField_1.setText("");
 		});
-		panel.add(addButton);
+		panel.add(addButton_1);
 
+		JTextField textField_2 = new JTextField(15);
+		panel.add(textField_2);
+		
+		JButton addButton_2 = new JButton("Add Field");
+		addButton_2.addActionListener(e -> {
+			String text = textField_2.getText();
+
+			// Storing inputed text
+			
+			fields.add(text);
+	
+			
+			textField_2.setText("");
+		});
+		panel.add(addButton_2);
+		
 		frame.setVisible(true);
-	}
-
-	public static String getText() {
-		return text;
 	}
 
 	public static ArrayList<String> getTextList() {
 		return entries;
+	}
+	
+	public static ArrayList<String> getFieldsList() {
+		
+		return fields;
+	}
+	
+	public static void ClearFieldsList() {
+		fields.clear();
 	}
 
 	@Override
