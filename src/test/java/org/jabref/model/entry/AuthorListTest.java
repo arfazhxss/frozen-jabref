@@ -1173,11 +1173,6 @@ public class AuthorListTest {
             assertEquals("al-Khw{\\={a}}rizm{\\={i}}, M., C. B{\\\"o}hm, K. G{\\\"{o}}del", THREE_AUTHORS_WITH_LATEX.getAsLastFirstFirstLastNamesWithAnd(false));
         }
         
-        @Test
-        public void testGetAsLastFirstFirstLastNamesWithoutAndMultipleAuthors() {
-            assertEquals("al-Khw{\\={a}}rizm{\\={i}}, M., C. B{\\\"o}hm, K. G{\\\"{o}}del", THREE_AUTHORS_WITH_LATEX.getAsLastFirstFirstLastNamesWithAnd(false));
-        }
-
 
         @Test
         public void parseAuthorWithoutMiddleName() {
@@ -1216,7 +1211,7 @@ public class AuthorListTest {
 
         @Test
         public void testGetAsFirstLastNamesWithAndSingleAuthor() {
-            assertEquals("John Doe", AuthorList.parse("John Doe").getAsFirstLastNames(true));
+            assertEquals("John Doe", AuthorList.parse("John Doe").getAsFirstLastNames(true, false));
         }
 
         @Test
@@ -1226,7 +1221,7 @@ public class AuthorListTest {
 
         @Test
         public void testGetAsFirstLastNamesWithoutAndSingleAuthor() {
-            assertEquals("John Doe", AuthorList.parse("John Doe").getAsFirstLastNames(false));
+            assertEquals("John Doe", AuthorList.parse("John Doe").getAsFirstLastNames(false, false));
         }
 
         @Test
@@ -1256,10 +1251,6 @@ public class AuthorListTest {
             assertEquals("Doe, Smith, Johnson", AuthorList.parse("John Doe and Jane Smith and James Johnson").getAsLastNames(true));
         }
 
-        @Test
-        public void testGetAsFirstLastNamesWithAndMultipleAuthors() {
-            assertEquals("John Doe, Jane Smith, James Johnson", AuthorList.parse("John Doe and Jane Smith and James Johnson").getAsFirstLastNames(true));
-        }
 
         @Test
         public void testGetAsLastNamesWithoutAndMultipleAuthors() {
@@ -1268,9 +1259,19 @@ public class AuthorListTest {
 
         @Test
         public void testGetAsFirstLastNamesWithoutAndMultipleAuthors() {
-            assertEquals("John Doe, Jane Smith, James Johnson", AuthorList.parse("John Doe and Jane Smith and James Johnson").getAsFirstLastNames(false));
+            assertEquals("John Doe, Jane Smith, James Johnson", AuthorList.parse("John Doe and Jane Smith and James Johnson").getAsFirstLastNames(false, true));
         }
 
+        @Test
+        public void testGetAsFirstLastNamesWithAbbreviationAndOxfordComma() {
+            assertEquals("J. Doe, J. Smith, J. Johnson", AuthorList.parse("John Doe and Jane Smith and James Johnson").getAsFirstLastNames(true, true));
+        }
+
+        @Test
+        public void testGetAsFirstLastNamesWithoutAbbreviationAndWithoutOxfordComma() {
+            assertEquals("John Doe, Jane Smith and James Johnson", AuthorList.parse("John Doe and Jane Smith and James Johnson").getAsFirstLastNames(false, false));
+        }
+        
         
         
         @CsvSource(
