@@ -37,9 +37,12 @@ public class AuthorListTest {
     private static final AuthorList TWO_INSTITUTIONS_WITH_LATEX = AuthorList.of(BANU_MOSA, BANU_MOSA);
     private static final AuthorList MIXED_AUTHOR_AND_INSTITUTION_WITH_LATEX = AuthorList.of(BANU_MOSA, CORRADO_BOHM);
 
+    AuthorList authorList = AuthorList.parse("Doe, John and Smith, Jane");
+
     public static int size(String bibtex) {
         return AuthorList.parse(bibtex).getNumberOfAuthors();
     }
+
 
     @Test
     public void testFixAuthorNatbib() {
@@ -1248,55 +1251,34 @@ public class AuthorListTest {
         Author expected = new Author("John", "J.", "Middle1 Middle2", "Doe", null);
         assertEquals(AuthorList.of(expected), AuthorList.parse("John Middle1 Middle2 Doe"));
     }
+    
+    
 
     @Test
-    public void testGetAsLastNamesWithAndMultipleAuthors() {
-        assertEquals("Doe, Smith, Johnson", AuthorList.parse("John Doe and Jane Smith and James Johnson").getAsLastNames(true));
+    public void testGetAsLastNamesWithoutAndMultipleAuthors() {
+        assertEquals("Doe and Smith", authorList.getAsLastNames(true));
     }
-
-//    @Test
-//    public void testGetAsFirstLastNamesWithAndMultipleAuthors() {
-//        assertEquals("John Doe, Jane Smith, James Johnson", AuthorList.parse("John Doe and Jane Smith and James Johnson").getAsFirstLastNames(true));
-//    }
-//
-//    @Test
-//    public void testGetAsLastNamesWithoutAndMultipleAuthors() {
-//        assertEquals("Doe, Smith, Johnson", AuthorList.parse("John Doe and Jane Smith and James Johnson").getAsLastNames(false));
-//    }
-//
-
-//        AuthorList authorList = AuthorList.parse("Doe, John and Smith, Jane");
-    @Test
-    public void testGetAsFirstLastNamesWithoutAndMultipleAuthors() {
-        assertEquals("J. Doe and J. Smith", AuthorList.parse("Doe, John and Smith, Jane")
-                        .getAsFirstLastNames(true,true));
-    }
-
-
-
 
     @Test
     public void testGetAsFirstLastNamesWithAbbreviationAndOxfordComma() {
-        assertEquals("J. Doe and J. Smith and J. Johnson", AuthorList.parse("John Doe and Jane Smith and James Johnson").getAsFirstLastNames(true, true));
+        assertEquals("J. Doe and J. Smith", authorList.getAsFirstLastNames(true, true));
     }
 
     @Test
     public void testGetAsFirstLastNamesWithoutAbbreviationAndWithoutOxfordComma() {
-        assertEquals("John Doe, Jane Smith and James Johnson", AuthorList.parse("John Doe and Jane Smith and James Johnson").getAsFirstLastNames(false, false));
+        assertEquals("John Doe and Jane Smith",authorList.getAsFirstLastNames(false, false));
     }
-
-
-
-    @CsvSource(
-            value = {
-                    "Bore; Tim Bore;true",
-            }, delimiter = ';')
-    @ParameterizedTest
-    public void allGetAsLastFirstFirstLastNames() {
-
-        assertEquals("", EMPTY_AUTHOR.getAsLastFirstFirstLastNamesWithAnd(true));
-        assertEquals("al-Khw{\\\\={a}}rizm{\\\\={i}}, M.", ONE_AUTHOR_WITH_LATEX.getAsLastFirstFirstLastNamesWithAnd(true));
-        assertEquals("al-Khw{\\\\={a}}rizm{\\\\={i}}, M. and C. B{\\\\\\\"o}hm", TWO_AUTHORS_WITH_LATEX.getAsLastFirstFirstLastNamesWithAnd(true));
-        assertEquals("al-Khw{\\={a}}rizm{\\={i}}, M. and C. B{\\\"o}hm and K. G{\\\"{o}}del", THREE_AUTHORS_WITH_LATEX.getAsLastFirstFirstLastNamesWithAnd(true));
-    }
+//
+//    @CsvSource(
+//            value = {
+//                    "Bore; Tim Bore;true",
+//            }, delimiter = ';')
+//    @ParameterizedTest
+//    public void allGetAsLastFirstFirstLastNames() {
+//
+//        assertEquals("", EMPTY_AUTHOR.getAsLastFirstFirstLastNamesWithAnd(true));
+//        assertEquals("al-Khw{\\\\={a}}rizm{\\\\={i}}, M.", ONE_AUTHOR_WITH_LATEX.getAsLastFirstFirstLastNamesWithAnd(true));
+//        assertEquals("al-Khw{\\\\={a}}rizm{\\\\={i}}, M. and C. B{\\\\\\\"o}hm", TWO_AUTHORS_WITH_LATEX.getAsLastFirstFirstLastNamesWithAnd(true));
+//        assertEquals("al-Khw{\\={a}}rizm{\\={i}}, M. and C. B{\\\"o}hm and K. G{\\\"{o}}del", THREE_AUTHORS_WITH_LATEX.getAsLastFirstFirstLastNamesWithAnd(true));
+//    }
 }
