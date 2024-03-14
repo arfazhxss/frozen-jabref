@@ -1118,7 +1118,103 @@ public class AuthorListTest {
         public void getAsLastFirstFirstLastNamesWithAndMultipleAuthors() {
                 assertEquals("al-Khw{\\={a}}rizm{\\={i}}, M. and C. B{\\\"o}hm and K. G{\\\"{o}}del", THREE_AUTHORS_WITH_LATEX.getAsLastFirstFirstLastNamesWithAnd(true));
         }
+        
+        @Test
+        public void parseAuthorWithMiddleName() {
+            Author expected = new Author("John", "J.", "Middle", "Doe", null);
+            assertEquals(AuthorList.of(expected), AuthorList.parse("John Middle Doe"));
+        }
 
+        @Test
+        public void parseAuthorWithSuffix() {
+            Author expected = new Author("John", "J.", null, "Doe", "Jr.");
+            assertEquals(AuthorList.of(expected), AuthorList.parse("John Doe Jr."));
+        }
+
+        @Test
+        public void parseAuthorWithPrefix() {
+            Author expected = new Author("Sir John", null, null, "Doe", null);
+            assertEquals(AuthorList.of(expected), AuthorList.parse("Sir John Doe"));
+        }
+
+        @Test
+        public void parseAuthorWithAllNameParts() {
+            Author expected = new Author("Sir John", "S. J.", "Middle", "Doe", "Jr.");
+            assertEquals(AuthorList.of(expected), AuthorList.parse("Sir John Middle Doe Jr."));
+        }
+
+        @Test
+        public void testGetAsLastNamesWithAnd() {
+            assertEquals("Doe and Smith", AuthorList.parse("John Doe and Jane Smith").getAsLastNames(true));
+        }
+
+        @Test
+        public void testGetAsLastNamesWithoutAnd() {
+            assertEquals("Doe, Smith", AuthorList.parse("John Doe and Jane Smith").getAsLastNames(false));
+        }
+
+        @Test
+        public void testGetAsFirstLastNamesWithAnd() {
+            assertEquals("John Doe and Jane Smith", AuthorList.parse("John Doe and Jane Smith").getAsFirstLastNames(true));
+        }
+
+        @Test
+        public void testGetAsFirstLastNamesWithoutAnd() {
+            assertEquals("John Doe, Jane Smith", AuthorList.parse("John Doe and Jane Smith").getAsFirstLastNames(false));
+        }
+        
+        @Test
+        public void testGetFullName() {
+            assertEquals("John Doe", AuthorList.parse("John Doe").getFullName());
+        }
+
+        @Test
+        public void testGetShortName() {
+            assertEquals("J. Doe", AuthorList.parse("John Doe").getShortName());
+        }
+
+        @Test
+        public void testGetFirstName() {
+            assertEquals("John", AuthorList.parse("John Doe").getFirstName());
+        }
+
+        @Test
+        public void testGetLastName() {
+            assertEquals("Doe", AuthorList.parse("John Doe").getLastName());
+        }
+
+        @Test
+        public void testGetMiddleName() {
+            assertEquals("Middle", AuthorList.parse("John Middle Doe").getMiddleName());
+        }
+
+        @Test
+        public void testGetSuffix() {
+            assertEquals("Jr.", AuthorList.parse("John Doe Jr.").getSuffix());
+        }
+
+        @Test
+        public void testGetPrefix() {
+            assertEquals("Sir", AuthorList.parse("Sir John Doe").getPrefix());
+        }
+
+        @Test
+        public void testIsLastNameFirst() {
+            assertTrue(AuthorList.parse("Doe, John").isLastNameFirst());
+        }
+
+        @Test
+        public void testIsLastNameFirstFalse() {
+            assertFalse(AuthorList.parse("John Doe").isLastNameFirst());
+        }
+
+        @Test
+        public void testIsLastNameFirstWithPrefix() {
+            assertTrue(AuthorList.parse("Doe, Sir John").isLastNameFirst());
+        }
+
+     
+        
         @CsvSource(
                 value = {
                         "Bore; Tim Bore;true",
@@ -1131,4 +1227,5 @@ public class AuthorListTest {
         	assertEquals("al-Khw{\\\\={a}}rizm{\\\\={i}}, M. and C. B{\\\\\\\"o}hm", TWO_AUTHORS_WITH_LATEX.getAsLastFirstFirstLastNamesWithAnd(true));
         	assertEquals("al-Khw{\\={a}}rizm{\\={i}}, M. and C. B{\\\"o}hm and K. G{\\\"{o}}del", THREE_AUTHORS_WITH_LATEX.getAsLastFirstFirstLastNamesWithAnd(true));
         }
+        
 }
