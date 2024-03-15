@@ -62,7 +62,7 @@ public class AddEntryWindow extends SimpleCommand {
 		addButton_1.addActionListener(e -> {
 			String text = textField_1.getText();
 
-			// Storing inputed text
+			// Storing inputted text
 			
 			entries.add(text);
 			ClearFieldsList();
@@ -77,7 +77,6 @@ public class AddEntryWindow extends SimpleCommand {
 		JButton addButton_2 = new JButton("Add Field");
 		addButton_2.addActionListener(e -> {
 			String text = textField_2.getText();
-
 			// Storing inputed text
 			
 			fields.add(text);
