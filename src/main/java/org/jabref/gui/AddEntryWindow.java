@@ -31,7 +31,6 @@ public class AddEntryWindow extends SimpleCommand {
 	 * preferencesService; private StateManager stateManager;
 	 */
 
-
 	private static ArrayList<String> entries = new ArrayList<>();
 	private static ArrayList<String> fields = new ArrayList<>();
 
@@ -63,7 +62,7 @@ public class AddEntryWindow extends SimpleCommand {
 			String text = textField_1.getText();
 
 			// Storing inputted text
-			
+
 			entries.add(text);
 			ClearFieldsList();
 
@@ -73,39 +72,39 @@ public class AddEntryWindow extends SimpleCommand {
 
 		JTextField textField_2 = new JTextField(15);
 		panel.add(textField_2);
-		
+
 		JButton addButton_2 = new JButton("Add Field");
 		addButton_2.addActionListener(e -> {
 			String text = textField_2.getText();
-			// Storing inputed text
-			
+
+			// Storing inputted text
+
 			fields.add(text);
-	
-			
+
 			textField_2.setText("");
 		});
 		panel.add(addButton_2);
-		
+
 		frame.setVisible(true);
 	}
 
 	public static ArrayList<String> getTextList() {
-		return entries;
+		
+		return new ArrayList<String>(entries);
 	}
-	
+
 	public static ArrayList<String> getFieldsList() {
 		
-		return fields;
+		return new ArrayList<String>(fields);
 	}
-	
+
 	public static void ClearFieldsList() {
 		fields.clear();
 	}
 
 	@Override
 	public void execute() {
-		
-		
+
 		ShowWindow();
 
 	}
