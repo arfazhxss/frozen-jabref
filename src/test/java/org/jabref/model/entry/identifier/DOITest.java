@@ -199,7 +199,8 @@ public class DOITest {
                          Arguments.of("10/abcde", DOI.findInText("other stuff https://www.doi.org/abcde end").get().getDOI()),
                          Arguments.of("10/abcde", DOI.findInText("other stuff https://doi.org/abcde end").get().getDOI()),
                          Arguments.of("10.5220/0010404301780189", DOI.findInText("https://www.scitepress.org/Link.aspx?doi=10.5220/0010404301780189").get().getDOI()),
-                         Arguments.of("10.5220/0010404301780189", DOI.findInText("10.5220/0010404301780189").get().getDOI()));
+                         Arguments.of("10.5220/0010404301780189", DOI.findInText("10.5220/0010404301780189").get().getDOI())
+                         );
     }
 
     @ParameterizedTest
@@ -285,3 +286,18 @@ public class DOITest {
         assertThrows(IllegalArgumentException.class, () -> new DOI("10gf4gqc end"));
     }
 }
+
+//// test2.2changedoc
+//import org.junit.jupiter.api.Disabled;
+//import org.junit.jupiter.api.Test;
+//
+//public class DOITest {
+//
+//    @Disabled
+//    @Test
+//    public void testEquals() {
+//        // Test logic
+//    }
+//
+//    // Other test methods here
+//}

@@ -25,6 +25,12 @@ public enum StandardEntryType implements EntryType {
     Proceedings("Proceedings"),
     TechReport("TechReport"),
     Unpublished("Unpublished"),
+    
+    
+    //Added
+    Other("Other"),
+    
+    
     // BibLaTeX
     BookInBook("BookInBook"),
     InReference("InReference"),
@@ -49,7 +55,7 @@ public enum StandardEntryType implements EntryType {
     StandardEntryType(String displayName) {
         this.displayName = displayName;
     }
-
+    
     @Override
     public String getName() {
         return displayName.toLowerCase(Locale.ENGLISH);

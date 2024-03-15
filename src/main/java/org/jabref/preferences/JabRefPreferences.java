@@ -822,17 +822,17 @@ public class JabRefPreferences implements PreferencesService {
 
     public void setLanguageDependentDefaultValues() {
         // Entry editor tab 0:
-        defaults.put(CUSTOM_TAB_NAME + "_def0", Localization.lang("General"));
+        //defaults.put(CUSTOM_TAB_NAME + "_def0", Localization.lang("General"));
         String fieldNames = FieldFactory.getDefaultGeneralFields().stream().map(Field::getName).collect(Collectors.joining(STRINGLIST_DELIMITER.toString()));
         defaults.put(CUSTOM_TAB_FIELDS + "_def0", fieldNames);
 
         // Entry editor tab 1:
-        defaults.put(CUSTOM_TAB_FIELDS + "_def1", StandardField.ABSTRACT.getName());
-        defaults.put(CUSTOM_TAB_NAME + "_def1", Localization.lang("Abstract"));
+        //defaults.put(CUSTOM_TAB_FIELDS + "_def1", StandardField.ABSTRACT.getName());
+        //defaults.put(CUSTOM_TAB_NAME + "_def1", Localization.lang("Abstract"));
 
         // Entry editor tab 2: Comments Field - used for research comments, etc.
-        defaults.put(CUSTOM_TAB_FIELDS + "_def2", StandardField.COMMENT.getName());
-        defaults.put(CUSTOM_TAB_NAME + "_def2", Localization.lang("Comments"));
+        //defaults.put(CUSTOM_TAB_FIELDS + "_def2", StandardField.COMMENT.getName());
+        //defaults.put(CUSTOM_TAB_NAME + "_def2", Localization.lang("Comments"));
 
         defaults.put(EMAIL_SUBJECT, Localization.lang("References"));
     }

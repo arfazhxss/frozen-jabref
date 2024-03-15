@@ -61,11 +61,17 @@ public class MetaDataParser {
         String reqFields = fieldsDescription.substring(4, indexEndOfRequiredFields);
         String optFields = fieldsDescription.substring(indexEndOfRequiredFields + 6, indexEndOfOptionalFields);
         BibEntryTypeBuilder entryTypeBuilder = new BibEntryTypeBuilder()
-                .withType(type)
+                .withType(type);
+        
+                 //Edited
+        
+                /**
                 .withRequiredFields(FieldFactory.parseOrFieldsList(reqFields))
                 // Important fields are optional fields, but displayed first. Thus, they do not need to be separated by "/".
                 // See org.jabref.model.entry.field.FieldPriority for details on important optional fields.
                 .withImportantFields(FieldFactory.parseFieldList(optFields));
+                **/
+        
         return Optional.of(entryTypeBuilder.build());
     }
 
