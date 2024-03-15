@@ -59,9 +59,6 @@ class DatabaseFileLookupTest {
         assertNotNull(entry2);
     }
 
-    /*
-    ---> test2.2 changedoc 
-    */
     @Test
     void directoryPathTests(@TempDir Path tempDir) throws IOException {
         // Create a temporary file directory
