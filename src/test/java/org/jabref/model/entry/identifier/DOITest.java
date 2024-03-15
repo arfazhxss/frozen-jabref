@@ -285,18 +285,3 @@ public class DOITest {
         assertThrows(IllegalArgumentException.class, () -> new DOI("10gf4gqc end"));
     }
 }
-
-// // test2.2changedoc
-// import org.junit.jupiter.api.Disabled;
-// import org.junit.jupiter.api.Test;
-
-// public class DOITest {
-
-//    @Disabled
-//    @Test
-//    public void testEquals() {
-//        // Test logic
-//    }
-
-//    // Other test methods here
-// }
