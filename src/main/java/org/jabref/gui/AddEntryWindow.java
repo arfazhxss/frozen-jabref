@@ -8,13 +8,6 @@ import org.jabref.gui.actions.SimpleCommand;
 import org.jabref.gui.bibtexextractor.ExtractBibtexDialog;
 import org.jabref.gui.importer.GrobidOptInDialogHelper;
 
-/**
-import org.jabref.gui.DialogService;
-import org.jabref.gui.StateManager;
-import org.jabref.preferences.PreferencesService;
-
-import com.airhacks.afterburner.injection.Injector;
-**/
 import static org.jabref.gui.actions.ActionHelper.needsDatabase;
 
 import java.util.ArrayList;
@@ -26,21 +19,13 @@ import org.jabref.model.entry.types.BibtexEntryTypeDefinitions;
 
 public class AddEntryWindow extends SimpleCommand {
 
-	/*
-	 * private DialogService dialogueService; private PreferencesService
-	 * preferencesService; private StateManager stateManager;
-	 */
 
 	private static ArrayList<String> entries = new ArrayList<>();
 	private static ArrayList<String> fields = new ArrayList<>();
 
-	public AddEntryWindow()// DialogService dialogueService,PreferencesService preferencesService,
-							// StateManager stateManager
+	public AddEntryWindow()
 	{
-		/**
-		 * this.dialogueService = dialogueService; this.preferencesService =
-		 * preferencesService; this.stateManager = stateManager;
-		 **/
+		
 	}
 
 	public void ShowWindow() {
