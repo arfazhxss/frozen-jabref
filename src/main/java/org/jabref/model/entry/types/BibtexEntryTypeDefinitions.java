@@ -12,10 +12,33 @@ import org.jabref.model.entry.field.StandardField;
 
 import org.jabref.gui.AddEntryWindow;
 
+
+/**
+* This class represents the added custom entry type names
+**/
+class CustomEntryType implements EntryType {
+
+	private String displayName;
+
+	CustomEntryType(String n) {
+		displayName = n;
+	}
+
+	@Override
+	public String getName() {
+		return displayName.toLowerCase(Locale.ENGLISH);
+	}
+
+	@Override
+	public String getDisplayName() {
+		return displayName;
+	}
+}
+
 /**
  * This class represents all supported BibTeX entry types. The BibLaTeX entry
  * types are defined at {@link BiblatexEntryTypeDefinitions}.
- */
+ **/
 public class BibtexEntryTypeDefinitions {
 
 	/**
@@ -225,6 +248,7 @@ public class BibtexEntryTypeDefinitions {
 	 * Adding newly added buttons by the user With a fixed required fields
 	 * 
 	 */
+
 	static String name = " ";
 
 	public static List<BibEntryType> add_new_entries() {
@@ -235,36 +259,12 @@ public class BibtexEntryTypeDefinitions {
 		for (int i = 0; i < custom_entries.size(); ++i) {
 			name = custom_entries.get(i);
 
-			class CustomEntryType implements EntryType {
-
-
-				private String displayName;
-
-				CustomEntryType(String n) {
-					displayName = n;
-				}
-
-				@Override
-				public String getName() {
-					return displayName.toLowerCase(Locale.ENGLISH);
-				}
-
-				@Override
-				public String getDisplayName() {
-					return displayName;
-				}
-			}
-
-			lis.add(new BibEntryTypeBuilder().withType(new CustomEntryType(name))
-					// .withRequiredFields(StandardField.AUTHOR, StandardField.TITLE,
-					// StandardField.NOTE)
-					// .withImportantFields(StandardField.MONTH, StandardField.YEAR)
-					.build());
+			lis.add(new BibEntryTypeBuilder().withType(new CustomEntryType(name)).build());
 		}
 
 		return lis;
 	}
-	
+
 	public BibtexEntryTypeDefinitions() {
 	}
 }
