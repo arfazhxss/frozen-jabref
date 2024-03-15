@@ -58,13 +58,12 @@ class DatabaseFileLookupTest {
         assertNotNull(entry1);
         assertNotNull(entry2);
     }
-    /*
-    ---> test2.2 changedoc 
-    */
+
     @Test
     void directoryPathTests(@TempDir Path tempDir) throws IOException {
         // Create a temporary file directory
         Path txtFileDir = tempDir.resolve("x.txt");
+
         try { Files.write(txtFileDir, Collections.singleton("x.txt file contents for test")); }
         catch (IOException e) { fail("Failed to create temporary file directory: " + e.getMessage()); }
         
@@ -92,4 +91,3 @@ class DatabaseFileLookupTest {
         assertEquals("", fileLookup.getPathOfDatabase().toString());
     }
 }
-
