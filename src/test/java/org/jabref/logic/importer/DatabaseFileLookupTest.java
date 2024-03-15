@@ -63,12 +63,10 @@ class DatabaseFileLookupTest {
     void directoryPathTests(@TempDir Path tempDir) throws IOException {
         // Create a temporary file directory
         Path txtFileDir = tempDir.resolve("x.txt");
-        try {
-            Files.write(txtFileDir, Collections.singleton("x.txt file contents for test"));
-        } catch (IOException e) {
-            fail("Failed to create temporary file directory: " + e.getMessage());
-        }
 
+        try { Files.write(txtFileDir, Collections.singleton("x.txt file contents for test")); }
+        catch (IOException e) { fail("Failed to create temporary file directory: " + e.getMessage()); }
+        
         // Create a BibDatabaseContext with a BibDatabase containing two entries
         BibDatabase bibDatabase = new BibDatabase();
         BibEntry entry1 = new BibEntry();
