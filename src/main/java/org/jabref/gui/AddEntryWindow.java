@@ -77,8 +77,7 @@ public class AddEntryWindow extends SimpleCommand {
 		JButton addButton_2 = new JButton("Add Field");
 		addButton_2.addActionListener(e -> {
 			String text = textField_2.getText();
-
-			// Storing inputted text
+			// Storing inputed text
 			
 			fields.add(text);
 	
