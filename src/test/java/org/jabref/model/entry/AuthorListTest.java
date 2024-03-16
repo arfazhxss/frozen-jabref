@@ -54,52 +54,26 @@ public class AuthorListTest {
                 .fixAuthorNatbib("John von Neumann and John Smith and Black Brown, Peter"));
     }
 
-    @Test
-    public void getAsNatbibLatexFreeEmptyAuthorStringForEmptyInput() {
-        assertEquals("", EMPTY_AUTHOR.latexFree().getAsNatbib());
+    
+    private static Stream<Object[]> getTestData() {
+        return Stream.of(
+                new Object[]{EMPTY_AUTHOR, ""},
+                new Object[]{ONE_AUTHOR_WITH_LATEX, "al-Khwārizmī"},
+                new Object[]{TWO_AUTHORS_WITH_LATEX, "al-Khwārizmī and Böhm"},
+                new Object[]{THREE_AUTHORS_WITH_LATEX, "al-Khwārizmī et al."},
+                new Object[]{ONE_INSTITUTION_WITH_LATEX, "The Banū Mūsā brothers"},
+                new Object[]{TWO_INSTITUTIONS_WITH_LATEX, "The Banū Mūsā brothers and The Banū Mūsā brothers"},
+                new Object[]{MIXED_AUTHOR_AND_INSTITUTION_WITH_LATEX, "The Banū Mūsā brothers and Böhm"},
+                new Object[]{ONE_INSTITUTION_WITH_STARTING_PARANTHESIS, "Łukasz Michał"}
+        );
     }
 
-    @Test
-    public void getAsNatbibLatexFreeUnicodeOneAuthorNameFromLatex() {
-        assertEquals("al-Khwārizmī",
-                ONE_AUTHOR_WITH_LATEX.latexFree().getAsNatbib());
+    @ParameterizedTest
+    @MethodSource("getTestData")
+    public void getAsNatbibLatexFree(AuthorList authorList, String expected) {
+        assertEquals(expected, authorList.latexFree().getAsNatbib());
     }
 
-    @Test
-    public void getAsNatbibLatexFreeUnicodeTwoAuthorNamesFromLatex() {
-        assertEquals("al-Khwārizmī and Böhm",
-                TWO_AUTHORS_WITH_LATEX.latexFree().getAsNatbib());
-    }
-
-    @Test
-    public void getAsNatbibLatexFreeUnicodeAuthorEtAlFromLatex() {
-        assertEquals("al-Khwārizmī et al.",
-                THREE_AUTHORS_WITH_LATEX.latexFree().getAsNatbib());
-    }
-
-    @Test
-    public void getAsNatbibLatexFreeUnicodeOneInsitutionNameFromLatex() {
-        assertEquals("The Banū Mūsā brothers",
-                ONE_INSTITUTION_WITH_LATEX.latexFree().getAsNatbib());
-    }
-
-    @Test
-    public void getAsNatbibLatexFreeUnicodeTwoInsitutionNameFromLatex() {
-        assertEquals("The Banū Mūsā brothers and The Banū Mūsā brothers",
-                TWO_INSTITUTIONS_WITH_LATEX.latexFree().getAsNatbib());
-    }
-
-    @Test
-    public void getAsNatbibLatexFreeUnicodeMixedAuthorsFromLatex() {
-        assertEquals("The Banū Mūsā brothers and Böhm",
-                MIXED_AUTHOR_AND_INSTITUTION_WITH_LATEX.latexFree().getAsNatbib());
-    }
-
-    @Test
-    public void getAsNatbibLatexFreeOneInstitutionWithParanthesisAtStart() {
-        assertEquals("Łukasz Michał",
-                ONE_INSTITUTION_WITH_STARTING_PARANTHESIS.latexFree().getAsNatbib());
-    }
 
     @Test
     public void parseCachesOneAuthor() {
