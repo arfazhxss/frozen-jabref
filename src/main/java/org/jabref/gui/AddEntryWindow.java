@@ -1,20 +1,15 @@
 package org.jabref.gui;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import java.awt.GridLayout;
 
 import org.jabref.gui.actions.SimpleCommand;
 import org.jabref.gui.bibtexextractor.ExtractBibtexDialog;
 import org.jabref.gui.importer.GrobidOptInDialogHelper;
 
-/**
-import org.jabref.gui.DialogService;
-import org.jabref.gui.StateManager;
-import org.jabref.preferences.PreferencesService;
-
-import com.airhacks.afterburner.injection.Injector;
-**/
 import static org.jabref.gui.actions.ActionHelper.needsDatabase;
 
 import java.util.ArrayList;
@@ -26,33 +21,22 @@ import org.jabref.model.entry.types.BibtexEntryTypeDefinitions;
 
 public class AddEntryWindow extends SimpleCommand {
 
-	/*
-	 * private DialogService dialogueService; private PreferencesService
-	 * preferencesService; private StateManager stateManager;
-	 */
-
-
 	private static ArrayList<String> entries = new ArrayList<>();
 	private static ArrayList<String> fields = new ArrayList<>();
 
-	public AddEntryWindow()// DialogService dialogueService,PreferencesService preferencesService,
-							// StateManager stateManager
-	{
-		/**
-		 * this.dialogueService = dialogueService; this.preferencesService =
-		 * preferencesService; this.stateManager = stateManager;
-		 **/
+	public AddEntryWindow() {
+
 	}
 
 	public void ShowWindow() {
 
 		// Creating a customized window for adding new entries.
 
-		JFrame frame = new JFrame("Add Entry an Fields");
+		JFrame frame = new JFrame("Add Entry and Fields");
 		frame.setSize(300, 150);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		JPanel panel = new JPanel();
+		JPanel panel = new JPanel(new GridLayout(0, 2, 0, 0));
 		frame.add(panel);
 
 		JTextField textField_1 = new JTextField(15);
@@ -63,7 +47,7 @@ public class AddEntryWindow extends SimpleCommand {
 			String text = textField_1.getText();
 
 			// Storing inputted text
-			
+
 			entries.add(text);
 			ClearFieldsList();
 
@@ -73,39 +57,114 @@ public class AddEntryWindow extends SimpleCommand {
 
 		JTextField textField_2 = new JTextField(15);
 		panel.add(textField_2);
-		
+
 		JButton addButton_2 = new JButton("Add Field");
 		addButton_2.addActionListener(e -> {
 			String text = textField_2.getText();
-			// Storing inputed text
-			
+
+			// Storing inputted text
+
 			fields.add(text);
-	
-			
+
 			textField_2.setText("");
+
 		});
 		panel.add(addButton_2);
+
+		// Separator for quick custome entries buttons
+
+		JLabel custom_entries_table = new JLabel("Quik Custom Fields");
+		panel.add(custom_entries_table);
+
+		JLabel separator = new JLabel("");
+		panel.add(separator);
+
+		// Buttons for quick fields addition
+
+		JButton addButton_3 = new JButton("Author");
+		addButton_3.addActionListener(e -> {
+
+			fields.add("Author");
+
+		});
+		panel.add(addButton_3);
+
+		JButton addButton_4 = new JButton("Title");
+		addButton_4.addActionListener(e -> {
+
+			fields.add("Title");
+
+		});
+		panel.add(addButton_4);
+
+		JButton addButton_5 = new JButton("ID");
+		addButton_5.addActionListener(e -> {
+
+			fields.add("ID");
+
+		});
+		panel.add(addButton_5);
+
+		JButton addButton_6 = new JButton("Date");
+		addButton_6.addActionListener(e -> {
+
+			fields.add("Date");
+
+		});
+		panel.add(addButton_6);
+
+		JButton addButton_7 = new JButton("Website");
+		addButton_7.addActionListener(e -> {
+
+			fields.add("Website");
+
+		});
+		panel.add(addButton_7);
 		
+		JButton addButton_8 = new JButton("Number");
+		addButton_8.addActionListener(e -> {
+
+			fields.add("Number");
+
+		});
+		panel.add(addButton_8);
+		
+		JButton addButton_9 = new JButton("Translator");
+		addButton_9.addActionListener(e -> {
+
+			fields.add("Translator");
+
+		});
+		panel.add(addButton_9);
+		
+		JButton addButton_10 = new JButton("Volume");
+		addButton_10.addActionListener(e -> {
+
+			fields.add("Volume");
+
+		});
+		panel.add(addButton_10);
+
 		frame.setVisible(true);
-	}
+	} 
 
 	public static ArrayList<String> getTextList() {
-		return entries;
+
+		return new ArrayList<String>(entries);
 	}
-	
+
 	public static ArrayList<String> getFieldsList() {
-		
-		return fields;
+
+		return new ArrayList<String>(fields);
 	}
-	
+
 	public static void ClearFieldsList() {
 		fields.clear();
 	}
 
 	@Override
 	public void execute() {
-		
-		
+
 		ShowWindow();
 
 	}
