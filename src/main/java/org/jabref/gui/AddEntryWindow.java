@@ -71,7 +71,7 @@ public class AddEntryWindow extends SimpleCommand {
 		});
 		panel.add(addButton_2);
 
-		// Separator for quick custom fields' buttons
+		// Separator for quick custome entries buttons
 
 		JLabel custom_entries_table = new JLabel("Quik Custom Fields");
 		panel.add(custom_entries_table);
@@ -79,7 +79,7 @@ public class AddEntryWindow extends SimpleCommand {
 		JLabel separator = new JLabel("");
 		panel.add(separator);
 
-		// Buttons for a quick field addition
+		// Buttons for quick fields addition
 
 		JButton addButton_3 = new JButton("Author");
 		addButton_3.addActionListener(e -> {
@@ -95,7 +95,6 @@ public class AddEntryWindow extends SimpleCommand {
 			fields.add("Title");
 
 		});
-
 		panel.add(addButton_4);
 
 		JButton addButton_5 = new JButton("ID");
@@ -120,11 +119,34 @@ public class AddEntryWindow extends SimpleCommand {
 			fields.add("Website");
 
 		});
-
 		panel.add(addButton_7);
+		
+		JButton addButton_8 = new JButton("Number");
+		addButton_8.addActionListener(e -> {
+
+			fields.add("Number");
+
+		});
+		panel.add(addButton_8);
+		
+		JButton addButton_9 = new JButton("Translator");
+		addButton_9.addActionListener(e -> {
+
+			fields.add("Translator");
+
+		});
+		panel.add(addButton_9);
+		
+		JButton addButton_10 = new JButton("Volume");
+		addButton_10.addActionListener(e -> {
+
+			fields.add("Volume");
+
+		});
+		panel.add(addButton_10);
 
 		frame.setVisible(true);
-	}
+	} 
 
 	public static ArrayList<String> getTextList() {
 
