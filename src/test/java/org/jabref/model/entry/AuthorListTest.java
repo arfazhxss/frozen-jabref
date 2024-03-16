@@ -54,24 +54,21 @@ public class AuthorListTest {
                 .fixAuthorNatbib("John von Neumann and John Smith and Black Brown, Peter"));
     }
 
-    
-    private static Stream<Object[]> getTestData() {
-        return Stream.of(
-                new Object[]{EMPTY_AUTHOR, ""},
-                new Object[]{ONE_AUTHOR_WITH_LATEX, "al-Khwārizmī"},
-                new Object[]{TWO_AUTHORS_WITH_LATEX, "al-Khwārizmī and Böhm"},
-                new Object[]{THREE_AUTHORS_WITH_LATEX, "al-Khwārizmī et al."},
-                new Object[]{ONE_INSTITUTION_WITH_LATEX, "The Banū Mūsā brothers"},
-                new Object[]{TWO_INSTITUTIONS_WITH_LATEX, "The Banū Mūsā brothers and The Banū Mūsā brothers"},
-                new Object[]{MIXED_AUTHOR_AND_INSTITUTION_WITH_LATEX, "The Banū Mūsā brothers and Böhm"},
-                new Object[]{ONE_INSTITUTION_WITH_STARTING_PARANTHESIS, "Łukasz Michał"}
-        );
-    }
 
+    @CsvSource(
+            value = {
+                    "''; '';",
+                    "'Mu{\\d{h}}ammad al-Khw{\\={a}}rizm{\\={i}}'; 'al-Khwārizmī';",
+                    "'Mu{\\d{h}}ammad al-Khw{\\={a}}rizm{\\={i}} and Corrado B{\\\"o}hm'; 'al-Khwārizmī and Böhm';",
+                    "'Mu{\\d{h}}ammad al-Khw{\\={a}}rizm{\\={i}} and Corrado B{\\\"o}hm and Kurt Godel'; 'al-Khwārizmī et al.';",
+                    "'{The Ban\\={u} M\\={u}s\\={a} brothers}'; 'The Banū Mūsā brothers';",
+                    "'{The Ban\\={u} M\\={u}s\\={a} brothers} and {The Ban\\={u} M\\={u}s\\={a} brothers}'; 'The Banū Mūsā brothers and The Banū Mūsā brothers';",
+                    "'{The Ban\\={u} M\\={u}s\\={a} brothers} and Corrado B{\\\"o}hm'; 'The Banū Mūsā brothers and Böhm';",
+                    "'{{\\L{}}ukasz Micha\\l{}}'; 'Łukasz Michał';"
+            }, delimiter = ';')
     @ParameterizedTest
-    @MethodSource("getTestData")
-    public void getAsNatbibLatexFree(AuthorList authorList, String expected) {
-        assertEquals(expected, authorList.latexFree().getAsNatbib());
+    public void getAsNatbibLatexFree(AuthorList input, String expected) {
+        assertEquals(expected, input.latexFree().getAsNatbib());
     }
 
 
