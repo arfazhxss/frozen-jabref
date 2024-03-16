@@ -54,52 +54,30 @@ public class AuthorListTest {
                 .fixAuthorNatbib("John von Neumann and John Smith and Black Brown, Peter"));
     }
 
-    @Test
-    public void getAsNatbibLatexFreeEmptyAuthorStringForEmptyInput() {
-        assertEquals("", EMPTY_AUTHOR.latexFree().getAsNatbib());
+    
+    /*
+     * ---> test2.3
+     * ---> The test below is for the task "Try to split or rewrite other test methods in AuthorListTest #4
+     * Dhuruvan
+     *
+     * ---> https://github.com/koppor/jabref/issues/676
+     */
+    @CsvSource(
+            value = {
+                    "''; '';",
+                    "'Mu{\\d{h}}ammad al-Khw{\\={a}}rizm{\\={i}}'; 'al-Khwārizmī';",
+                    "'Mu{\\d{h}}ammad al-Khw{\\={a}}rizm{\\={i}} and Corrado B{\\\"o}hm'; 'al-Khwārizmī and Böhm';",
+                    "'Mu{\\d{h}}ammad al-Khw{\\={a}}rizm{\\={i}} and Corrado B{\\\"o}hm and Kurt Godel'; 'al-Khwārizmī et al.';",
+                    "'{The Ban\\={u} M\\={u}s\\={a} brothers}'; 'The Banū Mūsā brothers';",
+                    "'{The Ban\\={u} M\\={u}s\\={a} brothers} and {The Ban\\={u} M\\={u}s\\={a} brothers}'; 'The Banū Mūsā brothers and The Banū Mūsā brothers';",
+                    "'{The Ban\\={u} M\\={u}s\\={a} brothers} and Corrado B{\\\"o}hm'; 'The Banū Mūsā brothers and Böhm';",
+                    "'{{\\L{}}ukasz Micha\\l{}}'; 'Łukasz Michał';"
+            }, delimiter = ';')
+    @ParameterizedTest
+    public void getAsNatbibLatexFree(AuthorList input, String expected) {
+        assertEquals(expected, input.latexFree().getAsNatbib());
     }
 
-    @Test
-    public void getAsNatbibLatexFreeUnicodeOneAuthorNameFromLatex() {
-        assertEquals("al-Khwārizmī",
-                ONE_AUTHOR_WITH_LATEX.latexFree().getAsNatbib());
-    }
-
-    @Test
-    public void getAsNatbibLatexFreeUnicodeTwoAuthorNamesFromLatex() {
-        assertEquals("al-Khwārizmī and Böhm",
-                TWO_AUTHORS_WITH_LATEX.latexFree().getAsNatbib());
-    }
-
-    @Test
-    public void getAsNatbibLatexFreeUnicodeAuthorEtAlFromLatex() {
-        assertEquals("al-Khwārizmī et al.",
-                THREE_AUTHORS_WITH_LATEX.latexFree().getAsNatbib());
-    }
-
-    @Test
-    public void getAsNatbibLatexFreeUnicodeOneInsitutionNameFromLatex() {
-        assertEquals("The Banū Mūsā brothers",
-                ONE_INSTITUTION_WITH_LATEX.latexFree().getAsNatbib());
-    }
-
-    @Test
-    public void getAsNatbibLatexFreeUnicodeTwoInsitutionNameFromLatex() {
-        assertEquals("The Banū Mūsā brothers and The Banū Mūsā brothers",
-                TWO_INSTITUTIONS_WITH_LATEX.latexFree().getAsNatbib());
-    }
-
-    @Test
-    public void getAsNatbibLatexFreeUnicodeMixedAuthorsFromLatex() {
-        assertEquals("The Banū Mūsā brothers and Böhm",
-                MIXED_AUTHOR_AND_INSTITUTION_WITH_LATEX.latexFree().getAsNatbib());
-    }
-
-    @Test
-    public void getAsNatbibLatexFreeOneInstitutionWithParanthesisAtStart() {
-        assertEquals("Łukasz Michał",
-                ONE_INSTITUTION_WITH_STARTING_PARANTHESIS.latexFree().getAsNatbib());
-    }
 
     @Test
     public void parseCachesOneAuthor() {
@@ -152,102 +130,32 @@ public class AuthorListTest {
         assertEquals("J. P. von Neumann", AuthorList.fixAuthorFirstNameFirstCommas("John Peter von Neumann", true, true));
     }
 
-    @Test
-    public void getAsFirstLastNamesLatexFreeEmptyAuthorStringForEmptyInputAbbreviate() {
-        assertEquals("", EMPTY_AUTHOR.latexFree().getAsFirstLastNames(true, false));
-    }
-
-    @Test
-    public void getAsFirstLastNamesLatexFreeUnicodeOneAuthorNameFromLatexAbbreviate() {
-        assertEquals("M. al-Khwārizmī",
-                ONE_AUTHOR_WITH_LATEX.latexFree().getAsFirstLastNames(true, false));
-    }
-
-    @Test
-    public void getAsFirstLastNamesLatexFreeUnicodeTwoAuthorNamesFromLatexAbbreviate() {
-        assertEquals("M. al-Khwārizmī and C. Böhm",
-                TWO_AUTHORS_WITH_LATEX.latexFree().getAsFirstLastNames(true, false));
-    }
-
-    @Test
-    public void getAsFirstLastNamesLatexFreeUnicodeTwoAuthorNamesFromLatexAbbreviateAndOxfordComma() {
-        assertEquals("M. al-Khwārizmī and C. Böhm",
-                TWO_AUTHORS_WITH_LATEX.latexFree().getAsFirstLastNames(true, true));
-    }
-
-    @Test
-    public void getAsFirstLastNamesLatexFreeThreeUnicodeAuthorsFromLatexAbbreviate() {
-        assertEquals("M. al-Khwārizmī, C. Böhm and K. Gödel",
-                THREE_AUTHORS_WITH_LATEX.latexFree().getAsFirstLastNames(true, false));
-    }
-
-    @Test
-    public void getAsFirstLastNamesLatexFreeThreeUnicodeAuthorsFromLatexAbbreviateAndOxfordComma() {
-        assertEquals("M. al-Khwārizmī, C. Böhm, and K. Gödel",
-                THREE_AUTHORS_WITH_LATEX.latexFree().getAsFirstLastNames(true, true));
-    }
-
-    @Test
-    public void getAsFirstLastNamesLatexFreeUnicodeOneInsitutionNameFromLatexAbbreviate() {
-        assertEquals("The Banū Mūsā brothers", ONE_INSTITUTION_WITH_LATEX.latexFree().getAsFirstLastNames(true, false));
-    }
-
-    @Test
-    public void getAsFirstLastNamesLatexFreeUnicodeTwoInsitutionNameFromLatexAbbreviate() {
-        assertEquals("The Banū Mūsā brothers and The Banū Mūsā brothers",
-                TWO_INSTITUTIONS_WITH_LATEX.latexFree().getAsFirstLastNames(true, false));
-    }
-
-    @Test
-    public void getAsFirstLastNamesLatexFreeUnicodeMixedAuthorsFromLatexAbbreviate() {
-        assertEquals("The Banū Mūsā brothers and C. Böhm",
-                MIXED_AUTHOR_AND_INSTITUTION_WITH_LATEX.latexFree().getAsFirstLastNames(true, false));
-    }
-
-    @Test
-    public void getAsFirstLastNamesLatexFreeOneInstitutionWithParanthesisAtStartAbbreviate() {
-        assertEquals("Łukasz Michał",
-                ONE_INSTITUTION_WITH_STARTING_PARANTHESIS.latexFree().getAsFirstLastNames(true, false));
-    }
-
-    @Test
-    public void getAsFirstLastNamesLatexFreeEmptyAuthorStringForEmptyInput() {
-        assertEquals("", EMPTY_AUTHOR.latexFree().getAsFirstLastNames(false, false));
-    }
-
-    @Test
-    public void getAsFirstLastNamesLatexFreeUnicodeOneAuthorNameFromLatex() {
-        assertEquals("Muḥammad al-Khwārizmī", ONE_AUTHOR_WITH_LATEX.latexFree().getAsFirstLastNames(false, false));
-    }
-
-    @Test
-    public void getAsFirstLastNamesLatexFreeUnicodeTwoAuthorNamesFromLatex() {
-        assertEquals("Muḥammad al-Khwārizmī and Corrado Böhm", TWO_AUTHORS_WITH_LATEX.latexFree().getAsFirstLastNames(false, false));
-    }
-
-    @Test
-    public void getAsFirstLastNamesLatexFreeThreeUnicodeAuthorsFromLatex() {
-        assertEquals("Muḥammad al-Khwārizmī, Corrado Böhm and Kurt Gödel", THREE_AUTHORS_WITH_LATEX.latexFree().getAsFirstLastNames(false, false));
-    }
-
-    @Test
-    public void getAsFirstLastNamesLatexFreeUnicodeOneInsitutionNameFromLatex() {
-        assertEquals("The Banū Mūsā brothers", ONE_INSTITUTION_WITH_LATEX.latexFree().getAsFirstLastNames(false, false));
-    }
-
-    @Test
-    public void getAsFirstLastNamesLatexFreeUnicodeTwoInsitutionNameFromLatex() {
-        assertEquals("The Banū Mūsā brothers and The Banū Mūsā brothers", TWO_INSTITUTIONS_WITH_LATEX.latexFree().getAsFirstLastNames(false, false));
-    }
-
-    @Test
-    public void getAsFirstLastNamesLatexFreeUnicodeMixedAuthorsFromLatex() {
-        assertEquals("The Banū Mūsā brothers and Corrado Böhm", MIXED_AUTHOR_AND_INSTITUTION_WITH_LATEX.latexFree().getAsFirstLastNames(false, false));
-    }
-
-    @Test
-    public void getAsFirstLastNamesLatexFreeOneInstitutionWithParanthesisAtStart() {
-        assertEquals("Łukasz Michał", ONE_INSTITUTION_WITH_STARTING_PARANTHESIS.latexFree().getAsFirstLastNames(false, false));
+    /*
+     * ---> test2.3
+     * ---> The test below is for the task "Try to split or rewrite other test methods in AuthorListTest #4
+     * Dhuruvan
+     *
+     * ---> https://github.com/koppor/jabref/issues/676
+     */
+    @CsvSource({
+            "'', true, false, ''",
+            "'M. al-Khwārizmī', true, false, 'Mudhammad al-Khwārizmī'",
+            "'M. al-Khwārizmī and C. Böhm', true, false, 'Mudhammad al-Khwārizmī and Corrado Böhm'",
+            "'M. al-Khwārizmī and C. Böhm', true, true, 'Mudhammad al-Khwārizmī and Corrado Böhm'",
+            "'T. B. M. brothers', true, false, 'The Banū Mūsā brothers'",
+            "'T. B. M. brothers and T. B. M. brothers', true, false, 'The Banū Mūsā brothers and The Banū Mūsā brothers'",
+            "'T. B. M. brothers and C. Böhm', true, false, 'The Banū Mūsā brothers and Corrado Böhm'",
+            "'Ł. Michał', true, false, 'Łukasz Michał'",
+            "'', false, false, ''",
+            "'Muḥammad al-Khwārizmī', false, false, 'Muḥammad al-Khwārizmī'",
+            "'Muḥammad al-Khwārizmī and Corrado Böhm', false, false, 'Muḥammad al-Khwārizmī and Corrado Böhm'",
+            "'The Banū Mūsā brothers', false, false, 'The Banū Mūsā brothers'",
+            "'The Banū Mūsā brothers and The Banū Mūsā brothers', false, false, 'The Banū Mūsā brothers and The Banū Mūsā brothers'",
+            "'Łukasz Michał', false, false, 'Łukasz Michał'"
+    })
+    @ParameterizedTest
+    public void testGetAsFirstLastNamesLatexFree(String expected, boolean abbreviate, boolean oxfordComma, AuthorList input) {
+        assertEquals(expected, input.latexFree().getAsFirstLastNames(abbreviate, oxfordComma));
     }
 
     @Test
