@@ -12,10 +12,12 @@ import org.jabref.model.entry.field.StandardField;
 
 import org.jabref.gui.AddEntryWindow;
 
-
-/**
-* This class represents the added custom entry type names
+//Editted
+/** 
+* This class represents the data needed to store custom entries entered by
+* the user and the entries name.
 **/
+
 class CustomEntryType implements EntryType {
 
 	private String displayName;
@@ -38,7 +40,8 @@ class CustomEntryType implements EntryType {
 /**
  * This class represents all supported BibTeX entry types. The BibLaTeX entry
  * types are defined at {@link BiblatexEntryTypeDefinitions}.
- **/
+ */
+
 public class BibtexEntryTypeDefinitions {
 
 	/**
@@ -244,11 +247,8 @@ public class BibtexEntryTypeDefinitions {
 
 	public static final List<BibEntryType> RECOMMENDED = Arrays.asList(ARTICLE, BOOK, INPROCEEDINGS, TECHREPORT, MISC);
 
-	/**
-	 * Adding newly added buttons by the user With a fixed required fields
-	 * 
-	 */
-
+	//Editted
+	//Adding newly added buttons by the user With a fixed required fields
 	static String name = " ";
 
 	public static List<BibEntryType> add_new_entries() {
