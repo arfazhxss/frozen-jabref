@@ -61,7 +61,12 @@ public enum StandardActions implements Action {
     NEW_LIBRARY(Localization.lang("New library"), IconTheme.JabRefIcons.NEW),
     
     //Added
-    Custom_Entry_Type (Localization.lang("Custom Entry Type"), IconTheme.JabRefIcons.ADD, KeyBinding.NEW_ENTRY_FROM_PLAIN_TEXT),
+    Custom_Entry_Type (Localization.lang("Custom Entry Type"), IconTheme.JabRefIcons.ADD, KeyBinding.NULL),
+    
+    //Editted
+    NEW_ENTRY_FROM_PLAIN_TEXT(Localization.lang("New entry options"), IconTheme.JabRefIcons.ADD_ROW, KeyBinding.NEW_ENTRY_FROM_PLAIN_TEXT),
+    //NULL(Localization.lang(""), IconTheme.JabRefIcons.NULL, KeyBinding.NULL),
+    
     
     OPEN_LIBRARY(Localization.lang("Open library"), IconTheme.JabRefIcons.OPEN, KeyBinding.OPEN_DATABASE),
     IMPORT(Localization.lang("Import"), IconTheme.JabRefIcons.IMPORT),
@@ -132,10 +137,12 @@ public enum StandardActions implements Action {
 
     EXPAND_ALL(Localization.lang("Expand all")),
     COLLAPSE_ALL(Localization.lang("Collapse all")),
-
+    
+    //B3
     NEW_ENTRY(Localization.lang("New entry"), IconTheme.JabRefIcons.ADD_ENTRY, KeyBinding.NEW_ENTRY),
+    
     NEW_ARTICLE(Localization.lang("New article"), IconTheme.JabRefIcons.ADD_ARTICLE),
-    NEW_ENTRY_FROM_PLAIN_TEXT(Localization.lang("New entry from plain text"), IconTheme.JabRefIcons.NEW_ENTRY_FROM_PLAIN_TEXT, KeyBinding.NEW_ENTRY_FROM_PLAIN_TEXT),
+    
     LIBRARY_PROPERTIES(Localization.lang("Library properties")),
     FIND_DUPLICATES(Localization.lang("Find duplicates"), IconTheme.JabRefIcons.FIND_DUPLICATES),
     MERGE_ENTRIES(Localization.lang("Merge entries"), IconTheme.JabRefIcons.MERGE_ENTRIES, KeyBinding.MERGE_ENTRIES),

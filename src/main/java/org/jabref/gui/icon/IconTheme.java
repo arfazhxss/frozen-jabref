@@ -161,7 +161,7 @@ public class IconTheme {
     }
 
     public enum JabRefIcons implements JabRefIcon {
-
+    	
         ADD(MaterialDesignP.PLUS_CIRCLE_OUTLINE),
         ADD_FILLED(MaterialDesignP.PLUS_CIRCLE),
         ADD_NOBOX(MaterialDesignP.PLUS),
@@ -362,6 +362,8 @@ public class IconTheme {
         JabRefIcons(Color color, Ikon... icons) {
             icon = new InternalMaterialDesignIcon(color, icons);
         }
+        
+ 
 
         @Override
         public Ikon getIkon() {

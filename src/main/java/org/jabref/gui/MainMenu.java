@@ -74,14 +74,14 @@ import org.jabref.model.util.FileUpdateMonitor;
 import org.jabref.preferences.PreferencesService;
 
 public class MainMenu extends MenuBar {
-    private final JabRefFrame frame;
+    private static JabRefFrame frame;
     private final SidePane sidePane;
     private final PushToApplicationCommand pushToApplicationCommand;
-    private final PreferencesService preferencesService;
-    private final StateManager stateManager;
+    private static PreferencesService preferencesService;
+    private static StateManager stateManager;
     private final FileUpdateMonitor fileUpdateMonitor;
-    private final TaskExecutor taskExecutor;
-    private final DialogService dialogService;
+    private TaskExecutor taskExecutor;
+    private static DialogService dialogService;
     private final JournalAbbreviationRepository abbreviationRepository;
     private final PredatoryJournalRepository predatoryJournalRepository;
     private final BibEntryTypesManager entryTypesManager;
@@ -361,5 +361,26 @@ public class MainMenu extends MenuBar {
         );
 
         return sendMenu;
+    }
+    
+    public static DialogService dser() {
+    	
+    	return dialogService;
+    	
+    }
+    
+    public static PreferencesService pser() {
+    	
+    	return preferencesService;
+    	
+    }
+    
+    public static StateManager stmn() {
+    	
+    	return stateManager;
+    	
+    }
+    public static LibraryTabContainer Frame() {
+    	return frame;
     }
 }

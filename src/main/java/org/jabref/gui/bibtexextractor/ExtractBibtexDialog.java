@@ -10,6 +10,7 @@ import javafx.scene.control.Tooltip;
 
 import org.jabref.gui.DialogService;
 import org.jabref.gui.StateManager;
+import org.jabref.gui.entryeditor.MultipleEntryFeatures;
 import org.jabref.gui.util.BaseDialog;
 import org.jabref.gui.util.TaskExecutor;
 import org.jabref.logic.l10n.Localization;
@@ -29,19 +30,21 @@ public class ExtractBibtexDialog extends BaseDialog<Void> {
     @FXML private TextArea input;
     @FXML private ButtonType parseButtonType;
     private BibtexExtractorViewModel viewModel;
-    @Inject private StateManager stateManager;
-    @Inject private DialogService dialogService;
-    @Inject private FileUpdateMonitor fileUpdateMonitor;
-    @Inject private TaskExecutor taskExecutor;
-    @Inject private UndoManager undoManager;
-    @Inject private PreferencesService preferencesService;
+    @Inject public static StateManager stateManager;
+    @Inject public static DialogService dialogService;
+    @Inject public static FileUpdateMonitor fileUpdateMonitor;
+    @Inject public static TaskExecutor taskExecutor;
+    @Inject public static UndoManager undoManager;
+    @Inject public static PreferencesService preferencesService;
 
     public ExtractBibtexDialog() {
         ViewLoader.view(this)
                   .load()
                   .setAsDialogPane(this);
         this.setTitle(Localization.lang("Plain References Parser"));
-        input.setPromptText(Localization.lang("Please enter the plain references to extract from separated by double empty lines."));
+        
+        //Editted
+        input.setText(Localization.lang(MultipleEntryFeatures.entry_from_plain_text()));
         input.selectAll();
 
         buttonParse = (Button) getDialogPane().lookupButton(parseButtonType);

@@ -1,5 +1,6 @@
 package org.jabref.gui.entryeditor;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Comparator;
@@ -57,18 +58,18 @@ class CustomFields implements Field {
 
 	@Override
 	public String getName() {
-		
+
 		if (this.name == null) {
 			return Field.super.getDisplayName();
 		} else {
 			return this.name;
 		}
-		
+
 	}
 
 	@Override
 	public boolean isStandardField() {
-		
+
 		return false;
 	}
 
@@ -99,12 +100,9 @@ public class CommentsTab extends FieldsEditorTab {
 	@Override
 	protected SequencedSet<Field> determineFieldsToShow(BibEntry entry) {
 		SequencedSet<Field> comments = new LinkedHashSet<>();
-		
-		
-		// Edited
-		
-		// First comes the standard and custom added field
 
+		// Edited
+		// First comes the standard and custom added field
 		List<String> fields = AddEntryWindow.getFieldsList();
 
 		comments.add(StandardField.COMMENT);
@@ -112,11 +110,11 @@ public class CommentsTab extends FieldsEditorTab {
 		for (int i = 0; i < fields.size(); ++i) {
 
 			CustomFields cf = new CustomFields(fields.get(i));
-
+			
 			comments.add(cf);
-		
+
 		}
-		
+
 		// Also show comment field of the current user (if enabled in the preferences)
 		if (entry.hasField(userSpecificCommentField) || entryEditorPreferences.shouldShowUserCommentsFields()) {
 			comments.add(userSpecificCommentField);

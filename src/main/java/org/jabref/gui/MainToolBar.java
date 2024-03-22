@@ -1,5 +1,8 @@
 package org.jabref.gui;
 
+
+import org.jabref.gui.entryeditor.MultipleEntryFeatures;
+
 import javafx.concurrent.Task;
 import javafx.geometry.Orientation;
 import javafx.scene.Group;
@@ -46,36 +49,43 @@ import org.controlsfx.control.PopOver;
 import org.controlsfx.control.TaskProgressView;
 
 public class MainToolBar extends ToolBar {
-    private final LibraryTabContainer frame;
+    
     private final PushToApplicationCommand pushToApplicationCommand;
     private final GlobalSearchBar globalSearchBar;
-    private final DialogService dialogService;
-    private final StateManager stateManager;
-    private final PreferencesService preferencesService;
+    
+    //Editted
+    private static LibraryTabContainer frame;
+    public static DialogService dialogService;
+    private static StateManager stateManager;
+    private static PreferencesService preferencesService;
+    
     private final FileUpdateMonitor fileUpdateMonitor;
-    private final TaskExecutor taskExecutor;
+    private static TaskExecutor taskExecutor;
     private final BibEntryTypesManager entryTypesManager;
     private final CountingUndoManager undoManager;
 
-    private PopOver entryFromIdPopOver;
+    private static PopOver entryFromIdPopOver;
     private PopOver progressViewPopOver;
 
     public MainToolBar(LibraryTabContainer tabContainer,
                        PushToApplicationCommand pushToApplicationCommand,
                        GlobalSearchBar globalSearchBar,
-                       DialogService dialogService,
-                       StateManager stateManager,
-                       PreferencesService preferencesService,
+                       DialogService dService,
+                       StateManager sManager,
+                       PreferencesService pService,
                        FileUpdateMonitor fileUpdateMonitor,
                        TaskExecutor taskExecutor,
                        BibEntryTypesManager entryTypesManager,
                        CountingUndoManager undoManager) {
-        this.frame = tabContainer;
+        
         this.pushToApplicationCommand = pushToApplicationCommand;
         this.globalSearchBar = globalSearchBar;
-        this.dialogService = dialogService;
-        this.stateManager = stateManager;
-        this.preferencesService = preferencesService;
+        
+        frame = tabContainer;
+        dialogService = dService;
+        stateManager = sManager;
+        preferencesService = pService;
+        
         this.fileUpdateMonitor = fileUpdateMonitor;
         this.taskExecutor = taskExecutor;
         this.entryTypesManager = entryTypesManager;
@@ -83,7 +93,8 @@ public class MainToolBar extends ToolBar {
 
         createToolBar();
     }
-
+    
+    
     private void createToolBar() {
         final ActionFactory factory = new ActionFactory(Globals.getKeyPrefs());
 
@@ -108,15 +119,23 @@ public class MainToolBar extends ToolBar {
                 rightSpacer,
 
                 new HBox(
-                        factory.createIconButton(StandardActions.NEW_ARTICLE, new NewEntryAction(frame::getCurrentLibraryTab, StandardEntryType.Article, dialogService, preferencesService, stateManager)),
-                        factory.createIconButton(StandardActions.NEW_ENTRY, new NewEntryAction(frame::getCurrentLibraryTab, dialogService, preferencesService, stateManager)),
-                        createNewEntryFromIdButton(),
+                		
+                		
+                        //factory.createIconButton(StandardActions.NEW_ENTRY_FROM_PLAIN_TEXT, new ExtractBibtexAction(dialogService, preferencesService, stateManager)),
+
+                		//B4
+                        //factory.createIconButton(StandardActions.NEW_ARTICLE, new NewEntryAction(frame::getCurrentLibraryTab, StandardEntryType.Article, dialogService, preferencesService, stateManager)),
                         
-                        factory.createIconButton(StandardActions.NEW_ENTRY_FROM_PLAIN_TEXT, new ExtractBibtexAction(dialogService, preferencesService, stateManager)),
+                        //B3
+                        //factory.createIconButton(StandardActions.NEW_ENTRY, new NewEntryAction(frame::getCurrentLibraryTab, dialogService, preferencesService, stateManager)),
                         
+                		//B4 functionality
+                        //createNewEntryFromIdButton(),
                         
-                        //Added with error
-                        factory.createIconButton(StandardActions.Custom_Entry_Type, new AddEntryWindow(/*dialogService, preferencesService, stateManager*/)),
+                        factory.createIconButton(StandardActions.NEW_ENTRY_FROM_PLAIN_TEXT, new MultipleEntryFeatures()),
+                        
+                        //Added
+                        factory.createIconButton(StandardActions.Custom_Entry_Type, new AddEntryWindow()),
                         
                         
                         factory.createIconButton(StandardActions.DELETE_ENTRY, new EditAction(StandardActions.DELETE_ENTRY, frame::getCurrentLibraryTab, stateManager, undoManager))),
@@ -181,6 +200,9 @@ public class MainToolBar extends ToolBar {
                 entryFromId.setEntryFromIdPopOver(entryFromIdPopOver);
             }
         });
+        
+        
+        //B2 hover name only
         newEntryFromIdButton.setTooltip(new Tooltip(Localization.lang("Import by ID")));
 
         return newEntryFromIdButton;
@@ -242,4 +264,36 @@ public class MainToolBar extends ToolBar {
 
         return new Group(indicator);
     }
+    
+    //Editted
+    
+    public static DialogService dser() {
+    	
+    	return dialogService;
+    	
+    }
+    
+    public static PreferencesService pser() {
+    	
+    	return preferencesService;
+    	
+    }
+    
+    public static StateManager stmn() {
+    	
+    	return stateManager;
+    	
+    }
+    public static LibraryTabContainer Frame() {
+    	return frame;
+    }
+    
+    public static PopOver popover() {
+    	return entryFromIdPopOver;
+    }
+    
+    public static TaskExecutor tskexec() {
+    	return taskExecutor;
+    }
+    
 }

@@ -30,11 +30,11 @@ public class BibtexExtractorViewModel {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BibtexExtractorViewModel.class);
 
-    private final StringProperty inputTextProperty = new SimpleStringProperty("");
-    private final DialogService dialogService;
-    private final PreferencesService preferencesService;
-    private final TaskExecutor taskExecutor;
-    private final ImportHandler importHandler;
+    private StringProperty inputTextProperty = new SimpleStringProperty("");
+    private DialogService dialogService;
+    private PreferencesService preferencesService;
+    private TaskExecutor taskExecutor;
+    private ImportHandler importHandler;
 
     public BibtexExtractorViewModel(BibDatabaseContext bibdatabaseContext,
                                     DialogService dialogService,
@@ -68,14 +68,15 @@ public class BibtexExtractorViewModel {
             parseUsingBibtexExtractor();
         }
     }
-
+    
+    //Editted before
     private void parseUsingBibtexExtractor() {
         BibEntry parsedEntry = new BibtexExtractor().extract(inputTextProperty.getValue());
         importHandler.importEntries(List.of(parsedEntry));
         trackNewEntry(parsedEntry, "ParseWithBibTeXExtractor");
     }
 
-    private void parseUsingGrobid() {
+    public void parseUsingGrobid() {
         GrobidCitationFetcher grobidCitationFetcher = new GrobidCitationFetcher(preferencesService.getGrobidPreferences(), preferencesService.getImportFormatPreferences());
         BackgroundTask.wrap(() -> grobidCitationFetcher.performSearch(inputTextProperty.getValue()))
                       .onRunning(() -> dialogService.notify(Localization.lang("Your text is being parsed...")))
