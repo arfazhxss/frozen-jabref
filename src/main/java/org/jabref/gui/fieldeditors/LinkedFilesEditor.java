@@ -320,8 +320,9 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
                 factory.createMenuItem(StandardActions.DOWNLOAD_FILE, new ContextAction(StandardActions.DOWNLOAD_FILE, linkedFile, preferencesService)),
                 factory.createMenuItem(StandardActions.RENAME_FILE_TO_PATTERN, new ContextAction(StandardActions.RENAME_FILE_TO_PATTERN, linkedFile, preferencesService)),
                 factory.createMenuItem(StandardActions.RENAME_FILE_TO_NAME, new ContextAction(StandardActions.RENAME_FILE_TO_NAME, linkedFile, preferencesService)),
-                factory.createMenuItem(StandardActions.MOVE_FILE_TO_FOLDER, new ContextAction(StandardActions.MOVE_FILE_TO_FOLDER, linkedFile, preferencesService)),
-                factory.createMenuItem(StandardActions.MOVE_FILE_TO_FOLDER_AND_RENAME, new ContextAction(StandardActions.MOVE_FILE_TO_FOLDER_AND_RENAME, linkedFile, preferencesService)),
+// TODO: use below for task 3:
+                factory.createMenuItem(StandardActions.MOVE_FILE_TO_GENERAL_FOLDER, new ContextAction(StandardActions.MOVE_FILE_TO_GENERAL_FOLDER, linkedFile, preferencesService)),
+                factory.createMenuItem(StandardActions.MOVE_FILE_TO_USER_FOLDER, new ContextAction(StandardActions.MOVE_FILE_TO_USER_FOLDER, linkedFile, preferencesService)),
                 factory.createMenuItem(StandardActions.COPY_FILE_TO_FOLDER, new CopySingleFileAction(linkedFile.getFile(), dialogService, databaseContext, preferencesService.getFilePreferences())),
                 factory.createMenuItem(StandardActions.REMOVE_LINK, new ContextAction(StandardActions.REMOVE_LINK, linkedFile, preferencesService)),
                 factory.createMenuItem(StandardActions.DELETE_FILE, new ContextAction(StandardActions.DELETE_FILE, linkedFile, preferencesService))
@@ -346,7 +347,7 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
                                         && linkedFile.getFile().findIn(databaseContext, preferencesService.getFilePreferences()).isPresent()
                                         && !linkedFile.isGeneratedNameSameAsOriginal(),
                                 linkedFile.getFile().linkProperty(), bibEntry.getValue().map(BibEntry::getFieldsObservable).orElse(null));
-                        case MOVE_FILE_TO_FOLDER, MOVE_FILE_TO_FOLDER_AND_RENAME -> Bindings.createBooleanBinding(
+                        case MOVE_FILE_TO_GENERAL_FOLDER, MOVE_FILE_TO_USER_FOLDER -> Bindings.createBooleanBinding(
                                 () -> !linkedFile.getFile().isOnlineLink()
                                         && linkedFile.getFile().findIn(databaseContext, preferencesService.getFilePreferences()).isPresent()
                                         && !linkedFile.isGeneratedPathSameAsOriginal(),
@@ -371,8 +372,8 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
                 case DOWNLOAD_FILE -> linkedFile.download();
                 case RENAME_FILE_TO_PATTERN -> linkedFile.renameToSuggestion();
                 case RENAME_FILE_TO_NAME -> linkedFile.askForNameAndRename();
-                case MOVE_FILE_TO_FOLDER -> linkedFile.moveToDefaultDirectory();
-                case MOVE_FILE_TO_FOLDER_AND_RENAME -> linkedFile.moveToDefaultDirectoryAndRename();
+                case MOVE_FILE_TO_GENERAL_FOLDER -> linkedFile.moveToDefaultDirectory();
+                case MOVE_FILE_TO_USER_FOLDER -> linkedFile.moveToDefaultDirectoryAndRename();
                 case DELETE_FILE -> viewModel.deleteFile(linkedFile);
                 case REMOVE_LINK -> viewModel.removeFileLink(linkedFile);
             }
