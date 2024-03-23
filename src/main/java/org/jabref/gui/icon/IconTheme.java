@@ -229,7 +229,10 @@ public class IconTheme {
         AUTO_FILE_LINK(MaterialDesignF.FILE_FIND),
         AUTO_RENAME(MaterialDesignA.AUTO_FIX),
         DOWNLOAD_FILE(MaterialDesignD.DOWNLOAD),
+// TODO: For A3.3 Icons
         MOVE_TO_FOLDER(MaterialDesignF.FILE_SEND),
+        MOVE_TO_USER_FOLDER(MaterialDesignF.FILE_PDF),
+// -------------------------------------------------------------
         COPY_TO_FOLDER(MaterialDesignC.CONTENT_COPY),
         RENAME(MaterialDesignR.RENAME_BOX),
         DELETE_FILE(MaterialDesignD.DELETE_FOREVER),
