@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import org.jabref.gui.DialogService;
 import org.jabref.gui.LibraryTab;
 import org.jabref.gui.StateManager;
+import org.jabref.gui.entryeditor.AdvancedEntryLookUp;
 import org.jabref.gui.entryeditor.MultipleEntryFeatures;
 import org.jabref.gui.icon.IconTheme;
 import org.jabref.gui.util.TaskExecutor;
@@ -51,23 +52,68 @@ public class GenerateEntryFromIdDialog {
     	
     	//Editted
     	
-        if (MultipleEntryFeatures.entry_from_plain_text().isEmpty()) {
+        if (MultipleEntryFeatures.entry_from_plain_text().isEmpty() && 
+        		AdvancedEntryLookUp.entry_from_plain_text().isEmpty()) {
+        	
             dialogService.notify(Localization.lang("Enter a valid ID"));
             return;
         }
 
         this.idTextField.requestFocus();
-
-        GenerateEntryFromIdAction generateEntryFromIdAction = new GenerateEntryFromIdAction(
+        
+        GenerateEntryFromIdAction generateEntryFromIdAction;
+        
+        if (!MultipleEntryFeatures.entry_from_plain_text().isEmpty()){
+        	
+        	String txt = 	MultipleEntryFeatures.entry_from_plain_text();
+        	
+        	generateEntryFromIdAction = new GenerateEntryFromIdAction(
                 libraryTab,
                 dialogService,
                 preferencesService,
                 taskExecutor,
                 entryFromIdPopOver,
-                MultipleEntryFeatures.entry_from_plain_text(),
+                txt,
                 stateManager,
                 fileUpdateMonitor
         );
+        	
+        	MultipleEntryFeatures.set_text_null();
+        
+        } else if (!AdvancedEntryLookUp.entry_from_plain_text().isEmpty()){
+        	
+        	String txt = 	AdvancedEntryLookUp.entry_from_plain_text();
+        	
+            generateEntryFromIdAction = new GenerateEntryFromIdAction(
+                libraryTab,
+                dialogService,
+                preferencesService,
+                taskExecutor,
+                entryFromIdPopOver,
+                txt,
+                stateManager,
+                fileUpdateMonitor
+                
+                );
+            
+            AdvancedEntryLookUp.set_text_null();
+            
+        }else {
+        	
+            generateEntryFromIdAction = new GenerateEntryFromIdAction(
+                libraryTab,
+                dialogService,
+                preferencesService,
+                taskExecutor,
+                entryFromIdPopOver,
+                " ",
+                stateManager,
+                fileUpdateMonitor
+                
+                 );
+        	
+        }
+    
         generateEntryFromIdAction.execute();
     }
 

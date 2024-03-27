@@ -11,6 +11,7 @@ import javafx.scene.control.Tooltip;
 import org.jabref.gui.DialogService;
 import org.jabref.gui.StateManager;
 import org.jabref.gui.entryeditor.MultipleEntryFeatures;
+import org.jabref.gui.entryeditor.AdvancedEntryLookUp;
 import org.jabref.gui.util.BaseDialog;
 import org.jabref.gui.util.TaskExecutor;
 import org.jabref.logic.l10n.Localization;
@@ -44,7 +45,16 @@ public class ExtractBibtexDialog extends BaseDialog<Void> {
         this.setTitle(Localization.lang("Plain References Parser"));
         
         //Editted
-        input.setText(Localization.lang(MultipleEntryFeatures.entry_from_plain_text()));
+        if (!MultipleEntryFeatures.entry_from_plain_text().isEmpty()) {
+        	input.setText(Localization.lang(MultipleEntryFeatures.entry_from_plain_text()));
+        	MultipleEntryFeatures.set_text_null();
+        }
+        else if (!AdvancedEntryLookUp.entry_from_plain_text().isEmpty()){
+        	input.setText(Localization.lang(AdvancedEntryLookUp.entry_from_plain_text()));
+        	AdvancedEntryLookUp.set_text_null();
+        }else {
+        	input.setText("");
+        }
         input.selectAll();
 
         buttonParse = (Button) getDialogPane().lookupButton(parseButtonType);

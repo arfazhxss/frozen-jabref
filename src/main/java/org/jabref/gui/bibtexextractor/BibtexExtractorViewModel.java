@@ -12,6 +12,7 @@ import javafx.beans.property.StringProperty;
 import org.jabref.gui.DialogService;
 import org.jabref.gui.StateManager;
 import org.jabref.gui.Telemetry;
+import org.jabref.gui.entryeditor.MultipleEntryFeatures;
 import org.jabref.gui.externalfiles.ImportHandler;
 import org.jabref.gui.util.BackgroundTask;
 import org.jabref.gui.util.TaskExecutor;
@@ -75,10 +76,15 @@ public class BibtexExtractorViewModel {
         importHandler.importEntries(List.of(parsedEntry));
         trackNewEntry(parsedEntry, "ParseWithBibTeXExtractor");
     }
-
+    
+    //Where the search for entry happens
+    
     public void parseUsingGrobid() {
         GrobidCitationFetcher grobidCitationFetcher = new GrobidCitationFetcher(preferencesService.getGrobidPreferences(), preferencesService.getImportFormatPreferences());
-        BackgroundTask.wrap(() -> grobidCitationFetcher.performSearch(inputTextProperty.getValue()))
+        
+        //Editted
+        BackgroundTask.wrap(() -> grobidCitationFetcher.performSearch(MultipleEntryFeatures.entry_from_plain_text()))
+        
                       .onRunning(() -> dialogService.notify(Localization.lang("Your text is being parsed...")))
                       .onFailure(e -> {
                           if (e instanceof FetcherException) {

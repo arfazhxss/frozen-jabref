@@ -2,7 +2,7 @@ package org.jabref.gui;
 
 
 import org.jabref.gui.entryeditor.MultipleEntryFeatures;
-
+import org.jabref.gui.entryeditor.AdvancedEntryLookUp;
 import javafx.concurrent.Task;
 import javafx.geometry.Orientation;
 import javafx.scene.Group;
@@ -120,23 +120,14 @@ public class MainToolBar extends ToolBar {
 
                 new HBox(
                 		
-                		
-                        //factory.createIconButton(StandardActions.NEW_ENTRY_FROM_PLAIN_TEXT, new ExtractBibtexAction(dialogService, preferencesService, stateManager)),
-
-                		//B4
-                        //factory.createIconButton(StandardActions.NEW_ARTICLE, new NewEntryAction(frame::getCurrentLibraryTab, StandardEntryType.Article, dialogService, preferencesService, stateManager)),
+                        //Added
+                        factory.createIconButton(StandardActions.ADVANCED_ENTRY, new AdvancedEntryLookUp()),
                         
-                        //B3
-                        //factory.createIconButton(StandardActions.NEW_ENTRY, new NewEntryAction(frame::getCurrentLibraryTab, dialogService, preferencesService, stateManager)),
-                        
-                		//B4 functionality
-                        //createNewEntryFromIdButton(),
-                        
+                        //Added
                         factory.createIconButton(StandardActions.NEW_ENTRY_FROM_PLAIN_TEXT, new MultipleEntryFeatures()),
                         
                         //Added
                         factory.createIconButton(StandardActions.Custom_Entry_Type, new AddEntryWindow()),
-                        
                         
                         factory.createIconButton(StandardActions.DELETE_ENTRY, new EditAction(StandardActions.DELETE_ENTRY, frame::getCurrentLibraryTab, stateManager, undoManager))),
 

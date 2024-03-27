@@ -64,9 +64,9 @@ public enum StandardActions implements Action {
     Custom_Entry_Type (Localization.lang("Custom Entry Type"), IconTheme.JabRefIcons.ADD, KeyBinding.NULL),
     
     //Editted
-    NEW_ENTRY_FROM_PLAIN_TEXT(Localization.lang("New entry options"), IconTheme.JabRefIcons.ADD_ROW, KeyBinding.NEW_ENTRY_FROM_PLAIN_TEXT),
-    //NULL(Localization.lang(""), IconTheme.JabRefIcons.NULL, KeyBinding.NULL),
+    NEW_ENTRY_FROM_PLAIN_TEXT(Localization.lang("New Entry Options"), IconTheme.JabRefIcons.ADD_ROW, KeyBinding.NEW_ENTRY_FROM_PLAIN_TEXT),
     
+    ADVANCED_ENTRY(Localization.lang("Advanced Entry"), IconTheme.JabRefIcons.ENTRY_TYPE, KeyBinding.NULL),
     
     OPEN_LIBRARY(Localization.lang("Open library"), IconTheme.JabRefIcons.OPEN, KeyBinding.OPEN_DATABASE),
     IMPORT(Localization.lang("Import"), IconTheme.JabRefIcons.IMPORT),

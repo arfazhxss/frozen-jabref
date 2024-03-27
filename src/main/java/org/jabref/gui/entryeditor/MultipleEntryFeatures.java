@@ -68,8 +68,7 @@ public class MultipleEntryFeatures extends SimpleCommand {
 
 	private static String text_1 = "";
 
-	final ActionFactory factory = new ActionFactory(Globals.getKeyPrefs());
-
+	
 	public MultipleEntryFeatures() {
 
 	}
@@ -104,10 +103,11 @@ public class MultipleEntryFeatures extends SimpleCommand {
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
-						ExtractBibtexAction nea = new ExtractBibtexAction(MainToolBar.dser(), MainToolBar.pser(),
-								MainToolBar.stmn());
+						
+						ExtractBibtexAction nea = new ExtractBibtexAction(MainToolBar.dser(), MainToolBar.pser(), MainToolBar.stmn());
 
 						ce = new CustomEntry(text_1);
+						
 						Platform.runLater(new Runnable() {
 							@Override
 							public void run() {
@@ -154,7 +154,10 @@ public class MultipleEntryFeatures extends SimpleCommand {
 
 		});
 		panel.add(addButton_2);
-
+		
+		JLabel blank = new JLabel("++++".repeat(100));
+		panel.add(blank);
+		
 		JButton addButton_3 = new JButton("Predefined Availabe Entry Types");
 		addButton_3.addActionListener(e -> {
 
@@ -184,6 +187,7 @@ public class MultipleEntryFeatures extends SimpleCommand {
 			}
 
 		});
+		
 		panel.add(addButton_3);
 
 		JButton addButton_4 = new JButton("Add New Article Entry");
@@ -215,10 +219,14 @@ public class MultipleEntryFeatures extends SimpleCommand {
 	}
 
 	public static String entry_from_plain_text() {
-
-		return text_1;
+		String t = text_1;
+		return t;
 	}
-
+	
+	public static void set_text_null() {
+		text_1 = "";
+	}
+	
 	@Override
 	public void execute() {
 
