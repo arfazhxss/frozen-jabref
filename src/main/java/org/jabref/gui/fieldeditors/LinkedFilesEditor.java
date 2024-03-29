@@ -347,10 +347,11 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
                                         && linkedFile.getFile().findIn(databaseContext, preferencesService.getFilePreferences()).isPresent()
                                         && !linkedFile.isGeneratedNameSameAsOriginal(),
                                 linkedFile.getFile().linkProperty(), bibEntry.getValue().map(BibEntry::getFieldsObservable).orElse(null));
-                        case MOVE_FILE_TO_GENERAL_FOLDER, MOVE_FILE_TO_USER_FOLDER -> Bindings.createBooleanBinding(
-                                () -> !linkedFile.getFile().isOnlineLink()
-                                        && linkedFile.getFile().findIn(databaseContext, preferencesService.getFilePreferences()).isPresent()
-                                        && !linkedFile.isGeneratedPathSameAsOriginal(),
+                        case MOVE_FILE_TO_GENERAL_FOLDER -> Bindings.createBooleanBinding(
+                                () -> canMoveFileToGeneralFolder(linkedFile, preferencesService),
+                                linkedFile.getFile().linkProperty(), bibEntry.getValue().map(BibEntry::getFieldsObservable).orElse(null));
+                        case MOVE_FILE_TO_USER_FOLDER -> Bindings.createBooleanBinding(
+                                () -> canMoveFileToUserFolder(linkedFile, preferencesService),
                                 linkedFile.getFile().linkProperty(), bibEntry.getValue().map(BibEntry::getFieldsObservable).orElse(null));
                         case DOWNLOAD_FILE -> Bindings.createBooleanBinding(
                                 () -> linkedFile.getFile().isOnlineLink(),
