@@ -391,6 +391,24 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
             }
             return !isInGeneralFolder(linkedFile) && hasPermissionToMoveToUserFolder(preferencesService);
         }
+        
+        private boolean canMoveFileToUserFolder(LinkedFile linkedFile, PreferencesService preferencesService) {
+            if (linkedFile == null || preferencesService == null) {
+                return false;
+            }
+            //if the file is not already in the user folder
+            if (!isInUserFolder(linkedFile)) {
+                return hasPermissionToMoveToUserFolder(preferencesService);
+            }
+            return false;
+        }
+
+        private boolean isInUserFolder(LinkedFile linkedFile) {
+            String path = linkedFile.getPath();
+            //Assuming the user folder is named "user/"
+            return path.startsWith("user/");
+        }
+
 
         
         
