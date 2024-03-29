@@ -363,7 +363,37 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
                         default -> BindingsHelper.constantOf(true);
                     });
         }
+ 
 
+        
+        
+        private boolean isInGeneralFolder(LinkedFile linkedFile) {
+            String path = linkedFile.getPath();
+            return path.startsWith("general/");
+        }
+
+        private boolean hasPermissionToMoveToUserFolder(PreferencesService preferencesService) {
+            if (preferencesService == null) {
+                return false;
+            }
+            // assuming preferencesService.getUserRole() returns the role of the current user
+            String userRole = preferencesService.getUserRole();
+            if (userRole == null) {
+                return false;
+            }
+            //Check if user role is admin
+            return userRole.equals("admin");
+        }
+
+        private boolean canMoveFileToGeneralFolder(LinkedFile linkedFile, PreferencesService preferencesService) {
+            if (linkedFile == null || preferencesService == null) {
+                return false;
+            }
+            return !isInGeneralFolder(linkedFile) && hasPermissionToMoveToUserFolder(preferencesService);
+        }
+
+        
+        
         @Override
         public void execute() {
             switch (command) {
