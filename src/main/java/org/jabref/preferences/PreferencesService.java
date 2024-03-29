@@ -151,4 +151,7 @@ public interface PreferencesService {
     ProtectedTermsPreferences getProtectedTermsPreferences();
 
     MergeDialogPreferences getMergeDialogPreferences();
+
+
+    String getUserRole();
 }
