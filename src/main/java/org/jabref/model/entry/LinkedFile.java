@@ -212,4 +212,14 @@ public class LinkedFile implements Serializable {
             return Optional.empty();
         }
     }
+
+    public String getPath() {
+        String link = getLink();
+        // If the link is an online link, there is no local path
+        if (isOnlineLink(link)) {
+            return null;
+        }
+        // If the link is a local file path, return it
+        return link.replace("\\", "/");
+    }
 }
