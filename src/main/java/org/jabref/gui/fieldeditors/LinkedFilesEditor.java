@@ -349,13 +349,13 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
                                 linkedFile.getFile().linkProperty(), bibEntry.getValue().map(BibEntry::getFieldsObservable).orElse(null));
 
 // ---------------------------------------------------------------------------------   Trying these now. - Mar 29, 2024
-                        case MOVE_FILE_TO_USER_FOLDER -> Bindings.createBooleanBinding(
-                                    () -> !linkedFile.getFile().linkProperty().get().startsWith("User")
-                                            && linkedFile.getFile().linkProperty().get().startsWith("General"));
-
                         case MOVE_FILE_TO_GENERAL_FOLDER -> Bindings.createBooleanBinding(
-                                    () -> !linkedFile.getFile().linkProperty().get().startsWith("General")
-                                            && linkedFile.getFile().linkProperty().get().startsWith("User"));
+                                () -> !linkedFile.getFile().linkProperty().get().startsWith("General"));
+//                                            || !linkedFile.getFile().linkProperty().get().startsWith("User"));
+
+                        case MOVE_FILE_TO_USER_FOLDER -> Bindings.createBooleanBinding(
+                                () -> !linkedFile.getFile().linkProperty().get().startsWith("User"));
+//                                            || !linkedFile.getFile().linkProperty().get().startsWith("General"));
 // --------------------------------------------------------------------------------------------------------------------
 
 //      Atempted the below, seemed to work but not sure now.
@@ -365,6 +365,7 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
 //                        case MOVE_FILE_TO_USER_FOLDER -> Bindings.createBooleanBinding(
 //                                () -> canMoveFileToUserFolder(linkedFile.getFile(), preferencesService),
 //                                linkedFile.getFile().linkProperty(), bibEntry.getValue().map(BibEntry::getFieldsObservable).orElse(null));
+// --------------------------------------------------------------------------------------------------------------------
 
                         case DOWNLOAD_FILE -> Bindings.createBooleanBinding(
                                 () -> linkedFile.getFile().isOnlineLink(),
