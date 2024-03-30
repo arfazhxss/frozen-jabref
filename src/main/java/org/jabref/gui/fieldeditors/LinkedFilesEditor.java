@@ -97,8 +97,8 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
         this.fieldCheckers = fieldCheckers;
 
         ViewLoader.view(this)
-                  .root(this)
-                  .load();
+                .root(this)
+                .load();
 
         decoratedModelList = new UiThreadObservableList<>(viewModel.filesProperty());
         Bindings.bindContentBidirectional(listView.itemsProperty().get(), decoratedModelList);
@@ -347,12 +347,25 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
                                         && linkedFile.getFile().findIn(databaseContext, preferencesService.getFilePreferences()).isPresent()
                                         && !linkedFile.isGeneratedNameSameAsOriginal(),
                                 linkedFile.getFile().linkProperty(), bibEntry.getValue().map(BibEntry::getFieldsObservable).orElse(null));
-                        case MOVE_FILE_TO_GENERAL_FOLDER -> Bindings.createBooleanBinding(
-                                () -> canMoveFileToGeneralFolder(linkedFile, preferencesService),
-                                linkedFile.getFile().linkProperty(), bibEntry.getValue().map(BibEntry::getFieldsObservable).orElse(null));
+
+// ---------------------------------------------------------------------------------   Trying these now. - Mar 29, 2024
                         case MOVE_FILE_TO_USER_FOLDER -> Bindings.createBooleanBinding(
-                                () -> canMoveFileToUserFolder(linkedFile, preferencesService),
-                                linkedFile.getFile().linkProperty(), bibEntry.getValue().map(BibEntry::getFieldsObservable).orElse(null));
+                                    () -> !linkedFile.getFile().linkProperty().get().startsWith("User")
+                                            && linkedFile.getFile().linkProperty().get().startsWith("General"));
+
+                        case MOVE_FILE_TO_GENERAL_FOLDER -> Bindings.createBooleanBinding(
+                                    () -> !linkedFile.getFile().linkProperty().get().startsWith("General")
+                                            && linkedFile.getFile().linkProperty().get().startsWith("User"));
+// --------------------------------------------------------------------------------------------------------------------
+
+//      Atempted the below, seemed to work but not sure now.
+//                        case MOVE_FILE_TO_GENERAL_FOLDER -> Bindings.createBooleanBinding(
+//                                () -> canMoveFileToGeneralFolder(linkedFile.getFile(), preferencesService),
+//                                linkedFile.getFile().linkProperty(), bibEntry.getValue().map(BibEntry::getFieldsObservable).orElse(null));
+//                        case MOVE_FILE_TO_USER_FOLDER -> Bindings.createBooleanBinding(
+//                                () -> canMoveFileToUserFolder(linkedFile.getFile(), preferencesService),
+//                                linkedFile.getFile().linkProperty(), bibEntry.getValue().map(BibEntry::getFieldsObservable).orElse(null));
+
                         case DOWNLOAD_FILE -> Bindings.createBooleanBinding(
                                 () -> linkedFile.getFile().isOnlineLink(),
                                 linkedFile.getFile().linkProperty(), bibEntry.getValue().map(BibEntry::getFieldsObservable).orElse(null));
@@ -363,10 +376,10 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
                         default -> BindingsHelper.constantOf(true);
                     });
         }
- 
 
-        
-        
+
+
+
         private boolean isInGeneralFolder(LinkedFile linkedFile) {
             String path = linkedFile.getPath();
             return path.startsWith("general/");
@@ -391,7 +404,7 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
             }
             return !isInGeneralFolder(linkedFile) && hasPermissionToMoveToUserFolder(preferencesService);
         }
-        
+
         private boolean canMoveFileToUserFolder(LinkedFile linkedFile, PreferencesService preferencesService) {
             if (linkedFile == null || preferencesService == null) {
                 return false;
@@ -410,8 +423,8 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
         }
 
 
-        
-        
+
+
         @Override
         public void execute() {
             switch (command) {
