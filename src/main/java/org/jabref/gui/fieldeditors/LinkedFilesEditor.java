@@ -349,16 +349,26 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
                                 linkedFile.getFile().linkProperty(), bibEntry.getValue().map(BibEntry::getFieldsObservable).orElse(null));
 
 // ---------------------------------------------------------------------------------   Trying these now. - Mar 29, 2024
+/*
+ * - The code within the commented hyphens needs to be modified.
+ * - The code currently makes both options either fully dark or light gray.
+ * - Need to modify it in such a way so that it only switches between the directories/colours when the user selects it.
+ *
+ * */
                         case MOVE_FILE_TO_GENERAL_FOLDER -> Bindings.createBooleanBinding(
-                                () -> !linkedFile.getFile().linkProperty().get().startsWith("General"));
-//                                            || !linkedFile.getFile().linkProperty().get().startsWith("User"));
+                                () -> !linkedFile.getFile().linkProperty().get().startsWith("General")
+                                            && linkedFile.getFile().linkProperty().get().startsWith("User"),
+                                                linkedFile.getFile().linkProperty());
 
                         case MOVE_FILE_TO_USER_FOLDER -> Bindings.createBooleanBinding(
-                                () -> !linkedFile.getFile().linkProperty().get().startsWith("User"));
-//                                            || !linkedFile.getFile().linkProperty().get().startsWith("General"));
+                                () -> !linkedFile.getFile().linkProperty().get().startsWith("User")
+                                            && linkedFile.getFile().linkProperty().get().startsWith("General"),
+                                                linkedFile.getFile().linkProperty());
+
 // --------------------------------------------------------------------------------------------------------------------
 
-//      Atempted the below, seemed to work but not sure now.
+//      Attempted the below, seemed to work but not sure now.
+
 //                        case MOVE_FILE_TO_GENERAL_FOLDER -> Bindings.createBooleanBinding(
 //                                () -> canMoveFileToGeneralFolder(linkedFile.getFile(), preferencesService),
 //                                linkedFile.getFile().linkProperty(), bibEntry.getValue().map(BibEntry::getFieldsObservable).orElse(null));
