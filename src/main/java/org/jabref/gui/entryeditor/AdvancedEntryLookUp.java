@@ -92,7 +92,7 @@ public class AdvancedEntryLookUp extends SimpleCommand {
 
 			text_1 = textField_1.getText();
 
-			if (text_1.toLowerCase().contains("doi") || text_1.toLowerCase().contains("http") || text_1.toLowerCase().contains("www")) {
+			if (text_1.toLowerCase().contains("doi") || text_1.toLowerCase().contains("http") || text_1.toLowerCase().contains("www.")) {
 
 				frame.dispose();
 

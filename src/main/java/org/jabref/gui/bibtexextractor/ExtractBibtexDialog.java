@@ -47,11 +47,11 @@ public class ExtractBibtexDialog extends BaseDialog<Void> {
         //Editted
         if (!MultipleEntryFeatures.entry_from_plain_text().isEmpty()) {
         	input.setText(Localization.lang(MultipleEntryFeatures.entry_from_plain_text()));
-        	MultipleEntryFeatures.set_text_null();
+        	//MultipleEntryFeatures.set_text_null();
         }
         else if (!AdvancedEntryLookUp.entry_from_plain_text().isEmpty()){
         	input.setText(Localization.lang(AdvancedEntryLookUp.entry_from_plain_text()));
-        	AdvancedEntryLookUp.set_text_null();
+        	//AdvancedEntryLookUp.set_text_null();
         }else {
         	input.setText("");
         }

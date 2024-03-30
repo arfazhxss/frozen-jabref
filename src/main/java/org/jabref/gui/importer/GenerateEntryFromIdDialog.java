@@ -65,7 +65,7 @@ public class GenerateEntryFromIdDialog {
         
         if (!MultipleEntryFeatures.entry_from_plain_text().isEmpty()){
         	
-        	String txt = 	MultipleEntryFeatures.entry_from_plain_text();
+        	final String txt = 	MultipleEntryFeatures.entry_from_plain_text();
         	
         	generateEntryFromIdAction = new GenerateEntryFromIdAction(
                 libraryTab,
@@ -82,7 +82,7 @@ public class GenerateEntryFromIdDialog {
         
         } else if (!AdvancedEntryLookUp.entry_from_plain_text().isEmpty()){
         	
-        	String txt = 	AdvancedEntryLookUp.entry_from_plain_text();
+        	final String txt = 	AdvancedEntryLookUp.entry_from_plain_text();
         	
             generateEntryFromIdAction = new GenerateEntryFromIdAction(
                 libraryTab,
