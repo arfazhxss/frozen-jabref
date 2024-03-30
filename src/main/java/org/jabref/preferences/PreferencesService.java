@@ -152,6 +152,5 @@ public interface PreferencesService {
 
     MergeDialogPreferences getMergeDialogPreferences();
 
-
     String getUserRole();
 }
