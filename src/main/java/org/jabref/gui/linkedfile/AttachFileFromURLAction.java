@@ -9,6 +9,7 @@ import org.jabref.gui.DialogService;
 import org.jabref.gui.StateManager;
 import org.jabref.gui.actions.ActionHelper;
 import org.jabref.gui.actions.SimpleCommand;
+import org.jabref.gui.entryeditor.AdvancedEntryLookUp;
 import org.jabref.gui.fieldeditors.LinkedFileViewModel;
 import org.jabref.gui.util.TaskExecutor;
 import org.jabref.logic.l10n.Localization;
@@ -53,14 +54,11 @@ public class AttachFileFromURLAction extends SimpleCommand {
 
         BibEntry entry = stateManager.getSelectedEntries().get(0);
 
-        Optional<String> urlforDownload = getUrlForDownloadFromClipBoardOrEntry(dialogService, entry);
-
-        if (urlforDownload.isEmpty()) {
-            return;
-        }
+        //Editted
+        //Optional<String> urlforDownload = getUrlForDownloadFromClipBoardOrEntry(dialogService, entry);
 
         try {
-            URL url = new URL(urlforDownload.get());
+            URL url = new URL(AdvancedEntryLookUp.entry_from_plain_text());
             LinkedFileViewModel onlineFile = new LinkedFileViewModel(
                              new LinkedFile(url, ""),
                              entry,
@@ -75,15 +73,19 @@ public class AttachFileFromURLAction extends SimpleCommand {
     }
 
     public static Optional<String> getUrlForDownloadFromClipBoardOrEntry(DialogService dialogService, BibEntry entry) {
-        String clipText = ClipBoardManager.getContents();
+    	
+    	//Editted
+    	
+        String clipText =  AdvancedEntryLookUp.entry_from_plain_text();
         Optional<String> urlText;
-        String urlField = entry.getField(StandardField.URL).orElse("");
+        String urlField =  AdvancedEntryLookUp.entry_from_plain_text();
+        
         if (clipText.startsWith("http://") || clipText.startsWith("https://") || clipText.startsWith("ftp://")) {
             urlText = dialogService.showInputDialogWithDefaultAndWait(
                     Localization.lang("Download file"), Localization.lang("Enter URL to download"), clipText);
         } else if (urlField.startsWith("http://") || urlField.startsWith("https://") || urlField.startsWith("ftp://")) {
             urlText = dialogService.showInputDialogWithDefaultAndWait(
-                    Localization.lang("Download file"), Localization.lang("Enter URL to download"), urlField);
+                    Localization.lang("Download file"), Localization.lang("Enter URL to download"),  urlField);
         } else {
             urlText = dialogService.showInputDialogAndWait(
                     Localization.lang("Download file"), Localization.lang("Enter URL to download"));

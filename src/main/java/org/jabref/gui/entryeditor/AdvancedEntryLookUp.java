@@ -39,6 +39,9 @@ import de.saxsys.mvvmfx.utils.commands.Command;
 import org.jabref.gui.importer.*;
 
 import org.controlsfx.control.PopOver;
+import org.jabref.gui.linkedfile.*;
+import org.jabref.gui.maintable.*;
+import org.jabref.gui.maintable.*;
 
 public class AdvancedEntryLookUp extends SimpleCommand {
 
@@ -92,7 +95,9 @@ public class AdvancedEntryLookUp extends SimpleCommand {
 
 			text_1 = textField_1.getText();
 
-			if (text_1.toLowerCase().contains("doi") || text_1.toLowerCase().contains("http") || text_1.toLowerCase().contains("www.")) {
+			if ((text_1.toLowerCase().contains("doi") || text_1.toLowerCase().contains("http")
+					|| text_1.toLowerCase().contains("www.")) && 
+					!text_1.toLowerCase().contains("pdf") && !text_1.toLowerCase().contains("txt")) {
 
 				frame.dispose();
 
@@ -118,9 +123,33 @@ public class AdvancedEntryLookUp extends SimpleCommand {
 						}
 					}
 				}).start();
+				
 
-			} else {
+			} else if (text_1.toLowerCase().contains("pdf") || text_1.toLowerCase().contains("txt")) {
+				
+				frame.dispose();
 
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+
+
+							AttachFileFromURLAction attachFile = new AttachFileFromURLAction(
+									MainTable.getDser(), MainTable.getStm(),
+									MainTable.getTaskExec(), MainTable.getPser());
+
+							Platform.runLater(new Runnable() {
+								@Override
+								public void run() {
+									attachFile.execute();
+								}
+							});
+						}
+					
+				}).start();
+
+			} else 
+				{
 				frame.dispose();
 
 				new Thread(new Runnable() {
@@ -164,6 +193,7 @@ public class AdvancedEntryLookUp extends SimpleCommand {
 	public static void set_text_null() {
 		text_1 = "";
 	}
+
 	@Override
 	public void execute() {
 
