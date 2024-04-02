@@ -426,7 +426,7 @@ public class DublinCoreExtractor {
         SortedSet<Field> fields = new TreeSet<>(Comparator.comparing(Field::getName));
         fields.addAll(bibEntry.getFields());
         for (Field field : fields) {
-            if (useXmpPrivacyFilter && xmpPreferences.getXmpPrivacyFilter().contains(field)) {
+            if (useXmpPrivacyFilter && (xmpPreferences.getSelectAllFields().getValue() || xmpPreferences.getXmpPrivacyFilter().contains(field))) {
                 continue;
             }
 

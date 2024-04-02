@@ -200,6 +200,7 @@ public class JabRefPreferences implements PreferencesService {
     public static final String SIDE_PANE_COMPONENT_NAMES = "sidePaneComponentNames";
     public static final String XMP_PRIVACY_FILTERS = "xmpPrivacyFilters";
     public static final String USE_XMP_PRIVACY_FILTER = "useXmpPrivacyFilter";
+    public static final String SELECT_ALL_FIELDS = "selectAllFields";
     public static final String DEFAULT_SHOW_SOURCE = "defaultShowSource";
     // Window sizes
     public static final String SIZE_Y = "mainWindowSizeY";
@@ -626,6 +627,7 @@ public class JabRefPreferences implements PreferencesService {
 
         defaults.put(XMP_PRIVACY_FILTERS, "pdf;timestamp;keywords;owner;note;review");
         defaults.put(USE_XMP_PRIVACY_FILTER, Boolean.FALSE);
+        defaults.put(SELECT_ALL_FIELDS, Boolean.FALSE);
         defaults.put(WORKING_DIRECTORY, USER_HOME);
         defaults.put(EXPORT_WORKING_DIRECTORY, USER_HOME);
 
@@ -2726,8 +2728,11 @@ public class JabRefPreferences implements PreferencesService {
         xmpPreferences = new XmpPreferences(
                 getBoolean(USE_XMP_PRIVACY_FILTER),
                 getStringList(XMP_PRIVACY_FILTERS).stream().map(FieldFactory::parseField).collect(Collectors.toSet()),
-                getBibEntryPreferences().keywordSeparatorProperty());
+                getBibEntryPreferences().keywordSeparatorProperty(),
+                getBoolean(SELECT_ALL_FIELDS));
 
+        EasyBind.listen(xmpPreferences.getSelectAllFields(),
+                (obs, oldValue, newValue) -> putBoolean(SELECT_ALL_FIELDS, newValue));
         EasyBind.listen(xmpPreferences.useXmpPrivacyFilterProperty(),
                 (obs, oldValue, newValue) -> putBoolean(USE_XMP_PRIVACY_FILTER, newValue));
         xmpPreferences.getXmpPrivacyFilter().addListener((SetChangeListener<Field>) c ->
