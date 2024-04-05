@@ -67,7 +67,6 @@ public class DeleteMetadataAction extends SimpleCommand {
         this.filePreferences = filePreferences;
         this.xmpPreferences = xmpPreferences;
         this.embeddedBibExporter = new EmbeddedBibFilePdfExporter(databaseMode, entryTypesManager, FieldPreferences);
-
         this.executable.bind(needsDatabase(stateManager));
     }
 
@@ -136,6 +135,8 @@ public class DeleteMetadataAction extends SimpleCommand {
                 for (Path file : files) {
                     if (Files.exists(file)) {
                         try {
+                            //A3.2
+                            System.out.println("\nAND THE PATH IS " + file);
                             DeleteMetadataFromFile(file);
                             stringJoiner.add("  " + Localization.lang("OK") + ".");
                             entriesChanged++;

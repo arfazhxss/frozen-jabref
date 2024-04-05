@@ -274,8 +274,7 @@ public class MainMenu extends MenuBar {
                         new WriteMetadataToLinkedPdfsAction(dialogService, preferencesService.getFieldPreferences(), preferencesService.getFilePreferences(), preferencesService.getXmpPreferences(), entryTypesManager, abbreviationRepository, taskExecutor, stateManager)),
 
                 // A3.2
-                factory.createMenuItem(StandardActions.DELETE_METADATA,
-                        new DeleteMetadataAction(stateManager, preferencesService.getLibraryPreferences().getDefaultBibDatabaseMode(), entryTypesManager, preferencesService.getFieldPreferences(), dialogService, taskExecutor, preferencesService.getFilePreferences(), preferencesService.getXmpPreferences())),
+                factory.createMenuItem(StandardActions.DELETE_METADATA, new DeleteMetadataAction(stateManager, preferencesService.getLibraryPreferences().getDefaultBibDatabaseMode(), entryTypesManager, preferencesService.getFieldPreferences(), dialogService, taskExecutor, preferencesService.getFilePreferences(), preferencesService.getXmpPreferences())),
 
                 factory.createMenuItem(StandardActions.COPY_LINKED_FILES, new CopyFilesAction(dialogService, preferencesService, stateManager, taskExecutor)),
 

@@ -33,6 +33,7 @@ public class XmpPreferences {
     }
 
     public BooleanProperty getSelectAllFields() {
+        System.out.println("CHECKCHECK");
         return selectAllFields;
     }
 

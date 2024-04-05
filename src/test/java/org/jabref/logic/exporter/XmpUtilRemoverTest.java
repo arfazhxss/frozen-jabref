@@ -17,10 +17,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import javax.xml.transform.TransformerException;
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -154,6 +157,28 @@ public class XmpUtilRemoverTest {
 
         // since all fields have been deleted, there should be no entry info in the metadata
         assertEquals(0, modifiedEntries.size());
+
+//        Path path = Paths.get("/Users/arfaz/Downloads/tst2/testingC copy.pdf");
+//        File file = path.toFile();
+//        when(xmpPreferences.shouldUseXmpPrivacyFilter()).thenReturn(true);
+//        when(xmpPreferences.getSelectAllFields()).thenReturn(new SimpleBooleanProperty(true));
+//        XmpUtilRemover.deleteXmp(path, xmpPreferences);
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+//        if (!Desktop.isDesktopSupported()) {
+//            System.out.println("Desktop is not supported");
+//            return;
+//        }
+//
+//        Desktop desktop = Desktop.getDesktop();
+//        if (file.exists()) {
+//            try {
+//                desktop.open(file);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     /**
@@ -163,7 +188,6 @@ public class XmpUtilRemoverTest {
     void testDeleteXmpWithMultipleEntries(@TempDir Path tempDir) throws IOException, TransformerException {
         List<BibEntry> entries = Arrays.asList(olly2018, vapnik2000, toral2006);
         Path tempFile = this.createDefaultFile("banana.pdf", tempDir);
-        XmpPreferences xmpPreferences = mock(XmpPreferences.class);
         XmpUtilWriter xmpUtilWriter = new XmpUtilWriter(xmpPreferences);
         xmpUtilWriter.writeXmp(Path.of(tempFile.toAbsolutePath().toString()), entries, null);
 

@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -50,18 +51,10 @@ public class XmpUtilRemover {
      * @throws IOException          If the file could not be written to or could not be found.
      */
     public static void deleteXmp(Path path, XmpPreferences xmpPreferences) throws IOException, TransformerException {
-        // uses same hack as PR #8658
-        // See: src/main/java/org/jabref/logic/xmp/XmpUtilWriter.java
-        // Restating the comment
-        // Read from another file
-        // Reason: Apache PDFBox does not support writing while the file is opened
-        // See https://issues.apache.org/jira/browse/PDFBOX-4028
         Path newFile = Files.createTempFile("JabRef", "pdf");
 
-        // extract entries from PDF file's XMP metadata
         List<BibEntry> entries = new XmpUtilReader().readXmp(path, xmpPreferences);
 
-        // get the union of all entries' fields
         Set<Field> fields = entries.stream().flatMap(entry -> entry.getFieldMap().keySet().stream()).collect(Collectors.toSet());
 
         try (PDDocument document = Loader.loadPDF(path.toFile())) {
@@ -69,22 +62,28 @@ public class XmpUtilRemover {
                 throw new EncryptedPdfsNotSupportedException();
             }
 
-            // Delete schemas (PDDocumentInformation) from the document metadata
-            if (entries.size() > 0) {
+            if (!entries.isEmpty()) {
                 XmpUtilRemover.deleteDocumentInformation(document, fields, xmpPreferences);
                 XmpUtilRemover.rewriteDublinCore(entries, document, xmpPreferences);
             }
-
-            // Save updates to original file
-            try {
-                document.save(newFile.toFile());
-                FileUtil.copyFile(newFile, path, true);
-            } catch (IOException e) {
-                LOGGER.debug("Could not delete XMP metadata", e);
-                throw new TransformerException("Could not delete XMP metadata: " + e.getLocalizedMessage(), e);
+            try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+                document.save(out);
+                byte[] bytes = out.toByteArray();
+                Files.write(newFile, bytes);
             }
+        } catch (IOException e) {
+            LOGGER.debug("Could not delete XMP metadata", e);
+            throw new TransformerException("Could not delete XMP metadata: " + e.getLocalizedMessage(), e);
+        }
+
+        try {
+            Files.move(newFile, path, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            LOGGER.debug("Could not overwrite the original file", e);
+            throw new IOException("Could not overwrite the original file: " + e.getLocalizedMessage(), e);
         }
     }
+
     /**
      * Tries to delete the entries of the fields listed in the privacy filter. If "select all fields" is checked,
      * any given fields in the BibTex Entry is deleted.
@@ -99,19 +98,29 @@ public class XmpUtilRemover {
         PDDocumentInformation di = document.getDocumentInformation();
 
         // Query privacy filter settings
-        boolean useXmpPrivacyFilter = xmpPreferences.shouldUseXmpPrivacyFilter();
+        // boolean useXmpPrivacyFilter = xmpPreferences.shouldUseXmpPrivacyFilter();
 
-        // Set all the values including key and entryType
-        for (Field field: fields) {
-            if (useXmpPrivacyFilter && xmpPreferences.getSelectAllFields().getValue()) {
-                // if delete all, no need to check if field is contained in xmp preference
-                deleteField(di, field);
-            } else if (useXmpPrivacyFilter && xmpPreferences.getXmpPrivacyFilter().contains(field)) {
-                // erase field instead of adding it
-                deleteField(di, field);
-            }
+        PDDocumentInformation infoEmpty = new PDDocumentInformation();
+        document.setDocumentInformation(infoEmpty);
+
+        PDMetadata newMetadataEmpty = new PDMetadata(document);
+        document.getDocumentCatalog().setMetadata(newMetadataEmpty);
+
+        for (Field field : fields) {
+            deleteField(di, field);
+            //            if (useXmpPrivacyFilter && xmpPreferences.getSelectAllFields().getValue()) {
+            //                // if delete all, no need to check if field is contained in xmp preference
+            //                System.out.println("WE ARE HERE 3");
+            //                deleteField(di, field);
+            //            } else if (useXmpPrivacyFilter && xmpPreferences.getXmpPrivacyFilter().contains(field)) {
+            //                // erase field instead of adding it
+            //                System.out.println("WE ARE HERE 4");
+            //                deleteField(di, field);
+            //            }
         }
+        //        document.close();
     }
+
     /**
      * Deletes field from document.
      *
@@ -120,6 +129,13 @@ public class XmpUtilRemover {
      */
 
     private static void deleteField(PDDocumentInformation di, Field field) {
+        System.out.println("Current Field Removal:\t" + field.getDisplayName());
+        di.setCreator("-");
+        di.setProducer("-");
+        di.setTitle("-");
+        di.setCustomMetadataValue("Relation", null);
+        di.setCustomMetadataValue("bibtex/entrytype", null);
+
         if (StandardField.AUTHOR.equals(field)) {
             di.setAuthor(null);
         } else if (StandardField.TITLE.equals(field)) {
@@ -127,7 +143,7 @@ public class XmpUtilRemover {
         } else if (StandardField.KEYWORDS.equals(field)) {
             di.setKeywords(null);
         } else if (StandardField.ABSTRACT.equals(field)) {
-            di.setSubject(null);
+            di.setSubject(" ");
         } else {
             di.setCustomMetadataValue("bibtex/" + field, null);
         }
