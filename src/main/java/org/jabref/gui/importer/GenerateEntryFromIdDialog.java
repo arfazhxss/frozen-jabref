@@ -8,6 +8,8 @@ import javafx.scene.control.TextField;
 import org.jabref.gui.DialogService;
 import org.jabref.gui.LibraryTab;
 import org.jabref.gui.StateManager;
+import org.jabref.gui.entryeditor.AdvancedEntryLookUp;
+import org.jabref.gui.entryeditor.MultipleEntryFeatures;
 import org.jabref.gui.icon.IconTheme;
 import org.jabref.gui.util.TaskExecutor;
 import org.jabref.logic.l10n.Localization;
@@ -45,26 +47,53 @@ public class GenerateEntryFromIdDialog {
         this.generateButton.setDefaultButton(true);
     }
 
-    @FXML private void generateEntry() {
-        if (idTextField.getText().isEmpty()) {
+    @FXML
+	public void generateEntry() {
+    	
+    	//Editted
+    	
+        if (MultipleEntryFeatures.entry_from_plain_text().isEmpty() && 
+        		AdvancedEntryLookUp.entry_from_plain_text().isEmpty()) {
+        	
             dialogService.notify(Localization.lang("Enter a valid ID"));
             return;
         }
 
         this.idTextField.requestFocus();
+        
+        String entryText;
+        GenerateEntryFromIdAction generateEntryFromIdAction;
+        
+        if (!MultipleEntryFeatures.entry_from_plain_text().isEmpty()) {
 
-        GenerateEntryFromIdAction generateEntryFromIdAction = new GenerateEntryFromIdAction(
-                libraryTab,
-                dialogService,
-                preferencesService,
-                taskExecutor,
-                entryFromIdPopOver,
-                idTextField.getText(),
-                stateManager,
-                fileUpdateMonitor
+            entryText = MultipleEntryFeatures.entry_from_plain_text();
+            MultipleEntryFeatures.set_text_null();
+
+        } else if (!AdvancedEntryLookUp.entry_from_plain_text().isEmpty()) {
+
+            entryText = AdvancedEntryLookUp.entry_from_plain_text();
+            AdvancedEntryLookUp.set_text_null();
+
+        } else{
+
+        	entryText = " ";
+
+        }
+
+        generateEntryFromIdAction = new GenerateEntryFromIdAction(
+            libraryTab,
+            dialogService,
+            preferencesService,
+            taskExecutor,
+            entryFromIdPopOver,
+            entryText,
+            stateManager,
+            fileUpdateMonitor
         );
+
         generateEntryFromIdAction.execute();
     }
+
 
     public void setEntryFromIdPopOver(PopOver entryFromIdPopOver) {
         this.entryFromIdPopOver = entryFromIdPopOver;
