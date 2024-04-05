@@ -18,32 +18,32 @@
 <!--    <Label fx:id="descriptionLabel1" styleClass="info-section"-->
 <!--           text="Do not write the following XMP metadata fields to PDFs when using <b>write metadata to PDF files</b>. Selecting this option will also remove existing metadata from PDFs if one or multiple of the following fields are ALSO present in the entry whose metadata is supposed to be written to PDF. Selected XMP metadata fields will be completely removed from PDFs if choosing <b>'Delete metadata from PDFs'</b>."-->
 <!--           wrapText="true"/>-->
-    <HBox alignment="BOTTOM_LEFT" spacing="4.0">
-        <VBox spacing="4.0">
-            <TableView fx:id="filterList" prefHeight="300.0" prefWidth="200.0">
-                <columns>
-                    <TableColumn fx:id="fieldColumn" minWidth="100.0"
-                                 text="%Field name"/>
-                    <TableColumn fx:id="actionsColumn" editable="false"
-                                 minWidth="30.0" prefWidth="30.0" maxWidth="39"
-                                 resizable="false" sortable="false"/>
-                </columns>
-                <columnResizePolicy>
-                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-                </columnResizePolicy>
-            </TableView>
-            <ComboBox fx:id="addFieldName" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
-        </VBox>
-        <Button fx:id="addField" styleClass="icon-button,narrow" onAction="#addField"
-                prefHeight="25.0" prefWidth="25.0">
-            <graphic>
-                <JabRefIconView glyph="ADD_NOBOX"/>
-            </graphic>
-            <tooltip>
-                <Tooltip text="%Add field to filter list"/>
-            </tooltip>
-        </Button>
-    </HBox>
+<!--    <HBox alignment="BOTTOM_LEFT" spacing="4.0">-->
+<!--        <VBox spacing="4.0">-->
+<!--            <TableView fx:id="filterList" prefHeight="300.0" prefWidth="200.0">-->
+<!--                <columns>-->
+<!--                    <TableColumn fx:id="fieldColumn" minWidth="100.0"-->
+<!--                                 text="%Field name"/>-->
+<!--                    <TableColumn fx:id="actionsColumn" editable="false"-->
+<!--                                 minWidth="30.0" prefWidth="30.0" maxWidth="39"-->
+<!--                                 resizable="false" sortable="false"/>-->
+<!--                </columns>-->
+<!--                <columnResizePolicy>-->
+<!--                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>-->
+<!--                </columnResizePolicy>-->
+<!--            </TableView>-->
+<!--            <ComboBox fx:id="addFieldName" prefWidth="200.0" VBox.vgrow="ALWAYS"/>-->
+<!--        </VBox>-->
+<!--        <Button fx:id="addField" styleClass="icon-button,narrow" onAction="#addField"-->
+<!--                prefHeight="25.0" prefWidth="25.0">-->
+<!--            <graphic>-->
+<!--                <JabRefIconView glyph="ADD_NOBOX"/>-->
+<!--            </graphic>-->
+<!--            <tooltip>-->
+<!--                <Tooltip text="%Add field to filter list"/>-->
+<!--            </tooltip>-->
+<!--        </Button>-->
+<!--    </HBox>-->
     <Label fx:id="descriptionLabel2" styleClass="info-section"
            text="Selected XMP metadata fields will be completely removed from PDFs if choosing Delete metadata from PDFs."
            wrapText="true"/>

@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 
 import javax.xml.transform.TransformerException;
 
-import org.jabref.logic.util.io.FileUtil;
 import org.jabref.model.entry.BibEntry;
 import org.jabref.model.entry.field.Field;
 import org.jabref.model.entry.field.StandardField;

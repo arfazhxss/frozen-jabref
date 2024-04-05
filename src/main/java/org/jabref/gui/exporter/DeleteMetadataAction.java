@@ -136,7 +136,7 @@ public class DeleteMetadataAction extends SimpleCommand {
                     if (Files.exists(file)) {
                         try {
                             //A3.2
-                            System.out.println("\nAND THE PATH IS " + file);
+//                            System.out.println("\nAND THE PATH IS " + file);
                             DeleteMetadataFromFile(file);
                             stringJoiner.add("  " + Localization.lang("OK") + ".");
                             entriesChanged++;
