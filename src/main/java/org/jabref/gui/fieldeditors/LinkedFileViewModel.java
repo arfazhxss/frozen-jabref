@@ -297,13 +297,10 @@ public class LinkedFileViewModel extends AbstractViewModel {
             return;
         }
 
-        // ------------------------------------------------------ Below is to be modified for A3.3.
-
         // Get target folder
         Optional<Path> fileDir = databaseContext.getFirstExistingFileDir(preferencesService.getFilePreferences());
         if (fileDir.isEmpty()) {
-            dialogService.showErrorDialogAndWait(Localization.lang("Move file"),
-                    Localization.lang("File directory is not set or does not exist! (LinkedFileViewModel.java)"));
+            dialogService.showErrorDialogAndWait(Localization.lang("Move file"), Localization.lang("File directory is not set or does not exist!"));
             return;
         }
 
@@ -323,8 +320,39 @@ public class LinkedFileViewModel extends AbstractViewModel {
             dialogService.showErrorDialogAndWait(Localization.lang("File not found"), Localization.lang("Could not find file '%0'.", linkedFile.getLink()));
         }
     }
+    
+    //not sure if it works but implemented a user directory 
+    public void moveToUserSpecificDirectory() {
+        if (linkedFile.isOnlineLink()) {
+            // Cannot move remote links
+            return;
+        }
 
-    // ---------------------------------------------------------------------------------------------------
+        // Get target folder
+        Optional<Path> userDir = databaseContext.getUserFileDirectory(preferencesService.getFilePreferences());
+        if (userDir.isEmpty()) {
+            dialogService.showErrorDialogAndWait(Localization.lang("Move file"), Localization.lang("User-specific file directory is not set or does not exist!"));
+            return;
+        }
+
+        Optional<Path> file = linkedFile.findIn(databaseContext, preferencesService.getFilePreferences());
+        if (file.isPresent()) {
+            // Found the linked file, so move it
+            try {
+                // Move the file to the user-specific directory
+                Files.move(file.get(), userDir.get().resolve(file.get().getFileName()));
+            } catch (IOException exception) {
+                dialogService.showErrorDialogAndWait(
+                        Localization.lang("Move file"),
+                        Localization.lang("Could not move file '%0'.", file.get().toString()),
+                        exception);
+            }
+        } else {
+            // File doesn't exist, so we can't move it.
+            dialogService.showErrorDialogAndWait(Localization.lang("File not found"), Localization.lang("Could not find file '%0'.", linkedFile.getLink()));
+        }
+    }
+
 
     /**
      * Gets the filename for the current linked file and compares it to the new suggested filename.
