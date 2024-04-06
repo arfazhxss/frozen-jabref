@@ -15,7 +15,10 @@ import org.jabref.gui.entryeditor.MultipleEntryFeatures.CustomEntry;
 import static org.jabref.gui.actions.ActionHelper.needsDatabase;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 
@@ -69,6 +72,9 @@ public class AdvancedEntryLookUp extends SimpleCommand {
 
 	private static String text_1 = "";
 
+	public static List<String> fields = new ArrayList<>();
+	public static List<String> values = new ArrayList<>();
+
 	public AdvancedEntryLookUp() {
 
 	}
@@ -86,6 +92,7 @@ public class AdvancedEntryLookUp extends SimpleCommand {
 		frame.add(panel);
 
 		JTextField textField_1 = new JTextField(15);
+		textField_1.setHorizontalAlignment(JTextField.LEFT);
 		panel.add(textField_1);
 
 		JButton addButton_1 = new JButton("Smart Entry Search");
@@ -95,9 +102,9 @@ public class AdvancedEntryLookUp extends SimpleCommand {
 
 			text_1 = textField_1.getText();
 
-			if ((text_1.toLowerCase().contains("doi") || text_1.toLowerCase().contains("http")
-					|| text_1.toLowerCase().contains("www.")) && 
-					!text_1.toLowerCase().contains("pdf") && !text_1.toLowerCase().contains("txt")) {
+			if (!text_1.contains("@") && (text_1.toLowerCase().contains("doi") || text_1.toLowerCase().contains("http")
+					|| text_1.toLowerCase().contains("www.")) && !text_1.toLowerCase().contains("pdf")
+					&& !text_1.toLowerCase().contains("txt")) {
 
 				frame.dispose();
 
@@ -123,46 +130,72 @@ public class AdvancedEntryLookUp extends SimpleCommand {
 						}
 					}
 				}).start();
-				
 
 			} else if (text_1.toLowerCase().contains("pdf") || text_1.toLowerCase().contains("txt")) {
-				
+
 				frame.dispose();
 
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
 
+						AttachFileFromURLAction attachFile = new AttachFileFromURLAction(MainTable.getDser(),
+								MainTable.getStm(), MainTable.getTaskExec(), MainTable.getPser());
 
-							AttachFileFromURLAction attachFile = new AttachFileFromURLAction(
-									MainTable.getDser(), MainTable.getStm(),
-									MainTable.getTaskExec(), MainTable.getPser());
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								attachFile.execute();
+							}
+						});
+					}
 
-							Platform.runLater(new Runnable() {
-								@Override
-								public void run() {
-									attachFile.execute();
-								}
-							});
-						}
-					
 				}).start();
 
-			} else 
-				{
-				frame.dispose();
+			} else {
+				if (!(text_1.toCharArray()[0] == '@')) {
+					frame.dispose();
 
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
 
-						if (MainToolBar.Frame() != null && MainToolBar.dser() != null && MainToolBar.pser() != null
-								&& MainToolBar.stmn() != null) {
+							if (MainToolBar.Frame() != null && MainToolBar.dser() != null && MainToolBar.pser() != null
+									&& MainToolBar.stmn() != null) {
 
-							ExtractBibtexAction nea = new ExtractBibtexAction(MainToolBar.dser(), MainToolBar.pser(),
-									MainToolBar.stmn());
+								ExtractBibtexAction nea = new ExtractBibtexAction(MainToolBar.dser(),
+										MainToolBar.pser(), MainToolBar.stmn());
 
-							ce = new CustomEntry(text_1);
+								ce = new CustomEntry(text_1);
+
+								Platform.runLater(new Runnable() {
+									@Override
+									public void run() {
+										nea.execute();
+									}
+								});
+							}
+						}
+
+					}).start();
+
+				} else {
+					
+					clear_fields();
+					clear_values();
+					
+					String entry_name = text_1.substring(0, text_1.indexOf("{")).replace("@", "");
+
+					final String name = entry_name.substring(0, 1).toUpperCase()
+							+ entry_name.substring(1).toLowerCase();
+
+					extract_fields_values(text_1);
+
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							NewEntryAction nea = new NewEntryAction(MainToolBar.Frame()::getCurrentLibraryTab,
+									new CustomEntry(name), MainToolBar.dser(), MainToolBar.pser(), MainToolBar.stmn());
 
 							Platform.runLater(new Runnable() {
 								@Override
@@ -171,10 +204,10 @@ public class AdvancedEntryLookUp extends SimpleCommand {
 								}
 							});
 						}
-					}
-
-				}).start();
-
+					}).start();
+					
+					
+				}
 			}
 
 			textField_1.setText("");
@@ -183,6 +216,19 @@ public class AdvancedEntryLookUp extends SimpleCommand {
 		panel.add(addButton_1);
 
 		frame.setVisible(true);
+	}
+
+	public static void extract_fields_values(String input) {
+
+		Pattern pattern = Pattern.compile("\\s*([a-zA-Z]+)\\s*=\\s*\\{(.*?)\\},?\\s*");
+
+		Matcher matcher = pattern.matcher(input);
+
+		while (matcher.find()) {
+			fields.add(matcher.group(1));
+			values.add(matcher.group(2));
+		}
+
 	}
 
 	public static String entry_from_plain_text() {
@@ -194,10 +240,27 @@ public class AdvancedEntryLookUp extends SimpleCommand {
 		text_1 = "";
 	}
 
+	public static List<String> getFieldsList() {
+		return new ArrayList<String>(fields);
+	}
+
+	public static List<String> getValuesList() {
+		return new ArrayList<String>(values);
+	}
+
+	public static void clear_fields() {
+		fields.clear();
+	}
+
+	public static void clear_values() {
+		values.clear();
+	}
+
 	@Override
 	public void execute() {
 
 		ShowWindow();
 
 	}
+
 }
