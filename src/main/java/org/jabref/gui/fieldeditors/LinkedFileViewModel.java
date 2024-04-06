@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +33,7 @@ import javafx.scene.control.ButtonType;
 import org.jabref.gui.AbstractViewModel;
 import org.jabref.gui.DialogService;
 import org.jabref.gui.desktop.JabRefDesktop;
+import org.jabref.gui.entryeditor.AdvancedEntryLookUp;
 import org.jabref.gui.externalfiles.FileDownloadTask;
 import org.jabref.gui.externalfiletype.ExternalFileType;
 import org.jabref.gui.externalfiletype.ExternalFileTypes;
@@ -429,7 +431,11 @@ public class LinkedFileViewModel extends AbstractViewModel {
             throw new UnsupportedOperationException("In order to download the file it has to be an online link");
         }
         try {
-            Optional<Path> targetDirectory = databaseContext.getFirstExistingFileDir(preferencesService.getFilePreferences());
+        	
+        	//Editted
+        	
+            Optional<Path> targetDirectory = Optional.of(Paths.get(System.getProperty("user.home") + "/Downloads"));
+            
             if (targetDirectory.isEmpty()) {
                 dialogService.showErrorDialogAndWait(Localization.lang("Download file"), Localization.lang("File directory is not set or does not exist!"));
                 return;
@@ -526,10 +532,22 @@ public class LinkedFileViewModel extends AbstractViewModel {
                 .wrap(() -> {
                     Optional<ExternalFileType> suggestedType = inferFileType(urlDownload);
                     ExternalFileType externalFileType = suggestedType.orElse(StandardExternalFileType.PDF);
-
-                    String suggestedName = linkedFileHandler.getSuggestedFileName(externalFileType.getExtension());
+                    
+                    //Editted
+                    String suggestedName;
+                    int last_dash_index;
+                    if(!AdvancedEntryLookUp.entry_from_plain_text().isEmpty()) {
+                    	
+                    last_dash_index = AdvancedEntryLookUp.entry_from_plain_text().lastIndexOf('/');
+                    suggestedName = AdvancedEntryLookUp.entry_from_plain_text().substring(last_dash_index + 1);
+                    
+                    }else {
+                    	
+                    	suggestedName = "Recent Downloaded File";
+                    	
+                    }
                     String fulltextDir = FileUtil.createDirNameFromPattern(databaseContext.getDatabase(), entry, preferencesService.getFilePreferences().getFileDirectoryPattern());
-                    suggestedName = FileNameUniqueness.getNonOverWritingFileName(targetDirectory.resolve(fulltextDir), suggestedName);
+                    suggestedName = FileNameUniqueness.getNonOverWritingFileName(targetDirectory.resolve(fulltextDir), suggestedName );
                     return targetDirectory.resolve(fulltextDir).resolve(suggestedName);
                 })
                 .then(destination -> new FileDownloadTask(urlDownload.getSource(), destination))
