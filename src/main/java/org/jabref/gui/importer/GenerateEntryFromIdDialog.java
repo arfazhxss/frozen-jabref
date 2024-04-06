@@ -61,61 +61,39 @@ public class GenerateEntryFromIdDialog {
 
         this.idTextField.requestFocus();
         
+        String entryText;
         GenerateEntryFromIdAction generateEntryFromIdAction;
         
-        if (!MultipleEntryFeatures.entry_from_plain_text().isEmpty()){
-        	
-        	final String txt = 	MultipleEntryFeatures.entry_from_plain_text();
-        	
-        	generateEntryFromIdAction = new GenerateEntryFromIdAction(
-                libraryTab,
-                dialogService,
-                preferencesService,
-                taskExecutor,
-                entryFromIdPopOver,
-                txt,
-                stateManager,
-                fileUpdateMonitor
-        );
-        	
-        	MultipleEntryFeatures.set_text_null();
-        
-        } else if (!AdvancedEntryLookUp.entry_from_plain_text().isEmpty()){
-        	
-        	final String txt = 	AdvancedEntryLookUp.entry_from_plain_text();
-        	
-            generateEntryFromIdAction = new GenerateEntryFromIdAction(
-                libraryTab,
-                dialogService,
-                preferencesService,
-                taskExecutor,
-                entryFromIdPopOver,
-                txt,
-                stateManager,
-                fileUpdateMonitor
-                
-                );
-            
+        if (!MultipleEntryFeatures.entry_from_plain_text().isEmpty()) {
+
+            entryText = MultipleEntryFeatures.entry_from_plain_text();
+            MultipleEntryFeatures.set_text_null();
+
+        } else if (!AdvancedEntryLookUp.entry_from_plain_text().isEmpty()) {
+
+            entryText = AdvancedEntryLookUp.entry_from_plain_text();
             AdvancedEntryLookUp.set_text_null();
-            
-        }else {
-        	
-            generateEntryFromIdAction = new GenerateEntryFromIdAction(
-                libraryTab,
-                dialogService,
-                preferencesService,
-                taskExecutor,
-                entryFromIdPopOver,
-                " ",
-                stateManager,
-                fileUpdateMonitor
-                
-                 );
-        	
+
+        } else{
+
+        	entryText = " ";
+
         }
-    
+
+        generateEntryFromIdAction = new GenerateEntryFromIdAction(
+            libraryTab,
+            dialogService,
+            preferencesService,
+            taskExecutor,
+            entryFromIdPopOver,
+            entryText,
+            stateManager,
+            fileUpdateMonitor
+        );
+
         generateEntryFromIdAction.execute();
     }
+
 
     public void setEntryFromIdPopOver(PopOver entryFromIdPopOver) {
         this.entryFromIdPopOver = entryFromIdPopOver;
