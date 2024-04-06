@@ -297,10 +297,13 @@ public class LinkedFileViewModel extends AbstractViewModel {
             return;
         }
 
+        // ------------------------------------------------------ Below is to be modified for A3.3.
+
         // Get target folder
         Optional<Path> fileDir = databaseContext.getFirstExistingFileDir(preferencesService.getFilePreferences());
         if (fileDir.isEmpty()) {
-            dialogService.showErrorDialogAndWait(Localization.lang("Move file"), Localization.lang("File directory is not set or does not exist!"));
+            dialogService.showErrorDialogAndWait(Localization.lang("Move file"),
+                    Localization.lang("File directory is not set or does not exist! (LinkedFileViewModel.java)"));
             return;
         }
 
@@ -320,6 +323,8 @@ public class LinkedFileViewModel extends AbstractViewModel {
             dialogService.showErrorDialogAndWait(Localization.lang("File not found"), Localization.lang("Could not find file '%0'.", linkedFile.getLink()));
         }
     }
+
+    // ---------------------------------------------------------------------------------------------------
 
     /**
      * Gets the filename for the current linked file and compares it to the new suggested filename.
