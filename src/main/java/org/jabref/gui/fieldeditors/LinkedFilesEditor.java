@@ -357,12 +357,12 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
  * */
                         case MOVE_FILE_TO_GENERAL_FOLDER -> Bindings.createBooleanBinding(
                                 () -> !linkedFile.getFile().linkProperty().get().startsWith("General")
-                                            && linkedFile.getFile().linkProperty().get().startsWith("User"),
+                                            && !linkedFile.getFile().linkProperty().get().startsWith("User"),
                                                 linkedFile.getFile().linkProperty());
 
                         case MOVE_FILE_TO_USER_FOLDER -> Bindings.createBooleanBinding(
                                 () -> !linkedFile.getFile().linkProperty().get().startsWith("User")
-                                            && linkedFile.getFile().linkProperty().get().startsWith("General"),
+                                            && !linkedFile.getFile().linkProperty().get().startsWith("General"),
                                                 linkedFile.getFile().linkProperty());
 
 // --------------------------------------------------------------------------------------------------------------------
