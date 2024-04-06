@@ -229,7 +229,7 @@ public class IconTheme {
         AUTO_FILE_LINK(MaterialDesignF.FILE_FIND),
         AUTO_RENAME(MaterialDesignA.AUTO_FIX),
         DOWNLOAD_FILE(MaterialDesignD.DOWNLOAD),
-// -------------------- Directory Icons ------------------------------------------------------------------
+// -------------------- A3.3 FDirectory Icons ------------------------------------------------------------------
         MOVE_TO_FOLDER(MaterialDesignE.EARTH),
         MOVE_TO_USER_FOLDER(MaterialDesignH.HUMAN),
 // -------------------------------------------------------------------------------------------------------
