@@ -193,6 +193,7 @@ public class BibDatabaseContext {
                                               .findFirst();
     }
 
+// -------------------------------------------------------------------------------------------------------------- A3.3
     private Path getFileDirectoryPath(String directoryName) {
         Path directory = Path.of(directoryName);
         // If this directory is relative, we try to interpret it as relative to
@@ -203,6 +204,18 @@ public class BibDatabaseContext {
         }
         return directory;
     }
+//
+//    private Path getFileDirectoryPath(String directoryName) {
+//        Path directory = Path.of(System.getProperty("user.home") + "/Downloads/SENG 371 Spring 2024 Assignment 03");
+//        // If this directory is relative, we try to interpret it as relative to
+//        // the file path of this BIB file:
+//        Optional<Path> databaseFile = getDatabasePath();
+//        if (!directory.isAbsolute() && databaseFile.isPresent()) {
+//            return databaseFile.get().getParent().resolve(directory).normalize();
+//        }
+//        return directory;
+//    }
+    // --------------------------------------------------------------------------------------------------------------
 
     public DatabaseSynchronizer getDBMSSynchronizer() {
         return this.dbmsSynchronizer;
