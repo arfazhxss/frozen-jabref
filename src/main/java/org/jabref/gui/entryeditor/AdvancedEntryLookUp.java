@@ -220,7 +220,7 @@ public class AdvancedEntryLookUp extends SimpleCommand {
 
 	public static void extract_fields_values(String input) {
 
-		Pattern pattern = Pattern.compile("\\s*([a-zA-Z]+)\\s*=\\s*\\{(.*?)\\},?\\s*");
+		Pattern pattern = Pattern.compile("\\s*([a-zA-Z]+)\\s*=\\s*(\\{[^{}]*\\}|[^,}]+),?\\s*");
 
 		Matcher matcher = pattern.matcher(input);
 
