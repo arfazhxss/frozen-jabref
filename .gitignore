@@ -22,6 +22,7 @@ docs/Gemfile.lock
 
 # ignore the generated markdown file if the user forgets to delete it
 status.md
+route.sh
 
 # Install4J
 install4j6/

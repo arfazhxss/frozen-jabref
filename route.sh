@@ -1,6 +1,6 @@
 #!/bin/bash
 # git workflow v8.0
-# 2024 @arfazhxss
+# 2024 @Crabbapp1es
 # Test Version #28
 
 breakStrSize=50
@@ -36,7 +36,7 @@ function pushChanges() {
   fi
 
   git add . && git add -u && \
-  git commit -m "$CommitMessage"$'\nCommit by @arfazhxss on '"$(date +'%a %d %b %Y')" && \
+  git commit -m "$CommitMessage"$'\nCommit by @Crabbapp1es on '"$(date +'%a %d %b %Y')" && \
   if git push --set-upstream origin "$branch" --quiet; then
     rm -Rf .DS_Store/
     echo -e "${breakStrIter}\n\t\tYour changes have been pushed\n\t\tto the repository :)\n${breakStrIter}"
