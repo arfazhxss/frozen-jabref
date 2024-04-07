@@ -44,6 +44,7 @@ import org.jabref.gui.icon.IconTheme;
 import org.jabref.gui.icon.JabRefIconView;
 import org.jabref.gui.importer.GrobidOptInDialogHelper;
 import org.jabref.gui.keyboard.KeyBinding;
+import org.jabref.gui.libraryproperties.general.GeneralPropertiesView;
 import org.jabref.gui.linkedfile.DeleteFileAction;
 import org.jabref.gui.util.BindingsHelper;
 import org.jabref.gui.util.TaskExecutor;
@@ -333,8 +334,8 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
 
     private class ContextAction extends SimpleCommand {
 
-        private final StandardActions command;
-        private final LinkedFileViewModel linkedFile;
+        private StandardActions command;
+        private LinkedFileViewModel linkedFile;
 
         public ContextAction(StandardActions command, LinkedFileViewModel linkedFile, PreferencesService preferencesService) {
             this.command = command;
@@ -361,8 +362,8 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
                                                 linkedFile.getFile().linkProperty());
 
                         case MOVE_FILE_TO_USER_FOLDER -> Bindings.createBooleanBinding(
-                                () -> !linkedFile.getFile().linkProperty().get().startsWith("User")
-                                            && !linkedFile.getFile().linkProperty().get().startsWith("General"),
+                                () -> !linkedFile.getFile().linkProperty().get().startsWith("General")
+                                        && !linkedFile.getFile().linkProperty().get().startsWith("User"),
                                                 linkedFile.getFile().linkProperty());
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -372,9 +373,11 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
 //                        case MOVE_FILE_TO_GENERAL_FOLDER -> Bindings.createBooleanBinding(
 //                                () -> canMoveFileToGeneralFolder(linkedFile.getFile(), preferencesService),
 //                                linkedFile.getFile().linkProperty(), bibEntry.getValue().map(BibEntry::getFieldsObservable).orElse(null));
+//
 //                        case MOVE_FILE_TO_USER_FOLDER -> Bindings.createBooleanBinding(
 //                                () -> canMoveFileToUserFolder(linkedFile.getFile(), preferencesService),
 //                                linkedFile.getFile().linkProperty(), bibEntry.getValue().map(BibEntry::getFieldsObservable).orElse(null));
+
 // --------------------------------------------------------------------------------------------------------------------
 
                         case DOWNLOAD_FILE -> Bindings.createBooleanBinding(
@@ -388,52 +391,47 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
                     });
         }
 
-
-
-
         private boolean isInGeneralFolder(LinkedFile linkedFile) {
-            String path = linkedFile.getPath();
-            return path.startsWith("general/");
+            String path = linkedFile.getFileType();
+            return path.startsWith("General");
         }
 
-        private boolean hasPermissionToMoveToUserFolder(PreferencesService preferencesService) {
+        private boolean isInUserFolder(LinkedFile linkedFile) {
+            String path = linkedFile.getFileType();
+            return path.startsWith("User");
+        }
+
+        public boolean hasPermissionToMoveToUserFolder(PreferencesService preferencesService) {
             if (preferencesService == null) {
                 return false;
             }
             // assuming preferencesService.getUserRole() returns the role of the current user
-            String userRole = preferencesService.getUserRole();
-            if (userRole == null) {
+            if (preferencesService.getUserRole() == null) {
                 return false;
             }
             //Check if user role is admin
-            return userRole.equals("admin");
+            return preferencesService.getUserRole().equals("Admin");
         }
+//
+//        private boolean canMoveFileToGeneralFolder(LinkedFile linkedFile, PreferencesService preferencesService) {
+//            if (linkedFile == null || preferencesService == null) {
+//                return false;
+//            }
+//            return !isInGeneralFolder(linkedFile) && hasPermissionToMoveToUserFolder(preferencesService);
+//        }
+//
+//        private boolean canMoveFileToUserFolder(LinkedFile linkedFile, PreferencesService preferencesService) {
+//            if (linkedFile == null || preferencesService == null) {
+//                return false;
+//            }
+//            //if the file is not already in the user folder
+//            if (!isInUserFolder(linkedFile)) {
+//                return hasPermissionToMoveToUserFolder(preferencesService);
+//            }
+//            return false;
+//        }
 
-        private boolean canMoveFileToGeneralFolder(LinkedFile linkedFile, PreferencesService preferencesService) {
-            if (linkedFile == null || preferencesService == null) {
-                return false;
-            }
-            return !isInGeneralFolder(linkedFile) && hasPermissionToMoveToUserFolder(preferencesService);
-        }
-
-        private boolean canMoveFileToUserFolder(LinkedFile linkedFile, PreferencesService preferencesService) {
-            if (linkedFile == null || preferencesService == null) {
-                return false;
-            }
-            //if the file is not already in the user folder
-            if (!isInUserFolder(linkedFile)) {
-                return hasPermissionToMoveToUserFolder(preferencesService);
-            }
-            return false;
-        }
-
-        private boolean isInUserFolder(LinkedFile linkedFile) {
-            String path = linkedFile.getPath();
-            //Assuming the user folder is named "user/"
-            return path.startsWith("user/");
-        }
-
-
+// ------------------------------------------------------------------------------------------------------------------
 
 
         @Override
@@ -446,7 +444,7 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
                 case RENAME_FILE_TO_PATTERN -> linkedFile.renameToSuggestion();
                 case RENAME_FILE_TO_NAME -> linkedFile.askForNameAndRename();
                 case MOVE_FILE_TO_GENERAL_FOLDER -> linkedFile.moveToDefaultDirectory();
-                case MOVE_FILE_TO_USER_FOLDER -> linkedFile.moveToDefaultDirectoryAndRename();
+                case MOVE_FILE_TO_USER_FOLDER -> linkedFile.moveToUserSpecificDirectory();
                 case DELETE_FILE -> viewModel.deleteFile(linkedFile);
                 case REMOVE_LINK -> viewModel.removeFileLink(linkedFile);
             }
