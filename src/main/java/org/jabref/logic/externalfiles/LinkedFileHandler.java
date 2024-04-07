@@ -38,29 +38,8 @@ public class LinkedFileHandler {
         this.filePreferences = Objects.requireNonNull(filePreferences);
     }
 
-
     // -------------------------------------------------------------------------------------- A3.3
-
-//    public void moveToGeneralDirectory(Path file) throws IOException {
-//        String generalDir = metaData.getDefaultFileDirectory().orElse("").trim();
-//        Path targetDirectory = Path.of(generalDir);
-//
-//        if (!Files.exists(targetDirectory)) {
-//            Files.createDirectories(targetDirectory);
-//        }
-//
-//        Path targetPath = targetDirectory.resolve(file.getFileName());
-//        if (Files.exists(targetPath)) {
-//            LOGGER.debug("The file {} would have been moved to {}. However, there exists already a file with that name so we do nothing.", file, targetPath);
-//            return;
-//        }
-//
-//        Files.move(file, targetPath);
-//    }
-
     public boolean moveToDefaultDirectory() throws IOException {
-
-//      Test:  System.out.println("15653155\n 1531313\n15389\n 46858");
 
         Optional<Path> targetDirectory = databaseContext.getFirstExistingFileDir(filePreferences);
         if (targetDirectory.isEmpty()) {
@@ -73,7 +52,7 @@ public class LinkedFileHandler {
             return false;
         }
 
-        String targetDirectoryName = "";
+        String targetDirectoryName = "G";
         if (!filePreferences.getFileDirectoryPattern().isEmpty()) {
             targetDirectoryName = FileUtil.createDirNameFromPattern(
                     databaseContext.getDatabase(), entry,
@@ -81,6 +60,39 @@ public class LinkedFileHandler {
         }
 
         Path targetPath = targetDirectory.get().resolve(targetDirectoryName).resolve(oldFile.get().getFileName());
+        if (Files.exists(targetPath)) {
+            // We do not overwrite already existing files
+            LOGGER.debug("The file {} would have been moved to {}. However, there exists already a file with that name so we do nothing.", oldFile.get(), targetPath);
+            return false;
+        } else {
+            // Make sure sub-directories exist
+            Files.createDirectories(targetPath.getParent());
+        }
+
+        // Move
+        Files.move(oldFile.get(), targetPath);
+
+        // Update path
+        fileEntry.setLink(relativize(targetPath));
+        return true;
+    }
+
+    public boolean moveToUserSpecificDirectory() throws IOException {
+
+        Optional<Path> oldFile = fileEntry.findIn(databaseContext, filePreferences);
+        if (oldFile.isEmpty()) {
+            // Could not find file
+            return false;
+        }
+
+        String targetDirectoryName = "U";
+        if (filePreferences.getFileDirectoryPattern().isEmpty()) {
+            targetDirectoryName = FileUtil.createDirNameFromPattern(
+                    databaseContext.getDatabase(), entry,
+                    filePreferences.getFileDirectoryPattern());
+        }
+
+        Path targetPath = oldFile.get().resolve(targetDirectoryName).resolve(oldFile.get().getFileName());
         if (Files.exists(targetPath)) {
             // We do not overwrite already existing files
             LOGGER.debug("The file {} would have been moved to {}. However, there exists already a file with that name so we do nothing.", oldFile.get(), targetPath);
