@@ -189,27 +189,16 @@ public class BibDatabaseContext {
      */
     public Optional<Path> getFirstExistingFileDir(FilePreferences preferences) {
         return getFileDirectories(preferences).stream()
-                                              .filter(Files::exists)
-                                              .findFirst();
+                .filter(Files::exists)
+                .findFirst();
     }
-    
+
     public Optional<Path> getUserFileDirectory(FilePreferences preferences) {
         return metaData.getUserFileDirectory(preferences.getUserAndHost()).map(this::getFileDirectoryPath);
     }
 
 
-// -------------------------------------------------------------------------------------------------------------- A3.3
-//    private Path getFileDirectoryPath(String directoryName) {
-//        Path directory = Path.of(directoryName);
-//        // If this directory is relative, we try to interpret it as relative to
-//        // the file path of this BIB file:
-//        Optional<Path> databaseFile = getDatabasePath();
-//        if (!directory.isAbsolute() && databaseFile.isPresent()) {
-//            return databaseFile.get().getParent().resolve(directory).normalize();
-//        }
-//        return directory;
-//    }
-//
+    // -------------------------------------------------------------------------------------------------------------- A3.3
     private Path getFileDirectoryPath(String directoryName) {
         Path directory = Path.of(directoryName);
         // If this directory is relative, we try to interpret it as relative to
@@ -230,9 +219,6 @@ public class BibDatabaseContext {
 //        }
 //        return directory;
 //    }
-    
-    
-    
     // --------------------------------------------------------------------------------------------------------------
 
     public DatabaseSynchronizer getDBMSSynchronizer() {
