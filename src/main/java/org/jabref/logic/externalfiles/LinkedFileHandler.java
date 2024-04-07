@@ -38,7 +38,10 @@ public class LinkedFileHandler {
         this.filePreferences = Objects.requireNonNull(filePreferences);
     }
 
+
+    // -------------------------------------------------------------------------------------- A3.3
     public boolean moveToDefaultDirectory() throws IOException {
+
         Optional<Path> targetDirectory = databaseContext.getFirstExistingFileDir(filePreferences);
         if (targetDirectory.isEmpty()) {
             return false;
@@ -53,8 +56,7 @@ public class LinkedFileHandler {
         String targetDirectoryName = "";
         if (!filePreferences.getFileDirectoryPattern().isEmpty()) {
             targetDirectoryName = FileUtil.createDirNameFromPattern(
-                    databaseContext.getDatabase(),
-                    entry,
+                    databaseContext.getDatabase(), entry,
                     filePreferences.getFileDirectoryPattern());
         }
 
@@ -75,6 +77,7 @@ public class LinkedFileHandler {
         fileEntry.setLink(relativize(targetPath));
         return true;
     }
+    // ---------------------------------------------------------------------------------------------------------
 
     public boolean renameToSuggestedName() throws IOException {
         return renameToName(getSuggestedFileName(), false);
