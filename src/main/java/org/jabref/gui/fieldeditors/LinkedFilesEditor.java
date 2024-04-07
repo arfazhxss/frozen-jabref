@@ -50,6 +50,7 @@ import org.jabref.gui.util.BindingsHelper;
 import org.jabref.gui.util.TaskExecutor;
 import org.jabref.gui.util.ViewModelListCellFactory;
 import org.jabref.gui.util.uithreadaware.UiThreadObservableList;
+import org.jabref.logic.externalfiles.LinkedFileHandler;
 import org.jabref.logic.integrity.FieldCheckers;
 import org.jabref.logic.journals.JournalAbbreviationRepository;
 import org.jabref.logic.l10n.Localization;
@@ -349,35 +350,16 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
                                         && !linkedFile.isGeneratedNameSameAsOriginal(),
                                 linkedFile.getFile().linkProperty(), bibEntry.getValue().map(BibEntry::getFieldsObservable).orElse(null));
 
-// ---------------------------------------------------------------------------------   Trying these now. - Mar 29, 2024
-/*
- * - The code within the commented hyphens needs to be modified.
- * - The code currently makes both options either fully dark or light gray.
- * - Need to modify it in such a way so that it only switches between the directories/colours when the user selects it.
- *
- * */
+// -------------------------------------------------------------------------------------------------------------- A3.3
                         case MOVE_FILE_TO_GENERAL_FOLDER -> Bindings.createBooleanBinding(
                                 () -> !linkedFile.getFile().linkProperty().get().startsWith("General")
-                                            && !linkedFile.getFile().linkProperty().get().startsWith("User"),
+                                         || !linkedFile.getFile().linkProperty().get().startsWith("User"),
                                                 linkedFile.getFile().linkProperty());
 
                         case MOVE_FILE_TO_USER_FOLDER -> Bindings.createBooleanBinding(
-                                () -> !linkedFile.getFile().linkProperty().get().startsWith("General")
-                                        && !linkedFile.getFile().linkProperty().get().startsWith("User"),
+                                () -> linkedFile.getFile().linkProperty().get().startsWith("General")
+                                        || !linkedFile.getFile().linkProperty().get().startsWith("User"),
                                                 linkedFile.getFile().linkProperty());
-
-// --------------------------------------------------------------------------------------------------------------------
-
-//      Attempted the below, seemed to work but not sure now.
-
-//                        case MOVE_FILE_TO_GENERAL_FOLDER -> Bindings.createBooleanBinding(
-//                                () -> canMoveFileToGeneralFolder(linkedFile.getFile(), preferencesService),
-//                                linkedFile.getFile().linkProperty(), bibEntry.getValue().map(BibEntry::getFieldsObservable).orElse(null));
-//
-//                        case MOVE_FILE_TO_USER_FOLDER -> Bindings.createBooleanBinding(
-//                                () -> canMoveFileToUserFolder(linkedFile.getFile(), preferencesService),
-//                                linkedFile.getFile().linkProperty(), bibEntry.getValue().map(BibEntry::getFieldsObservable).orElse(null));
-
 // --------------------------------------------------------------------------------------------------------------------
 
                         case DOWNLOAD_FILE -> Bindings.createBooleanBinding(
