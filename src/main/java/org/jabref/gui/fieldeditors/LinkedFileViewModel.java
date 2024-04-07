@@ -292,7 +292,9 @@ public class LinkedFileViewModel extends AbstractViewModel {
     }
 
     // -------------------------------------------------------------------------------------------------------- A3.3
+
     public void moveToDefaultDirectory() {
+
         if (linkedFile.isOnlineLink()) {
             // Cannot move remote links
             return;
@@ -300,10 +302,15 @@ public class LinkedFileViewModel extends AbstractViewModel {
 
         // Get target folder
         Optional<Path> fileDir = databaseContext.getFirstExistingFileDir(preferencesService.getFilePreferences());
+
+//        System.out.println(fileDir);
+
         if (fileDir.isEmpty()) {
             dialogService.showErrorDialogAndWait(Localization.lang("Move file"), Localization.lang("General file directory is not set or does not exist!"));
             return;
         }
+
+//        System.out.println("rfgddgbngfj\nefavd\nvfvf\n");
 
         Optional<Path> file = linkedFile.findIn(databaseContext, preferencesService.getFilePreferences());
         if (file.isPresent()) {
@@ -324,6 +331,7 @@ public class LinkedFileViewModel extends AbstractViewModel {
 
     //not sure if it works but implemented a user directory
     public void moveToUserSpecificDirectory() {
+
         if (linkedFile.isOnlineLink()) {
             // Cannot move remote links
             return;
