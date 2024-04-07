@@ -303,14 +303,10 @@ public class LinkedFileViewModel extends AbstractViewModel {
         // Get target folder
         Optional<Path> fileDir = databaseContext.getFirstExistingFileDir(preferencesService.getFilePreferences());
 
-//        System.out.println(fileDir);
-
         if (fileDir.isEmpty()) {
             dialogService.showErrorDialogAndWait(Localization.lang("Move file"), Localization.lang("General file directory is not set or does not exist!"));
             return;
         }
-
-//        System.out.println("rfgddgbngfj\nefavd\nvfvf\n");
 
         Optional<Path> file = linkedFile.findIn(databaseContext, preferencesService.getFilePreferences());
         if (file.isPresent()) {
@@ -338,7 +334,8 @@ public class LinkedFileViewModel extends AbstractViewModel {
         }
 
         // Get target folder
-        Optional<Path> userDir = databaseContext.getUserFileDirectory(preferencesService.getFilePreferences());
+        Optional<Path> userDir = databaseContext.getFirstExistingFileDir(preferencesService.getFilePreferences());
+
         if (userDir.isEmpty()) {
             dialogService.showErrorDialogAndWait(Localization.lang("Move file"), Localization.lang("User-specific file directory is not set or does not exist!"));
             return;
@@ -349,7 +346,7 @@ public class LinkedFileViewModel extends AbstractViewModel {
             // Found the linked file, so move it
             try {
                 // Move the file to the user-specific directory
-                linkedFileHandler.moveToUserSpecificDirectory();
+//                linkedFileHandler.moveToUserSpecificDirectory();
                 Files.move(file.get(), userDir.get().resolve(file.get().getFileName()));
             } catch (IOException exception) {
                 dialogService.showErrorDialogAndWait(
