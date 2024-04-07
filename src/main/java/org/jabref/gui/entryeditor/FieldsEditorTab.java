@@ -204,6 +204,7 @@ abstract class FieldsEditorTab extends EntryEditorTab {
     @Override
     protected void bindToEntry(BibEntry entry) {
         initPanel();
+        entry.setCommentsBeforeEntry("gggggggggggggg");
         setupPanel(entry, isCompressed);
         if (previewPanel != null) {
             previewPanel.setEntry(entry);
