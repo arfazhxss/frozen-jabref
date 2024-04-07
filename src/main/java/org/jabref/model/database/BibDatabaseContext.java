@@ -188,17 +188,30 @@ public class BibDatabaseContext {
      * @return the path - or an empty optional, if none of the directories exists
      */
     public Optional<Path> getFirstExistingFileDir(FilePreferences preferences) {
+
+//        Optional<Path> optionalPath = getFileDirectories(preferences).stream().filter(Files::exists).findFirst();
+//        optionalPath.ifPresentOrElse(
+//                path -> System.out.println("Path: " + path),
+//                () -> System.out.println("Path is empty.")
+//        );
+
         return getFileDirectories(preferences).stream()
                 .filter(Files::exists)
                 .findFirst();
     }
 
+    // -------------------------------------------------------------------------------------------------------------- A3.3
+
+//    public Optional<Path> getGeneralDirectory(FilePreferences preferences) {
+//        System.out.println("111111111\n999999999999999\n777777777777\n");
+//        return metaData.getUserFileDirectory(preferences.getUserAndHost()).map(this::getFileDirectoryPath);
+//    }
+
     public Optional<Path> getUserFileDirectory(FilePreferences preferences) {
+//        System.out.println("351\n555555555\n666666666\n444444444\n");
         return metaData.getUserFileDirectory(preferences.getUserAndHost()).map(this::getFileDirectoryPath);
     }
 
-
-    // -------------------------------------------------------------------------------------------------------------- A3.3
     private Path getFileDirectoryPath(String directoryName) {
         Path directory = Path.of(directoryName);
         // If this directory is relative, we try to interpret it as relative to
