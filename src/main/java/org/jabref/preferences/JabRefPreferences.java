@@ -2677,7 +2677,7 @@ public class JabRefPreferences implements PreferencesService {
 
     @Override
     public String getUserRole() {
-        return null;
+        return "Admin";
     }
 
     //*************************************************************************************************************
