@@ -25,6 +25,7 @@ import org.jabref.gui.edit.ReplaceStringAction;
 import org.jabref.gui.edit.automaticfiededitor.AutomaticFieldEditorAction;
 import org.jabref.gui.entryeditor.OpenEntryEditorAction;
 import org.jabref.gui.entryeditor.PreviewSwitchAction;
+import org.jabref.gui.exporter.DeleteMetadataAction;
 import org.jabref.gui.exporter.ExportCommand;
 import org.jabref.gui.exporter.ExportToClipboardAction;
 import org.jabref.gui.exporter.SaveAction;
@@ -271,6 +272,10 @@ public class MainMenu extends MenuBar {
 
                 factory.createMenuItem(StandardActions.WRITE_METADATA_TO_PDF,
                         new WriteMetadataToLinkedPdfsAction(dialogService, preferencesService.getFieldPreferences(), preferencesService.getFilePreferences(), preferencesService.getXmpPreferences(), entryTypesManager, abbreviationRepository, taskExecutor, stateManager)),
+
+                // A3.2
+                factory.createMenuItem(StandardActions.DELETE_METADATA, new DeleteMetadataAction(stateManager, preferencesService.getLibraryPreferences().getDefaultBibDatabaseMode(), entryTypesManager, preferencesService.getFieldPreferences(), dialogService, taskExecutor, preferencesService.getFilePreferences(), preferencesService.getXmpPreferences())),
+
                 factory.createMenuItem(StandardActions.COPY_LINKED_FILES, new CopyFilesAction(dialogService, preferencesService, stateManager, taskExecutor)),
 
                 new SeparatorMenuItem(),

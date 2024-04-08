@@ -173,7 +173,7 @@ public class LinkedFileViewModel extends AbstractViewModel {
             return ControlHelper.truncateString(linkedFile.getDescription(), -1, "...",
                     ControlHelper.EllipsisPosition.CENTER) + " (" +
                     ControlHelper.truncateString(linkedFile.getLink(), -1, "...",
-                    ControlHelper.EllipsisPosition.CENTER) + ")";
+                            ControlHelper.EllipsisPosition.CENTER) + ")";
         }
     }
 
@@ -183,8 +183,8 @@ public class LinkedFileViewModel extends AbstractViewModel {
 
     public JabRefIcon getTypeIcon() {
         return ExternalFileTypes.getExternalFileTypeByLinkedFile(linkedFile, false, preferencesService.getFilePreferences())
-                                .map(ExternalFileType::getIcon)
-                                .orElse(IconTheme.JabRefIcons.FILE);
+                .map(ExternalFileType::getIcon)
+                .orElse(IconTheme.JabRefIcons.FILE);
     }
 
     public ObjectBinding<Node> typeIconProperty() {
@@ -293,7 +293,10 @@ public class LinkedFileViewModel extends AbstractViewModel {
         }
     }
 
+    // -------------------------------------------------------------------------------------------------------- A3.3
+
     public void moveToDefaultDirectory() {
+
         if (linkedFile.isOnlineLink()) {
             // Cannot move remote links
             return;
@@ -301,8 +304,9 @@ public class LinkedFileViewModel extends AbstractViewModel {
 
         // Get target folder
         Optional<Path> fileDir = databaseContext.getFirstExistingFileDir(preferencesService.getFilePreferences());
+
         if (fileDir.isEmpty()) {
-            dialogService.showErrorDialogAndWait(Localization.lang("Move file"), Localization.lang("File directory is not set or does not exist!"));
+            dialogService.showErrorDialogAndWait(Localization.lang("Move file"), Localization.lang("General file directory is not set or does not exist!"));
             return;
         }
 
@@ -322,6 +326,43 @@ public class LinkedFileViewModel extends AbstractViewModel {
             dialogService.showErrorDialogAndWait(Localization.lang("File not found"), Localization.lang("Could not find file '%0'.", linkedFile.getLink()));
         }
     }
+
+    //not sure if it works but implemented a user directory
+    public void moveToUserSpecificDirectory() {
+
+        if (linkedFile.isOnlineLink()) {
+            // Cannot move remote links
+            return;
+        }
+
+        // Get target folder
+        Optional<Path> userDir = databaseContext.getFirstExistingFileDir(preferencesService.getFilePreferences());
+
+        if (userDir.isEmpty()) {
+            dialogService.showErrorDialogAndWait(Localization.lang("Move file"), Localization.lang("User-specific file directory is not set or does not exist!"));
+            return;
+        }
+
+        Optional<Path> file = linkedFile.findIn(databaseContext, preferencesService.getFilePreferences());
+        if (file.isPresent()) {
+            // Found the linked file, so move it
+            try {
+                // Move the file to the user-specific directory
+                linkedFileHandler.moveToUserSpecificDirectory();
+                Files.move(file.get(), userDir.get().resolve(file.get().getFileName()));
+            } catch (IOException exception) {
+                dialogService.showErrorDialogAndWait(
+                        Localization.lang("Move file"),
+                        Localization.lang("Could not move file '%0'.", file.get().toString()),
+                        exception);
+            }
+        } else {
+            // File doesn't exist, so we can't move it.
+            dialogService.showErrorDialogAndWait(Localization.lang("File not found"), Localization.lang("Could not find file '%0'.", linkedFile.getLink()));
+        }
+    }
+    // ------------------------------------------------------------------------------------------------------------
+
 
     /**
      * Gets the filename for the current linked file and compares it to the new suggested filename.
@@ -492,38 +533,38 @@ public class LinkedFileViewModel extends AbstractViewModel {
                 } else if (ex instanceof FetcherServerException serverException) {
                     statusCode = serverException.getStatusCode();
                     dialogService.showInformationDialogAndWait(Localization.lang("Failed to download from URL"),
-                                Localization.lang("Error downloading from URL. Cause is likely the server side. HTTP Error %0 \n %1 \nURL: %2 \nPlease try again later or contact the server administrator.", statusCode, fetcherExceptionMessage, urlDownload.getSource()));
-                    } else {
-                        dialogService.showErrorDialogAndWait(Localization.lang("Failed to download from URL"), Localization.lang("Error message: %0 \nURL: %1 \nPlease check the URL and try again.", fetcherExceptionMessage, urlDownload.getSource()));
-                    }
-                });
-                taskExecutor.execute(downloadTask);
-            } catch (MalformedURLException exception) {
-                dialogService.showErrorDialogAndWait(Localization.lang("Invalid URL"), exception);
-            }
-        }
-
-        public boolean checkSSLHandshake(URLDownload urlDownload) {
-            try {
-                urlDownload.canBeReached();
-            } catch (kong.unirest.UnirestException ex) {
-                if (ex.getCause() instanceof SSLHandshakeException) {
-                    if (dialogService.showConfirmationDialogAndWait(Localization.lang("Download file"),
-                            Localization.lang("Unable to find valid certification path to requested target(%0), download anyway?",
-                                    urlDownload.getSource().toString()))) {
-                        return true;
-                    } else {
-                        dialogService.notify(Localization.lang("Download operation canceled."));
-                        return false;
-                    }
+                            Localization.lang("Error downloading from URL. Cause is likely the server side. HTTP Error %0 \n %1 \nURL: %2 \nPlease try again later or contact the server administrator.", statusCode, fetcherExceptionMessage, urlDownload.getSource()));
                 } else {
-                    LOGGER.error("Error while checking if the file can be downloaded", ex);
-                    dialogService.notify(Localization.lang("Error downloading"));
+                    dialogService.showErrorDialogAndWait(Localization.lang("Failed to download from URL"), Localization.lang("Error message: %0 \nURL: %1 \nPlease check the URL and try again.", fetcherExceptionMessage, urlDownload.getSource()));
+                }
+            });
+            taskExecutor.execute(downloadTask);
+        } catch (MalformedURLException exception) {
+            dialogService.showErrorDialogAndWait(Localization.lang("Invalid URL"), exception);
+        }
+    }
+
+    public boolean checkSSLHandshake(URLDownload urlDownload) {
+        try {
+            urlDownload.canBeReached();
+        } catch (kong.unirest.UnirestException ex) {
+            if (ex.getCause() instanceof SSLHandshakeException) {
+                if (dialogService.showConfirmationDialogAndWait(Localization.lang("Download file"),
+                        Localization.lang("Unable to find valid certification path to requested target(%0), download anyway?",
+                                urlDownload.getSource().toString()))) {
+                    return true;
+                } else {
+                    dialogService.notify(Localization.lang("Download operation canceled."));
                     return false;
                 }
+            } else {
+                LOGGER.error("Error while checking if the file can be downloaded", ex);
+                dialogService.notify(Localization.lang("Error downloading"));
+                return false;
             }
-            return true;
         }
+        return true;
+    }
 
     public BackgroundTask<Path> prepareDownloadTask(Path targetDirectory, URLDownload urlDownload) {
         SSLSocketFactory defaultSSLSocketFactory = HttpsURLConnection.getDefaultSSLSocketFactory();
@@ -578,7 +619,7 @@ public class LinkedFileViewModel extends AbstractViewModel {
 
     private Optional<ExternalFileType> inferFileTypeFromURL(String url) {
         return URLUtil.getSuffix(url, preferencesService.getFilePreferences())
-                      .flatMap(extension -> ExternalFileTypes.getExternalFileTypeByExt(extension, preferencesService.getFilePreferences()));
+                .flatMap(extension -> ExternalFileTypes.getExternalFileTypeByExt(extension, preferencesService.getFilePreferences()));
     }
 
     public LinkedFile getFile() {

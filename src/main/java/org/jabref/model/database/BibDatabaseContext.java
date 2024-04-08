@@ -188,9 +188,28 @@ public class BibDatabaseContext {
      * @return the path - or an empty optional, if none of the directories exists
      */
     public Optional<Path> getFirstExistingFileDir(FilePreferences preferences) {
+
+//        Optional<Path> optionalPath = getFileDirectories(preferences).stream().filter(Files::exists).findFirst();
+//        optionalPath.ifPresentOrElse(
+//                path -> System.out.println("Path: " + path),
+//                () -> System.out.println("Path is empty.")
+//        );
+
         return getFileDirectories(preferences).stream()
-                                              .filter(Files::exists)
-                                              .findFirst();
+                .filter(Files::exists)
+                .findFirst();
+    }
+
+    // -------------------------------------------------------------------------------------------------------------- A3.3
+
+//    public Optional<Path> getGeneralDirectory(FilePreferences preferences) {
+//        System.out.println("111111111\n999999999999999\n777777777777\n");
+//        return metaData.getUserFileDirectory(preferences.getUserAndHost()).map(this::getFileDirectoryPath);
+//    }
+
+    public Optional<Path> getUserFileDirectory(FilePreferences preferences) {
+//        System.out.println("351\n555555555\n666666666\n444444444\n");
+        return metaData.getUserFileDirectory(preferences.getUserAndHost()).map(this::getFileDirectoryPath);
     }
 
     private Path getFileDirectoryPath(String directoryName) {
@@ -203,6 +222,17 @@ public class BibDatabaseContext {
         }
         return directory;
     }
+//    private Path getFileDirectoryPath(String directoryName) {
+//        Path directory = Path.of(System.getProperty("user.home") + "/Downloads/SENG 371 Spring 2024 Assignment 03");
+//        // If this directory is relative, we try to interpret it as relative to
+//        // the file path of this BIB file:
+//        Optional<Path> databaseFile = getDatabasePath();
+//        if (!directory.isAbsolute() && databaseFile.isPresent()) {
+//            return databaseFile.get().getParent().resolve(directory).normalize();
+//        }
+//        return directory;
+//    }
+    // --------------------------------------------------------------------------------------------------------------
 
     public DatabaseSynchronizer getDBMSSynchronizer() {
         return this.dbmsSynchronizer;

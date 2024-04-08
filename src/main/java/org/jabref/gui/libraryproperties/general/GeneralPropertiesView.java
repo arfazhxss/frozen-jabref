@@ -60,9 +60,7 @@ public class GeneralPropertiesView extends AbstractPropertiesTabView<GeneralProp
     }
 
     @FXML
-    public void browseGeneralFileDirectory() {
-        viewModel.browseGeneralDir();
-    }
+    public void browseGeneralFileDirectory() {viewModel.browseGeneralDir();}
 
     @FXML
     public void browseUserSpecificFileDirectory() {
