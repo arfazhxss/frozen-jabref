@@ -5,6 +5,8 @@ import java.util.Map;
 import javafx.beans.binding.Bindings;
 
 import org.jabref.gui.Telemetry;
+import org.jabref.gui.bibtexextractor.ExtractBibtexAction;
+import org.jabref.gui.importer.NewEntryAction;
 import org.jabref.gui.keyboard.KeyBindingRepository;
 
 import de.saxsys.mvvmfx.utils.commands.Command;
@@ -12,8 +14,13 @@ import de.saxsys.mvvmfx.utils.commands.Command;
 /**
  * Wrapper around one of our actions from {@link Action} to convert them to controlsfx {@link org.controlsfx.control.action.Action}.
  */
-class JabRefAction extends org.controlsfx.control.action.Action {
+public class JabRefAction extends org.controlsfx.control.action.Action {
 
+	
+	 public JabRefAction(String s) {
+		 super(s);
+	 }
+	 
     public JabRefAction(Action action, KeyBindingRepository keyBindingRepository) {
         super(action.getText());
         action.getIcon()
@@ -48,10 +55,19 @@ class JabRefAction extends org.controlsfx.control.action.Action {
         disabledProperty().bind(command.executableProperty().not());
 
         if (command instanceof SimpleCommand ourCommand) {
-            longTextProperty().bind(Bindings.concat(action.getDescription(), ourCommand.statusMessageProperty()));
+			longTextProperty().bind(Bindings.concat(action.getDescription(), ourCommand.statusMessageProperty()));
         }
     }
+    
 
+    //Editted
+    public JabRefAction() throws IllegalArgumentException {
+
+    	this("sss");
+
+    }
+    
+    
     private String getActionName(Action action, Command command) {
         if (command.getClass().isAnonymousClass()) {
             return action.getText();
@@ -79,5 +95,11 @@ class JabRefAction extends org.controlsfx.control.action.Action {
                 actionName,
                 Map.of("Source", source.toString()),
                 Map.of()));
+    }
+    
+    public void executeCommand(Command cm) {
+    	 setEventHandler(event -> {
+             cm.execute();
+    	 });
     }
 }

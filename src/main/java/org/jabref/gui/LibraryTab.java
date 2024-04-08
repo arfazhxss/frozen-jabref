@@ -90,6 +90,8 @@ import org.controlsfx.control.action.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+import org.jabref.model.database.*;
 /**
  * Represents the ui area where the notifier pane, the library table and the entry editor are shown.
  */
@@ -468,13 +470,20 @@ public class LibraryTab extends Tab {
     public void insertEntry(final BibEntry bibEntry) {
         if (bibEntry != null) {
             insertEntries(Collections.singletonList(bibEntry));
+            
         }
     }
 
     public void insertEntries(final List<BibEntry> entries) {
+    	
+    	
+    	
         if (!entries.isEmpty()) {
+        	
+        	//source of errors
             bibDatabaseContext.getDatabase().insertEntries(entries);
-
+            
+           
             // Set owner and timestamp
             UpdateField.setAutomaticFields(entries,
                     preferencesService.getOwnerPreferences(),

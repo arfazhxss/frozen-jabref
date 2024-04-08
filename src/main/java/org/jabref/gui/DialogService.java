@@ -195,6 +195,8 @@ public interface DialogService {
      */
     Optional<ButtonType> showCustomDialogAndWait(String title, DialogPane contentPane, ButtonType... buttonTypes);
 
+    
+    
     /**
      * Shows a custom dialog and returns the result.
      *

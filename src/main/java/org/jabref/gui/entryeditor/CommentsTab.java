@@ -1,5 +1,6 @@
 package org.jabref.gui.entryeditor;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Comparator;
@@ -57,18 +58,18 @@ class CustomFields implements Field {
 
 	@Override
 	public String getName() {
-		
+
 		if (this.name == null) {
 			return Field.super.getDisplayName();
 		} else {
 			return this.name;
 		}
-		
+
 	}
 
 	@Override
 	public boolean isStandardField() {
-		
+
 		return false;
 	}
 
@@ -99,24 +100,32 @@ public class CommentsTab extends FieldsEditorTab {
 	@Override
 	protected SequencedSet<Field> determineFieldsToShow(BibEntry entry) {
 		SequencedSet<Field> comments = new LinkedHashSet<>();
-		
-		
+
 		// Edited
-		
 		// First comes the standard and custom added field
-
-		List<String> fields = AddEntryWindow.getFieldsList();
-
+		
+		List<String> fields = new ArrayList<>();
+		
+		if (!AddEntryWindow.getFieldsList().isEmpty()) {
+			
+			fields = AddEntryWindow.getFieldsList();
+			
+		}else if (!AdvancedEntryLookUp.getFieldsList().isEmpty()) {
+			
+			fields = AdvancedEntryLookUp.getFieldsList();
+			
+		}
+	
 		comments.add(StandardField.COMMENT);
 
 		for (int i = 0; i < fields.size(); ++i) {
 
 			CustomFields cf = new CustomFields(fields.get(i));
-
+			
 			comments.add(cf);
-		
+
 		}
-		
+
 		// Also show comment field of the current user (if enabled in the preferences)
 		if (entry.hasField(userSpecificCommentField) || entryEditorPreferences.shouldShowUserCommentsFields()) {
 			comments.add(userSpecificCommentField);
@@ -137,13 +146,13 @@ public class CommentsTab extends FieldsEditorTab {
 	private void setCompressedRowLayout() {
 		int numberOfComments = gridPane.getRowCount() - 1;
 		double totalWeight = numberOfComments * 3 + 1;
-
+		
 		RowConstraints commentConstraint = new RowConstraints();
 		commentConstraint.setVgrow(Priority.ALWAYS);
 		commentConstraint.setValignment(VPos.TOP);
 		double commentHeightPercent = 3.0 / totalWeight * 100.0;
 		commentConstraint.setPercentHeight(commentHeightPercent);
-
+		
 		RowConstraints buttonConstraint = new RowConstraints();
 		buttonConstraint.setVgrow(Priority.ALWAYS);
 		buttonConstraint.setValignment(VPos.TOP);
@@ -173,7 +182,7 @@ public class CommentsTab extends FieldsEditorTab {
 			boolean shouldBeEnabled = isStandardBibtexComment || isDefaultOwnerComment;
 			editor.getNode().setDisable(false);
 		}
-
+		
 		// Show "Hide" button only if user-specific comment field is empty. Otherwise,
 		// it is a strange UI, because the
 		// button would just disappear and no change **in the current** editor would be

@@ -3,6 +3,10 @@ package org.jabref.gui.keyboard;
 import org.jabref.logic.l10n.Localization;
 
 public enum KeyBinding {
+	
+	//Editted
+	NULL("",Localization.lang(""), "", KeyBindingCategory.BIBTEX),
+	
     EDITOR_DELETE("Delete", Localization.lang("Delete text"), "", KeyBindingCategory.EDITOR),
     // DELETE BACKWARDS = Rubout
     EDITOR_BACKWARD("Move caret left", Localization.lang("Move caret left"), "", KeyBindingCategory.EDITOR),

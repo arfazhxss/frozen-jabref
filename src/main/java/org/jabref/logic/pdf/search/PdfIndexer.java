@@ -296,6 +296,11 @@ public class PdfIndexer {
     }
 
     public void close() throws IOException {
+    	
+    	//Editted
+    	
+    	if (indexWriter != null) {
         indexWriter.close();
+    	}
     }
 }

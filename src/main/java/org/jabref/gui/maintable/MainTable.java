@@ -63,8 +63,10 @@ public class MainTable extends TableView<BibEntryTableViewModel> {
     private static final Logger LOGGER = LoggerFactory.getLogger(MainTable.class);
 
     private final LibraryTab libraryTab;
-    private final DialogService dialogService;
-    private final StateManager stateManager;
+    
+    private static DialogService dSer;
+    private static StateManager Stm;
+    
     private final BibDatabaseContext database;
     private final MainTableDataModel model;
 
@@ -72,8 +74,13 @@ public class MainTable extends TableView<BibEntryTableViewModel> {
     private final CustomLocalDragboard localDragboard;
     private final ClipBoardManager clipBoardManager;
     private final BibEntryTypesManager entryTypesManager;
-    private final TaskExecutor taskExecutor;
+    
+    private static TaskExecutor taskExec;
+    
     private final UndoManager undoManager;
+    
+    private static PreferencesService pSer;
+    
     private long lastKeyPressTime;
     private String columnSearchTerm;
 
@@ -92,13 +99,19 @@ public class MainTable extends TableView<BibEntryTableViewModel> {
         super();
 
         this.libraryTab = libraryTab;
-        this.dialogService = dialogService;
-        this.stateManager = stateManager;
+        
+        
+        //Editted
+        dSer = dialogService;
+        Stm = stateManager;
+        taskExec = taskExecutor;
+        pSer = preferencesService;
+        
+        
         this.database = Objects.requireNonNull(database);
         this.model = model;
         this.clipBoardManager = clipBoardManager;
         this.entryTypesManager = entryTypesManager;
-        this.taskExecutor = taskExecutor;
         this.undoManager = libraryTab.getUndoManager();
         MainTablePreferences mainTablePreferences = preferencesService.getMainTablePreferences();
 
@@ -201,7 +214,7 @@ public class MainTable extends TableView<BibEntryTableViewModel> {
                 taskExecutor);
 
         // Enable the header right-click menu.
-        new MainTableHeaderContextMenu(this, rightClickMenuFactory, tabContainer, keyBindingRepository, dialogService).show(true);
+        new MainTableHeaderContextMenu(this, rightClickMenuFactory, tabContainer, keyBindingRepository, dSer).show(true);
     }
 
     /**
@@ -259,7 +272,7 @@ public class MainTable extends TableView<BibEntryTableViewModel> {
         if (!selectedEntries.isEmpty()) {
             try {
                 clipBoardManager.setContent(selectedEntries, entryTypesManager);
-                dialogService.notify(Localization.lang("Copied %0 entry(ies)", selectedEntries.size()));
+                dSer.notify(Localization.lang("Copied %0 entry(ies)", selectedEntries.size()));
             } catch (IOException e) {
                 LOGGER.error("Error while copying selected entries to clipboard.", e);
             }
@@ -272,10 +285,10 @@ public class MainTable extends TableView<BibEntryTableViewModel> {
     }
 
     private void setupKeyBindings(KeyBindingRepository keyBindings) {
-        EditAction pasteAction = new EditAction(StandardActions.PASTE, () -> libraryTab, stateManager, undoManager);
-        EditAction copyAction = new EditAction(StandardActions.COPY, () -> libraryTab, stateManager, undoManager);
-        EditAction cutAction = new EditAction(StandardActions.CUT, () -> libraryTab, stateManager, undoManager);
-        EditAction deleteAction = new EditAction(StandardActions.DELETE_ENTRY, () -> libraryTab, stateManager, undoManager);
+        EditAction pasteAction = new EditAction(StandardActions.PASTE, () -> libraryTab, Stm, undoManager);
+        EditAction copyAction = new EditAction(StandardActions.COPY, () -> libraryTab, Stm, undoManager);
+        EditAction cutAction = new EditAction(StandardActions.CUT, () -> libraryTab, Stm, undoManager);
+        EditAction deleteAction = new EditAction(StandardActions.DELETE_ENTRY, () -> libraryTab, Stm, undoManager);
 
         this.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -351,11 +364,11 @@ public class MainTable extends TableView<BibEntryTableViewModel> {
             return this.importHandler.handleStringData(data);
         } catch (FetcherException exception) {
             if (exception instanceof FetcherClientException) {
-                dialogService.showInformationDialogAndWait(Localization.lang("Look up identifier"), Localization.lang("No data was found for the identifier"));
+                dSer.showInformationDialogAndWait(Localization.lang("Look up identifier"), Localization.lang("No data was found for the identifier"));
             } else if (exception instanceof FetcherServerException) {
-                dialogService.showInformationDialogAndWait(Localization.lang("Look up identifier"), Localization.lang("Server not available"));
+                dSer.showInformationDialogAndWait(Localization.lang("Look up identifier"), Localization.lang("Server not available"));
             } else {
-                dialogService.showErrorDialogAndWait(exception);
+                dSer.showErrorDialogAndWait(exception);
             }
             return List.of();
         }
@@ -426,7 +439,7 @@ public class MainTable extends TableView<BibEntryTableViewModel> {
             // Depending on the pressed modifier, move/copy/link files to drop target
             switch (ControlHelper.getDroppingMouseLocation(row, event)) {
                 case TOP, BOTTOM ->
-                        importHandler.importFilesInBackground(files).executeWith(taskExecutor);
+                        importHandler.importFilesInBackground(files).executeWith(taskExec);
                 case CENTER -> {
                     BibEntry entry = target.getEntry();
                     switch (event.getTransferMode()) {
@@ -458,7 +471,7 @@ public class MainTable extends TableView<BibEntryTableViewModel> {
 
         if (event.getDragboard().hasFiles()) {
             List<Path> files = event.getDragboard().getFiles().stream().map(File::toPath).collect(Collectors.toList());
-            importHandler.importFilesInBackground(files).executeWith(taskExecutor);
+            importHandler.importFilesInBackground(files).executeWith(taskExec);
 
             success = true;
         }
@@ -488,5 +501,18 @@ public class MainTable extends TableView<BibEntryTableViewModel> {
                     .stream()
                     .filter(viewModel -> viewModel.getEntry().equals(entry))
                     .findFirst();
+    }
+    
+    public static DialogService getDser() {
+    	return dSer;
+    }
+    public static PreferencesService getPser() {
+    	return pSer;
+    }
+    public static TaskExecutor getTaskExec() {
+    	return taskExec;
+    }
+    public static StateManager getStm() {
+    	return Stm;
     }
 }
