@@ -59,11 +59,11 @@ public enum StandardActions implements Action {
     RELEVANCE(Localization.lang("Relevance"), IconTheme.JabRefIcons.RELEVANCE),
     RELEVANT(Localization.lang("Toggle relevance"), IconTheme.JabRefIcons.RELEVANCE),
     NEW_LIBRARY(Localization.lang("New library"), IconTheme.JabRefIcons.NEW),
-    
+
     //Added
     Custom_Entry_Type (Localization.lang("Custom Entry Type"), IconTheme.JabRefIcons.ADD, KeyBinding.NEW_ENTRY_FROM_PLAIN_TEXT),
-    
-    OPEN_LIBRARY(Localization.lang("Open library"), IconTheme.JabRefIcons.OPEN, KeyBinding.OPEN_DATABASE),
+
+    OPEN_LIBRARY(Localization.lang("Open library"), Localization.lang("Open the selected library"), IconTheme.JabRefIcons.OPEN, KeyBinding.OPEN_DATABASE),
     IMPORT(Localization.lang("Import"), IconTheme.JabRefIcons.IMPORT),
     EXPORT(Localization.lang("Export"), IconTheme.JabRefIcons.EXPORT, KeyBinding.EXPORT),
     SAVE_LIBRARY(Localization.lang("Save library"), IconTheme.JabRefIcons.SAVE, KeyBinding.SAVE_DATABASE),
@@ -101,9 +101,9 @@ public enum StandardActions implements Action {
     EDIT_EXISTING_STUDY(Localization.lang("Manage study definition")),
 
     OPEN_DATABASE_FOLDER(Localization.lang("Reveal in file explorer")),
-    OPEN_FOLDER(Localization.lang("Open folder"), Localization.lang("Open folder"), IconTheme.JabRefIcons.FOLDER, KeyBinding.OPEN_FOLDER),
+    OPEN_FOLDER(Localization.lang("Open folder"), Localization.lang("Open folder in file explorer"), IconTheme.JabRefIcons.FOLDER, KeyBinding.OPEN_FOLDER),
     OPEN_FILE(Localization.lang("Open file"), Localization.lang("Open file"), IconTheme.JabRefIcons.FILE, KeyBinding.OPEN_FILE),
-    OPEN_CONSOLE(Localization.lang("Open terminal here"), Localization.lang("Open terminal here"), IconTheme.JabRefIcons.CONSOLE, KeyBinding.OPEN_CONSOLE),
+    OPEN_CONSOLE(Localization.lang("Open terminal here"), Localization.lang("Open a terminal window in the current directory"), IconTheme.JabRefIcons.CONSOLE, KeyBinding.OPEN_CONSOLE),
     COPY_LINKED_FILES(Localization.lang("Copy linked files to folder...")),
     COPY_DOI(Localization.lang("Copy DOI")),
     COPY_DOI_URL(Localization.lang("Copy DOI url")),
@@ -155,8 +155,11 @@ public enum StandardActions implements Action {
     DOWNLOAD_FILE(Localization.lang("Download file"), IconTheme.JabRefIcons.DOWNLOAD_FILE),
     RENAME_FILE_TO_PATTERN(Localization.lang("Rename file to defined pattern"), IconTheme.JabRefIcons.AUTO_RENAME),
     RENAME_FILE_TO_NAME(Localization.lang("Rename file to a given name"), IconTheme.JabRefIcons.RENAME, KeyBinding.REPLACE_STRING),
-    MOVE_FILE_TO_FOLDER(Localization.lang("Move file to file directory"), IconTheme.JabRefIcons.MOVE_TO_FOLDER),
-    MOVE_FILE_TO_FOLDER_AND_RENAME(Localization.lang("Move file to file directory and rename file")),
+
+    // ---------------------------------------------------------------------------------------------- A3.3 Icons
+    MOVE_FILE_TO_GENERAL_FOLDER(Localization.lang("Move file to General file directory"), IconTheme.JabRefIcons.MOVE_TO_FOLDER),
+    MOVE_FILE_TO_USER_FOLDER/*_AND_RENAME*/(Localization.lang("Move file to User-specific file directory"), IconTheme.JabRefIcons.MOVE_TO_USER_FOLDER),
+    // ----------------------------------------------------------------------------------------------------------
     COPY_FILE_TO_FOLDER(Localization.lang("Copy linked file to folder..."), IconTheme.JabRefIcons.COPY_TO_FOLDER, KeyBinding.COPY),
     REMOVE_LINK(Localization.lang("Remove link"), IconTheme.JabRefIcons.REMOVE_LINK),
     DELETE_FILE(Localization.lang("Permanently delete local file"), IconTheme.JabRefIcons.DELETE_FILE, KeyBinding.DELETE_ENTRY),

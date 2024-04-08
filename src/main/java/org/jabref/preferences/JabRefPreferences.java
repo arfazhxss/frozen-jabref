@@ -2677,6 +2677,11 @@ public class JabRefPreferences implements PreferencesService {
         return mergeDialogPreferences;
     }
 
+    @Override
+    public String getUserRole() {
+        return "Admin";
+    }
+
     //*************************************************************************************************************
     // Misc preferences
     //*************************************************************************************************************
@@ -3043,4 +3048,6 @@ public class JabRefPreferences implements PreferencesService {
                 getDOIPreferences(),
                 getGrobidPreferences());
     }
+
+    private String getUserRole;
 }
