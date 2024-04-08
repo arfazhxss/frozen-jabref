@@ -59,11 +59,16 @@ public enum StandardActions implements Action {
     RELEVANCE(Localization.lang("Relevance"), IconTheme.JabRefIcons.RELEVANCE),
     RELEVANT(Localization.lang("Toggle relevance"), IconTheme.JabRefIcons.RELEVANCE),
     NEW_LIBRARY(Localization.lang("New library"), IconTheme.JabRefIcons.NEW),
-
+    
     //Added
-    Custom_Entry_Type (Localization.lang("Custom Entry Type"), IconTheme.JabRefIcons.ADD, KeyBinding.NEW_ENTRY_FROM_PLAIN_TEXT),
-
-    OPEN_LIBRARY(Localization.lang("Open library"), Localization.lang("Open the selected library"), IconTheme.JabRefIcons.OPEN, KeyBinding.OPEN_DATABASE),
+    Custom_Entry_Type (Localization.lang("Custom Entry Type"), IconTheme.JabRefIcons.ADD, KeyBinding.NULL),
+    
+    //Editted
+    NEW_ENTRY_FROM_PLAIN_TEXT(Localization.lang("New Entry Options"), IconTheme.JabRefIcons.ADD_ROW, KeyBinding.NEW_ENTRY_FROM_PLAIN_TEXT),
+    
+    ADVANCED_ENTRY(Localization.lang("Advanced Entry"), IconTheme.JabRefIcons.ENTRY_TYPE, KeyBinding.NULL),
+    
+    OPEN_LIBRARY(Localization.lang("Open library"), IconTheme.JabRefIcons.OPEN, KeyBinding.OPEN_DATABASE),
     IMPORT(Localization.lang("Import"), IconTheme.JabRefIcons.IMPORT),
     EXPORT(Localization.lang("Export"), IconTheme.JabRefIcons.EXPORT, KeyBinding.EXPORT),
     SAVE_LIBRARY(Localization.lang("Save library"), IconTheme.JabRefIcons.SAVE, KeyBinding.SAVE_DATABASE),
@@ -94,16 +99,16 @@ public enum StandardActions implements Action {
 
     PARSE_LATEX(Localization.lang("Search for citations in LaTeX files..."), IconTheme.JabRefIcons.LATEX_CITATIONS),
     NEW_SUB_LIBRARY_FROM_AUX(Localization.lang("New sublibrary based on AUX file") + "...", Localization.lang("New BibTeX sublibrary") + Localization.lang("This feature generates a new library based on which entries are needed in an existing LaTeX document."), IconTheme.JabRefIcons.NEW),
-    WRITE_METADATA_TO_PDF(Localization.lang("Write metadata to PDF file"), Localization.lang("Will write metadata to the PDFs linked from selected entries."), KeyBinding.WRITE_METADATA_TO_PDF),
-    DELETE_METADATA(Localization.lang("Delete metadata from selected PDF(s)"), Localization.lang("Will delete metadata fields from PDFs listed in preferences linked from selected entries.")),
+    WRITE_METADATA_TO_PDF(Localization.lang("Write metadata to PDF files"), Localization.lang("Will write metadata to the PDFs linked from selected entries."), KeyBinding.WRITE_METADATA_TO_PDF),
+
     START_NEW_STUDY(Localization.lang("Start new systematic literature review")),
     UPDATE_SEARCH_RESULTS_OF_STUDY(Localization.lang("Update study search results")),
     EDIT_EXISTING_STUDY(Localization.lang("Manage study definition")),
 
     OPEN_DATABASE_FOLDER(Localization.lang("Reveal in file explorer")),
-    OPEN_FOLDER(Localization.lang("Open folder"), Localization.lang("Open folder in file explorer"), IconTheme.JabRefIcons.FOLDER, KeyBinding.OPEN_FOLDER),
+    OPEN_FOLDER(Localization.lang("Open folder"), Localization.lang("Open folder"), IconTheme.JabRefIcons.FOLDER, KeyBinding.OPEN_FOLDER),
     OPEN_FILE(Localization.lang("Open file"), Localization.lang("Open file"), IconTheme.JabRefIcons.FILE, KeyBinding.OPEN_FILE),
-    OPEN_CONSOLE(Localization.lang("Open terminal here"), Localization.lang("Open a terminal window in the current directory"), IconTheme.JabRefIcons.CONSOLE, KeyBinding.OPEN_CONSOLE),
+    OPEN_CONSOLE(Localization.lang("Open terminal here"), Localization.lang("Open terminal here"), IconTheme.JabRefIcons.CONSOLE, KeyBinding.OPEN_CONSOLE),
     COPY_LINKED_FILES(Localization.lang("Copy linked files to folder...")),
     COPY_DOI(Localization.lang("Copy DOI")),
     COPY_DOI_URL(Localization.lang("Copy DOI url")),
@@ -132,10 +137,12 @@ public enum StandardActions implements Action {
 
     EXPAND_ALL(Localization.lang("Expand all")),
     COLLAPSE_ALL(Localization.lang("Collapse all")),
-
+    
+    //B3
     NEW_ENTRY(Localization.lang("New entry"), IconTheme.JabRefIcons.ADD_ENTRY, KeyBinding.NEW_ENTRY),
+    
     NEW_ARTICLE(Localization.lang("New article"), IconTheme.JabRefIcons.ADD_ARTICLE),
-    NEW_ENTRY_FROM_PLAIN_TEXT(Localization.lang("New entry from plain text"), IconTheme.JabRefIcons.NEW_ENTRY_FROM_PLAIN_TEXT, KeyBinding.NEW_ENTRY_FROM_PLAIN_TEXT),
+    
     LIBRARY_PROPERTIES(Localization.lang("Library properties")),
     FIND_DUPLICATES(Localization.lang("Find duplicates"), IconTheme.JabRefIcons.FIND_DUPLICATES),
     MERGE_ENTRIES(Localization.lang("Merge entries"), IconTheme.JabRefIcons.MERGE_ENTRIES, KeyBinding.MERGE_ENTRIES),
@@ -155,11 +162,8 @@ public enum StandardActions implements Action {
     DOWNLOAD_FILE(Localization.lang("Download file"), IconTheme.JabRefIcons.DOWNLOAD_FILE),
     RENAME_FILE_TO_PATTERN(Localization.lang("Rename file to defined pattern"), IconTheme.JabRefIcons.AUTO_RENAME),
     RENAME_FILE_TO_NAME(Localization.lang("Rename file to a given name"), IconTheme.JabRefIcons.RENAME, KeyBinding.REPLACE_STRING),
-
-    // ---------------------------------------------------------------------------------------------- A3.3 Icons
-    MOVE_FILE_TO_GENERAL_FOLDER(Localization.lang("Move file to General file directory"), IconTheme.JabRefIcons.MOVE_TO_FOLDER),
-    MOVE_FILE_TO_USER_FOLDER/*_AND_RENAME*/(Localization.lang("Move file to User-specific file directory"), IconTheme.JabRefIcons.MOVE_TO_USER_FOLDER),
-    // ----------------------------------------------------------------------------------------------------------
+    MOVE_FILE_TO_FOLDER(Localization.lang("Move file to file directory"), IconTheme.JabRefIcons.MOVE_TO_FOLDER),
+    MOVE_FILE_TO_FOLDER_AND_RENAME(Localization.lang("Move file to file directory and rename file")),
     COPY_FILE_TO_FOLDER(Localization.lang("Copy linked file to folder..."), IconTheme.JabRefIcons.COPY_TO_FOLDER, KeyBinding.COPY),
     REMOVE_LINK(Localization.lang("Remove link"), IconTheme.JabRefIcons.REMOVE_LINK),
     DELETE_FILE(Localization.lang("Permanently delete local file"), IconTheme.JabRefIcons.DELETE_FILE, KeyBinding.DELETE_ENTRY),
