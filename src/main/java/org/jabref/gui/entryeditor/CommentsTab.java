@@ -104,7 +104,7 @@ public class CommentsTab extends FieldsEditorTab {
 		// Edited
 		// First comes the standard and custom added field
 		
-		List<String> fields;
+		List<String> fields = new ArrayList<>();
 		
 		if (!AddEntryWindow.getFieldsList().isEmpty()) {
 			
@@ -115,11 +115,7 @@ public class CommentsTab extends FieldsEditorTab {
 			fields = AdvancedEntryLookUp.getFieldsList();
 			
 		}
-		else {
-			
-			fields = new ArrayList<>();
-			
-		}
+	
 		comments.add(StandardField.COMMENT);
 
 		for (int i = 0; i < fields.size(); ++i) {
