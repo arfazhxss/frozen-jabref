@@ -55,7 +55,7 @@ public class LinkedFileHandler {
         // Construct the target directory path
         Path targetDirectoryPath = targetDirectory.get();
 
-        String targetDirectoryName = "G";
+        String targetDirectoryName = "";
         if (!filePreferences.getFileDirectoryPattern().isEmpty()) {
             targetDirectoryName = FileUtil.createDirNameFromPattern(
                     databaseContext.getDatabase(), entry,
@@ -73,7 +73,7 @@ public class LinkedFileHandler {
         fileEntry.setLink(relativize(targetPath));
         return true;
     }
-    
+
 //    public boolean moveToDefaultDirectory() throws IOException {
 //
 //        Optional<Path> targetDirectory = databaseContext.getFirstExistingFileDir(filePreferences);
@@ -95,7 +95,7 @@ public class LinkedFileHandler {
 //        }
 //
 //        Path targetPath = targetDirectory.get().resolve(targetDirectoryName).resolve(oldFile.get().getFileName());
-//        
+//
 //        if (Files.exists(targetPath)) {
 //            // We do not overwrite already existing files
 //            LOGGER.debug("The file {} would have been moved to {}. However, there exists already a file with that name so we do nothing.", oldFile.get(), targetPath);
@@ -136,7 +136,7 @@ public class LinkedFileHandler {
         fileEntry.setLink(relativize(targetPath));
         return true;
     }
-    
+
 //    public boolean moveToUserSpecificDirectory() throws IOException {
 //
 //        Optional<Path> oldFile = fileEntry.findIn(databaseContext, filePreferences);
@@ -240,14 +240,14 @@ public class LinkedFileHandler {
     public Optional<Path> findExistingFile(LinkedFile flEntry, BibEntry entry, String targetFileName) {
         // The .get() is legal without check because the method will always return a value.
         Path targetFilePath = flEntry.findIn(databaseContext, filePreferences)
-                                     .get().getParent().resolve(targetFileName);
+                .get().getParent().resolve(targetFileName);
         Path oldFilePath = flEntry.findIn(databaseContext, filePreferences).get();
         // Check if file already exists in directory with different case.
         // This is necessary because other entries may have such a file.
         Optional<Path> matchedByDiffCase = Optional.empty();
         try (Stream<Path> stream = Files.list(oldFilePath.getParent())) {
             matchedByDiffCase = stream.filter(name -> name.toString().equalsIgnoreCase(targetFilePath.toString()))
-                                      .findFirst();
+                    .findFirst();
         } catch (IOException e) {
             LOGGER.error("Could not get the list of files in target directory", e);
         }
