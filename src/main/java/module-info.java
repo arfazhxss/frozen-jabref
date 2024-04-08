@@ -144,6 +144,6 @@ open module org.jabref {
     requires de.saxsys.mvvmfx.validation;
     requires com.jthemedetector;
     requires flexmark.html2md.converter;
-    requires org.junit.jupiter.api;
+	requires java.base;
     //requires flexmark.html2md.converter;
 }
