@@ -346,7 +346,7 @@ public class LinkedFileViewModel extends AbstractViewModel {
             // Found the linked file, so move it
             try {
                 // Move the file to the user-specific directory
-//                linkedFileHandler.moveToUserSpecificDirectory();
+                linkedFileHandler.moveToUserSpecificDirectory();
                 Files.move(file.get(), userDir.get().resolve(file.get().getFileName()));
             } catch (IOException exception) {
                 dialogService.showErrorDialogAndWait(
