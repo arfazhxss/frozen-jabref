@@ -342,27 +342,32 @@ public class LinkedFilesEditor extends HBox implements FieldEditorFX {
             this.command = command;
             this.linkedFile = linkedFile;
 
-            
             this.executable.bind(
                     switch (command) {
+
                         case RENAME_FILE_TO_PATTERN -> Bindings.createBooleanBinding(
                                 () -> !linkedFile.getFile().isOnlineLink()
                                         && linkedFile.getFile().findIn(databaseContext, preferencesService.getFilePreferences()).isPresent()
                                         && !linkedFile.isGeneratedNameSameAsOriginal(),
                                 linkedFile.getFile().linkProperty(), bibEntry.getValue().map(BibEntry::getFieldsObservable).orElse(null));
+
+                        // ------------------------------------------------------------------------------------
+
                         case MOVE_FILE_TO_GENERAL_FOLDER -> Bindings.createBooleanBinding(
                                 () -> !linkedFile.getFile().isOnlineLink()
-                                        && !linkedFile.getFile().getLink().startsWith("General")
-                                        && !linkedFile.getFile().getLink().startsWith("User"),
+                                        && !linkedFile.getFile().getLink().startsWith("General"),
                                 linkedFile.getFile().linkProperty());
+
                         case MOVE_FILE_TO_USER_FOLDER -> Bindings.createBooleanBinding(
                                 () -> !linkedFile.getFile().isOnlineLink()
-                                        && (linkedFile.getFile().getLink().startsWith("General")
-                                        || linkedFile.getFile().getLink().startsWith("User")),
+                                        && !linkedFile.getFile().getLink().startsWith("User"),
                                 linkedFile.getFile().linkProperty());
+
+                        // ----------------------------------------------------------------------------------------
                         case DOWNLOAD_FILE -> Bindings.createBooleanBinding(
                                 () -> linkedFile.getFile().isOnlineLink(),
                                 linkedFile.getFile().linkProperty(), bibEntry.getValue().map(BibEntry::getFieldsObservable).orElse(null));
+
                         case OPEN_FILE, OPEN_FOLDER, RENAME_FILE_TO_NAME, DELETE_FILE -> Bindings.createBooleanBinding(
                                 () -> !linkedFile.getFile().isOnlineLink()
                                         && linkedFile.getFile().findIn(databaseContext, preferencesService.getFilePreferences()).isPresent(),
