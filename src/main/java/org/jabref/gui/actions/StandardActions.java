@@ -158,6 +158,11 @@ public enum StandardActions implements Action {
     CLEANUP_ENTRIES(Localization.lang("Cleanup entries"), IconTheme.JabRefIcons.CLEANUP_ENTRIES, KeyBinding.CLEANUP),
     SET_FILE_LINKS(Localization.lang("Automatically set file links"), KeyBinding.AUTOMATICALLY_LINK_FILES),
 
+    // ---------------------------------------------------------------------------------------------- A3.3 Icons
+    MOVE_FILE_TO_GENERAL_FOLDER(Localization.lang("Move file to General file directory"), IconTheme.JabRefIcons.MOVE_TO_FOLDER),
+    MOVE_FILE_TO_USER_FOLDER/*_AND_RENAME*/(Localization.lang("Move file to User-specific file directory"), IconTheme.JabRefIcons.MOVE_TO_USER_FOLDER),
+    // ----------------------------------------------------------------------------------------------------------
+    
     EDIT_FILE_LINK(Localization.lang("Edit"), IconTheme.JabRefIcons.EDIT, KeyBinding.EDIT_ENTRY),
     DOWNLOAD_FILE(Localization.lang("Download file"), IconTheme.JabRefIcons.DOWNLOAD_FILE),
     RENAME_FILE_TO_PATTERN(Localization.lang("Rename file to defined pattern"), IconTheme.JabRefIcons.AUTO_RENAME),
