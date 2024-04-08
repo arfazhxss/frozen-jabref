@@ -15,6 +15,7 @@ import javax.xml.transform.TransformerException;
 import org.jabref.model.entry.BibEntry;
 import org.jabref.model.entry.field.Field;
 import org.jabref.model.entry.field.StandardField;
+import org.jabref.model.entry.types.StandardEntryType;
 import org.jabref.model.schema.DublinCoreSchemaCustom;
 
 import org.apache.pdfbox.Loader;
@@ -29,8 +30,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class XmpUtilRemover {
-
-    private static final String XMP_BEGIN_END_TAG = "?xpacket";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(XmpUtilWriter.class);
 
@@ -77,6 +76,10 @@ public class XmpUtilRemover {
 
         try {
             Files.move(newFile, path, StandardCopyOption.REPLACE_EXISTING);
+            BibEntry nullEntries = new BibEntry(StandardEntryType.Misc);
+            new XmpUtilWriter(xmpPreferences).writeXmp(path, nullEntries, null);
+            PDDocument document = Loader.loadPDF(path.toFile());
+            XmpUtilRemover.deleteDocumentInformation(document, fields, xmpPreferences);
         } catch (IOException e) {
             LOGGER.debug("Could not overwrite the original file", e);
             throw new IOException("Could not overwrite the original file: " + e.getLocalizedMessage(), e);
@@ -107,17 +110,7 @@ public class XmpUtilRemover {
 
         for (Field field : fields) {
             deleteField(di, field);
-            //            if (useXmpPrivacyFilter && xmpPreferences.getSelectAllFields().getValue()) {
-            //                // if delete all, no need to check if field is contained in xmp preference
-            //                System.out.println("WE ARE HERE 3");
-            //                deleteField(di, field);
-            //            } else if (useXmpPrivacyFilter && xmpPreferences.getXmpPrivacyFilter().contains(field)) {
-            //                // erase field instead of adding it
-            //                System.out.println("WE ARE HERE 4");
-            //                deleteField(di, field);
-            //            }
         }
-        //        document.close();
     }
 
     /**
@@ -128,23 +121,28 @@ public class XmpUtilRemover {
      */
 
     private static void deleteField(PDDocumentInformation di, Field field) {
-        System.out.println("Current Field Removal:\t" + field.getDisplayName());
         di.setCreator("-");
         di.setProducer("-");
         di.setTitle("-");
         di.setCustomMetadataValue("Relation", null);
         di.setCustomMetadataValue("bibtex/entrytype", null);
 
-        if (StandardField.AUTHOR.equals(field)) {
-            di.setAuthor(null);
-        } else if (StandardField.TITLE.equals(field)) {
-            di.setTitle(null);
-        } else if (StandardField.KEYWORDS.equals(field)) {
-            di.setKeywords(null);
-        } else if (StandardField.ABSTRACT.equals(field)) {
-            di.setSubject(" ");
-        } else {
-            di.setCustomMetadataValue("bibtex/" + field, null);
+        switch (field) {
+            case StandardField.AUTHOR:
+                di.setAuthor(null);
+                break;
+            case StandardField.TITLE:
+                di.setTitle(null);
+                break;
+            case StandardField.KEYWORDS:
+                di.setKeywords(null);
+                break;
+            case StandardField.ABSTRACT:
+                di.setSubject(" ");
+                break;
+            default:
+                di.setCustomMetadataValue("bibtex/" + field, null);
+                break;
         }
     }
 
