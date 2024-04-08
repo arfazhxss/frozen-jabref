@@ -12,11 +12,10 @@ import org.jabref.model.entry.field.StandardField;
 
 import org.jabref.gui.AddEntryWindow;
 
-//Editted
-/** 
-* This class represents the data needed to store custom entries entered by
-* the user and the entries name.
-**/
+/**
+ * This class represents all supported BibTeX entry types. The BibLaTeX entry
+ * types are defined at {@link BiblatexEntryTypeDefinitions}.
+ */
 
 class CustomEntryType implements EntryType {
 
@@ -36,11 +35,6 @@ class CustomEntryType implements EntryType {
 		return displayName;
 	}
 }
-
-/**
- * This class represents all supported BibTeX entry types. The BibLaTeX entry
- * types are defined at {@link BiblatexEntryTypeDefinitions}.
- */
 
 public class BibtexEntryTypeDefinitions {
 
