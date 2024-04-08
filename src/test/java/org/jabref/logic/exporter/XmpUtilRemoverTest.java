@@ -157,28 +157,6 @@ public class XmpUtilRemoverTest {
 
         // since all fields have been deleted, there should be no entry info in the metadata
         assertEquals(0, modifiedEntries.size());
-
-//        Path path = Paths.get("/Users/arfaz/Downloads/tst2/testingC copy.pdf");
-//        File file = path.toFile();
-//        when(xmpPreferences.shouldUseXmpPrivacyFilter()).thenReturn(true);
-//        when(xmpPreferences.getSelectAllFields()).thenReturn(new SimpleBooleanProperty(true));
-//        XmpUtilRemover.deleteXmp(path, xmpPreferences);
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-//        if (!Desktop.isDesktopSupported()) {
-//            System.out.println("Desktop is not supported");
-//            return;
-//        }
-//
-//        Desktop desktop = Desktop.getDesktop();
-//        if (file.exists()) {
-//            try {
-//                desktop.open(file);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     /**
